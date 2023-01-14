@@ -16,6 +16,7 @@ function setRandomTagline() {
     "mediocre guitarist",
     "plastic disk enthusiast",
     "hobbyist game dev",
+    "the one who vanquished the tyranny of the maker many cycles before us",
   ];
   shuffleArray(taglines);
   let heading = document.querySelector("#taglines");
