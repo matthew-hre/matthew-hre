@@ -85,38 +85,11 @@ main > ul {
   line-height: 25px;
 }
 
-svg.sprite {
-  width: 20px;
-  height: 20px;
-  margin-bottom: 0px;
-}
-.empty {
-  background: #efefef;
-}
-code.button {
-  background: #131313;
-  color: white;
-  font-size: smaller;
-  display: inline-block;
-  padding: 0px 6px;
-  font-weight: bold;
-  border-radius: 2px;
-  line-height: 22px;
-}
-
 main hr {
   border: 1px;
   clear: both;
 }
 
-main > ul.jump {
-  columns: 2;
-  line-height: 20px;
-}
-main > ul.jump li {
-  list-style-type: decimal-leading-zero;
-  list-style-position: inside;
-}
 main img.medium {
   max-width: 300px;
 }
