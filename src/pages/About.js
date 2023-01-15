@@ -35,7 +35,7 @@ function Home() {
         a copy of platSCII.
       </p>
       <p>
-        that project, i ended up taking the role of the artist. i was
+        that project, i ended up taking the role of the artist. i was{" "}
         <i>fine</i> at it, but i really struggled with now having control over
         the programming aspect of things, and not being able to tweak things to
         my liking - we were working in unity, an engine i wasn't (and still am

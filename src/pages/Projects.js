@@ -35,13 +35,13 @@ function Projects() {
       </h3>
 
       <p>
-        my participation in
+        my participation in{" "}
         <a href="https://adventofcode.com/2021">advent of code 2021</a> in js.
         every day, you get a new puzzle, and you have to solve it. unique inputs
-        and solutions per user, was a whole lot of fun. did not get far, because
+        and solutions per user, was a whole lot of fun. did not get far, because{" "}
         <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">
           dijkstra
-        </a>
+        </a>{" "}
         is the worst.
       </p>
 
@@ -50,14 +50,14 @@ function Projects() {
       </h3>
 
       <p>
-        i attempted
+        i attempted{" "}
         <a href="https://adventofcode.com/2022">advent of code 2022</a> in
         python. this time, i had created a boilerplate class that would
         automatically grab my puzzle input from the site, as well as did some
-        cool stuff like output formatting. also, did not get far, because
+        cool stuff like output formatting. also, did not get far, because{" "}
         <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">
           dijkstra
-        </a>
+        </a>{" "}
         is still the worst.
       </p>
     </main>

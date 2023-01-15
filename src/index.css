@@ -188,6 +188,10 @@ ul.nobull li {
   list-style-type: none;
 }
 
+.float-right {
+  float: right;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background: #131313;
