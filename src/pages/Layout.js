@@ -14,7 +14,12 @@ function Layout() {
     if (heading) {
       heading.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [location.pathname]);
+  }, [location]);
+
+  useEffect(() => {
+    console.log("Page refreshed");
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="App">
