@@ -27,13 +27,12 @@ function Footer() {
     <footer>
       <hr />
       <span className="float-right">
-        last updated on {commit.time} [
+        last updated on {commit.time} [{" "}
         <a
           href={`https://github.com/matthew-hre/matthew-hre/commit/${commit.sha}`}
         >
-          {" "}
-          commit {commit.sha.split(" ")[0].substring(0, 7)}{" "}
-        </a>
+          commit {commit.sha.split(" ")[0].substring(0, 7)}
+        </a>{" "}
         ]
       </span>
       <b>matthew hrehirchuk</b> © 2023.
