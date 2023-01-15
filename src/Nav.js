@@ -1,10 +1,27 @@
 import "./index.css";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Nav() {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(true);
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 1100) {
+        setIsDetailsOpen(false);
+      } else {
+        setIsDetailsOpen(true);
+      }
+    }
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <nav>
-      <details open="open">
+      <details open={isDetailsOpen}>
         <summary>
           <b>menu</b>
         </summary>
