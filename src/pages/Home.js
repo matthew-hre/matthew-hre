@@ -49,6 +49,58 @@ function Home() {
           was a fun switch from my JS roots, but definitely a challenge.
         </li>
       </ul>
+
+      <h3>Website Updates</h3>
+      <ul>
+        <li>
+          <b>Capitalization</b> was changed across the board, because stylistic
+          decisions aren't "professional".
+        </li>
+        <li>
+          <b>Github Revision History</b> now appears at the bottom of the page,
+          and updates when the site is updated. It's a bit of a hack, as I
+          haven't registered an API key, and have just been using the
+          unauthenticated API, but hey, it works.
+        </li>
+        <li>
+          <b>React Routing</b> is now implemented site-wide, so no more nasty
+          .html extensions in the URL. For everyone out there who I gave a
+          testing URL ending in /home.html, I am sorry that every time you check
+          the site it throws you a 404.
+        </li>
+      </ul>
+
+      <h3>
+        Plans for <strike>world domination</strike> Expansion
+      </h3>
+      <ul>
+        <li>
+          <b>Light/Dark</b> themes are implemented, but are determined by system
+          preference. Would love to make a button to be able to switch these on
+          the fly.
+        </li>
+        <li>
+          <b>Spotify Listening History</b>, as nerdy as that sounds, is
+          something I thought would be really neat to have. Maybe display my
+          current song in the header, or show my listening history somewhere.
+          Just something to show off my API skills.
+        </li>
+        <li>
+          <b>Markdown Interpretation</b> is an idea that's been in my head for a
+          few days now. All these pages are really basic HTML for the most part,
+          nothing really crazy... would love to be able to write these pages in
+          Markdown, and have them compile to HTML on the fly. Would eliminate
+          the need for all these annoying .jsx files, and would make creating
+          pages really easy.
+        </li>
+        <li>
+          <b>Tables of contents</b> for bigger pages like these. I'm thinking
+          instead of assigning each heading an ID and then linking to it, I'll
+          do it based on the number of elements, and just make it spit me
+          between H2 tags. Just something to make megapages like this a little
+          more tolerable.
+        </li>
+      </ul>
     </main>
   );
 }
