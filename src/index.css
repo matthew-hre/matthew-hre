@@ -79,6 +79,7 @@ main > h2 {
 }
 main > h3 {
   font-size: 20px;
+  scroll-margin: 20px;
 }
 main > h4 {
   font-size: 35px;
@@ -153,6 +154,10 @@ main table.drpdown td {
   text-decoration: none;
 }
 
+.contents {
+  padding: 0;
+}
+
 main .shortcut,
 main kbd {
   background: #fff;
@@ -196,6 +201,10 @@ ul.nobull li {
 
 .float-right {
   float: right;
+}
+
+strike {
+  text-decoration-thickness: 2.5px;
 }
 
 @media (prefers-color-scheme: dark) {

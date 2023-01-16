@@ -1,11 +1,13 @@
 import "../index.css";
 import { Link } from "react-router-dom";
+import Contents from "../Contents";
 
 function Home() {
   return (
     <main>
       <h1>Home</h1>
       <h2>January 2023</h2>
+      <Contents data="New Years Resolutions: 1, Recent Projects: 2, Website Updates: 3, Plans for Expansion: 4" />
       <h3>Happy New Year</h3>
 
       <p>
@@ -53,6 +55,14 @@ function Home() {
       <h3>Website Updates</h3>
       <ul>
         <li>
+          <b>Tables of Contents</b> are now implemented, and I can now add them
+          to pages at my will. They're not assigned to IDs or anything, they're
+          instead assigned by index. This is super cool, because it allows me to
+          create a table of contents for a page super fast, and then add more
+          sections to the page without having to update the table of contents.
+          It's a bit of a hack, but it's super fast for when I'm writing.
+        </li>
+        <li>
           <b>Capitalization</b> was changed across the board, because stylistic
           decisions aren't "professional".
         </li>
@@ -94,11 +104,7 @@ function Home() {
           pages really easy.
         </li>
         <li>
-          <b>Tables of contents</b> for bigger pages like these. I'm thinking
-          instead of assigning each heading an ID and then linking to it, I'll
-          do it based on the number of elements, and just make it spit me
-          between H2 tags. Just something to make megapages like this a little
-          more tolerable.
+          <i>Tables of contents are now implemented</i>
         </li>
       </ul>
     </main>
