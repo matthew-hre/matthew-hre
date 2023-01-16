@@ -13,30 +13,32 @@ function Header() {
     "graphic designer",
     '<a href="https://en.wikipedia.org/wiki/Tron">fights for the users</a>',
     "student",
-    "javascript developer",
-    "react developer",
-    "eclipse hater",
-    "python scripter",
+    "JavaScript developer",
+    "React developer",
+    "Eclipse hater",
+    "Python scripter",
     "mediocre guitarist",
     "plastic disk enthusiast",
     "hobbyist game dev",
-    '<a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">dijkstra</a> hater',
-    '<a href="https://bladerunner.fandom.com/wiki/Voight-Kampff_test">voight-kampf</a> proof',
+    '<a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra</a> hater',
+    '<a href="https://bladerunner.fandom.com/wiki/Voight-Kampff_test">Voight-Kampf</a> proof',
   ];
 
   useEffect(() => {
     const taglineHeading = document.getElementById("taglines");
     shuffleArray(taglines);
-    taglineHeading.innerHTML = `${taglines[0]}, ${taglines[1]}, ${taglines[2]}.`;
+    let tagline = `${taglines[0]}, ${taglines[1]}, ${taglines[2]}.`;
+    taglineHeading.innerHTML =
+      tagline.charAt(0).toUpperCase() + tagline.slice(1);
   });
 
   return (
     <header>
       <Link to="/">
-        <h1>matthew hrehirchuk</h1>
+        <h1>Matthew Hrehirchuk</h1>
       </Link>
       <h4 id="taglines">
-        software developer, game designer, all around great guy.
+        Software developer, game designer, all around great guy.
       </h4>
     </header>
   );

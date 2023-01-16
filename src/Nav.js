@@ -23,24 +23,24 @@ function Nav() {
     <nav>
       <details open={isDetailsOpen}>
         <summary>
-          <b>menu</b>
+          <b>Menu</b>
         </summary>
         <section className="site-nav">
           <section>
-            <h2>general</h2>
+            <h2>General</h2>
             <ul className="nobull">
               <li>
-                <Link to="about">about</Link>
+                <Link to="about">About</Link>
               </li>
               <li>
-                <Link to="contact">contact</Link>
+                <Link to="contact">Contact</Link>
               </li>
               <li>
-                <Link to="socials">socials</Link>
+                <Link to="socials">Socials</Link>
               </li>
               <li>
                 <a href="matthew-hrehirchuk-resume-2023.pdf" download>
-                  resume
+                  Resume
                 </a>
               </li>
             </ul>
@@ -48,28 +48,28 @@ function Nav() {
           <section>
             <h2>
               <Link id="projects" className="navheader" to="projects">
-                projects
+                Projects
               </Link>
             </h2>
             <ul className="nobull">
               <li>
                 <a href="https://github.com/matthew-hre/hypixelbot">
-                  hypixel bot
+                  Hypixel Bot
                 </a>
               </li>
               <li>
                 <a href="https://github.com/matthew-hre/minesweeper">
-                  react minesweeper
+                  React Minesweeper
                 </a>
               </li>
               <li>
                 <a href="https://github.com/matthew-hre/adventOfCode2021">
-                  advent of code '21
+                  Advent of Code '21
                 </a>
               </li>
               <li>
                 <a href="https://github.com/matthew-hre/AOC22">
-                  advent of code '22
+                  Advent of Code '22
                 </a>
               </li>
             </ul>
@@ -77,23 +77,23 @@ function Nav() {
           <section>
             <h2>
               <Link id="learning" className="navheader" to="learning">
-                learning
+                Learning
               </Link>
             </h2>
             <ul className="nobull">
               <li>
                 <a href="https://github.com/matthew-hre/1501-practice-site">
-                  1501 practice site
+                  1501 Practice Site
                 </a>
               </li>
               <li>
                 <a href="https://github.com/matthew-hre/python_classes_practice">
-                  1501 python classes
+                  1501 Python Classes
                 </a>
               </li>
               <li>
                 <a href="https://github.com/matthew-hre/python-to-java">
-                  python to java
+                  Python to Java
                 </a>
               </li>
             </ul>
@@ -101,7 +101,7 @@ function Nav() {
           <section>
             <h2>
               <Link id="games" className="navheader" to="games">
-                games
+                Games
               </Link>
             </h2>
             <ul className="nobull">

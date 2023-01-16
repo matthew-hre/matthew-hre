@@ -4,49 +4,49 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <main>
-      <h1>home</h1>
-      <h2>january 2023</h2>
-      <h3>happy new year</h3>
+      <h1>Home</h1>
+      <h2>January 2023</h2>
+      <h3>Happy New Year</h3>
 
       <p>
-        i've set out quite a few goals for myself this year, and one of them is
-        keeping an <b>updated</b> portfolio. that means frequent additions to
-        projects, and hopefully some new games. oh, and learning sections, as i
-        intend to make more study guides for poeple. and more frequent updates
+        I've set out quite a few goals for myself this year, and one of them is
+        keeping an <b>updated</b> portfolio. That means frequent additions to
+        projects, and hopefully some new games. Oh, and learning sections, as I
+        intend to make more study guides for people. And more frequent updates
         to this page, of course.
       </p>
       <p>
-        i'm also going to try to keep a more regular schedule of updates, so
-        that i can keep track of what i've been doing. i'm going to try to write
-        a short summary of what i've been up to every month, to incentivise
-        working on more projects. i'll also try to keep the most important
+        I'm also going to try to keep a more regular schedule of updates, so
+        that I can keep track of what I've been doing. I'm going to try to write
+        a short summary of what I've been up to every month, to incentivise
+        working on more projects. I'll also try to keep the most important
         things in the <Link to="about">about</Link> section.
       </p>
       <p>
-        if you're a recruiter or someone looking to hire me, welcome! take a
+        If you're a recruiter or someone looking to hire me, welcome! Take a
         peek at some <Link to="projects">projects</Link> of mine, play a couple
         of my <Link to="games">games</Link>, and grab a copy of my&nbsp;
         <a href="./matthew-hrehirchuk-resume-2023.pdf" download>
           resume
         </a>
-        . if you're interested in working with me,{" "}
-        <Link to="contact">contact</Link> me! i'm always looking for&nbsp;
-        <a href="https://ldjam.com/">ludum dare</a> teammates.
+        . If you're interested in working with me,{" "}
+        <Link to="contact">contact</Link> me! I'm always looking for&nbsp;
+        <a href="https://ldjam.com/">Ludum Dare</a> teammates.
       </p>
-      <h3>some recent things</h3>
+      <h3>Some Recent Things</h3>
       <ul>
         <li>
-          <b>this website</b> now exists! was going to try and do something real
-          fancy with react and tailwind, but i decided against it.
+          <b>This website</b> now exists! Was going to try and do something real
+          fancy with Tailwind, but I decided against it.
         </li>
         <li>
           <b>
             <a href="https://github.com/matthew-hre/AOC22">
-              advent of code 2022
+              Advent of Code 2022
             </a>
           </b>{" "}
-          wrapped up, although i kind of lost steam on it. doing it in python
-          was a fun switch from my js roots, but definitely a challenge.
+          wrapped up, although I kind of lost steam on it. Doing it in Python
+          was a fun switch from my JS roots, but definitely a challenge.
         </li>
       </ul>
     </main>
