@@ -126,6 +126,17 @@ function Nav() {
               </li>
             </ul>
           </section>
+          <section>
+            <h2>Design</h2>
+            <ul className="nobull">
+              <li>
+                <Link to="1984">1984 Cover</Link>
+              </li>
+              <li>
+                <Link to="band-posters">Band Posters</Link>
+              </li>
+            </ul>
+          </section>
         </section>
       </details>
     </nav>
