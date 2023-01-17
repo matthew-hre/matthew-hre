@@ -7,7 +7,7 @@ function Home() {
     <main>
       <h1>Home</h1>
       <h2>January 2023</h2>
-      <Contents data="New Years Resolutions: 1, Recent Projects: 2, Website Updates: 3, Plans for Expansion: 4" />
+      <Contents data="New Years Resolutions: 1, Recent Projects: 2, Website Updates: 3, Website Roadmap: 4" />
       <h3>Happy New Year</h3>
 
       <p>

@@ -203,6 +203,10 @@ ul.nobull li {
   float: right;
 }
 
+.contents-item {
+  cursor: pointer;
+}
+
 strike {
   text-decoration-thickness: 2.5px;
 }

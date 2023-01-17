@@ -14,9 +14,15 @@ function ContentsItem(props) {
 
   return (
     <li>
-      <a onClick={() => goToHeading()} href={() => false}>
-        {props.title}
-      </a>
+      <u>
+        <a
+          onClick={() => goToHeading()}
+          href={() => false}
+          className="contents-item"
+        >
+          {props.title}
+        </a>
+      </u>
     </li>
   );
 }
