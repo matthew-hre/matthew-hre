@@ -96,6 +96,11 @@ function Nav() {
                   Python to Java
                 </a>
               </li>
+              <li>
+                <a href="https://github.com/matthew-hre/BestVSCodeExtensions">
+                  Best VSCode Extensions
+                </a>
+              </li>
             </ul>
           </section>
           <section>

@@ -50,6 +50,18 @@ function Learning() {
         and running, and then spent some time walking through converting a basic
         Python program to Java: stuff from basic math to reading inputs.
       </p>
+
+      <h3>
+        <a href="https://github.com/matthew-hre/BestVSCodeExtensions">
+          Best VSCode Extensions
+        </a>
+      </h3>
+
+      <p>
+        A rather haphazardly sorted list of my favorite VSCode extensions. I
+        either use or have used all of these extensions, and I think they're all
+        pretty handy. Sorted by rough category, and then sorted by vibes.
+      </p>
     </main>
   );
 }
