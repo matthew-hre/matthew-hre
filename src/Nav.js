@@ -98,7 +98,7 @@ function Nav() {
               </li>
               <li>
                 <a href="https://github.com/matthew-hre/BestVSCodeExtensions">
-                  Best VSCode Extensions
+                  VSCode Extensions
                 </a>
               </li>
             </ul>
