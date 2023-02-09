@@ -212,6 +212,8 @@ ul.nobull li {
   border-left: 3px solid #555;
   font-family: monospace;
   transition: 0.3s;
+  font-size: 18px;
+  max-width: calc(600px - 30px - 3px);
 }
 
 .snippet:hover {

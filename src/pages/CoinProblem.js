@@ -13,7 +13,7 @@ function CoinProblem() {
         This was a problem I was given in my Puzzling Adventures in Mathematics
         course.
       </p>
-      <p className="snippet">
+      <div className="snippet">
         You have n plates, each with one coin.
         <br />
         There are two operations possible. Each operation costs you one coin.
@@ -39,7 +39,7 @@ function CoinProblem() {
           <li>Prove that c(5) ≥ 300.</li>
           <li>What have you managed to get for c(5)? I can get over 800.</li>
         </ol>
-      </p>
+      </div>
       <h3>My Manual Solution</h3>
       <p>
         Part 1 was a piece of cake, I just prioritized getting the most coins on
