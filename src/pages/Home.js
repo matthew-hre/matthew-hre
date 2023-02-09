@@ -33,6 +33,15 @@ function Home() {
           </b>{" "}
           was a fun little introduction to AI and genetic algorithms.
         </li>
+        <li>
+          <b>
+            <a href="https://github.com/matthew-hre/BestVSCodeExtensions">
+              Best VSCode Extensions
+            </a>
+          </b>{" "}
+          is a handy little repo I made to show off some of my favourite VSCode
+          extensions.
+        </li>
       </ul>
 
       <h3>Website Updates</h3>
