@@ -72,6 +72,9 @@ function Nav() {
                   Advent of Code '22
                 </a>
               </li>
+              <li>
+                <Link to="coin-problem">Coin Problem</Link>
+              </li>
             </ul>
           </section>
           <section>
@@ -94,6 +97,11 @@ function Nav() {
               <li>
                 <a href="https://github.com/matthew-hre/python-to-java">
                   Python to Java
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/matthew-hre/BestVSCodeExtensions">
+                  VSCode Extensions
                 </a>
               </li>
             </ul>

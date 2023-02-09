@@ -207,6 +207,18 @@ ul.nobull li {
   cursor: pointer;
 }
 
+.snippet {
+  padding-left: 30px;
+  border-left: 3px solid #555;
+  font-family: monospace;
+  transition: 0.3s;
+}
+
+.snippet:hover {
+  border-left: 3px solid #fff;
+  transition: 0.3s;
+}
+
 strike {
   text-decoration-thickness: 2.5px;
 }
@@ -283,7 +295,7 @@ strike {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
   nav .site-nav section {
     width: 100%;
   }

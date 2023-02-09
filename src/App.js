@@ -11,6 +11,7 @@ import Learning from "./pages/Learning";
 import NoPage from "./pages/NoPage";
 import Orwell from "./pages/Orwell.js";
 import BandPosters from "./pages/BandPosters.js";
+import CoinProblem from "./pages/CoinProblem.js";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="learning" element={<Learning />} />
           <Route path="1984" element={<Orwell />} />
           <Route path="band-posters" element={<BandPosters />} />
+          <Route path="coin-problem" element={<CoinProblem />} />
 
           <Route path="*" element={<NoPage />} />
         </Route>
