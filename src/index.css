@@ -213,12 +213,17 @@ ul.nobull li {
   font-family: monospace;
   transition: 0.3s;
   font-size: 18px;
-  max-width: calc(600px - 30px - 3px);
+  max-width: 80%;
 }
 
 .snippet:hover {
   border-left: 3px solid #fff;
   transition: 0.3s;
+}
+
+.show-on-mobile {
+  display: none;
+  visibility: hidden;
 }
 
 strike {
@@ -254,6 +259,10 @@ strike {
     float: left;
     margin: 0 10px 10px 0;
   }
+  .show-on-mobile {
+    display: none;
+    visibility: hidden;
+  }
 }
 @media (max-width: 1100px) and (min-width: 751px) {
   nav .site-nav section {
@@ -264,6 +273,10 @@ strike {
   }
   main {
     padding-top: 0;
+  }
+  .show-on-mobile {
+    display: none;
+    visibility: hidden;
   }
 }
 
@@ -280,6 +293,13 @@ strike {
   nav {
     padding-bottom: 0;
   }
+  .hide-on-mobile {
+    display: none;
+  }
+  .show-on-mobile {
+    display: block;
+    visibility: visible;
+  }
 }
 
 @media (max-width: 600px) and (min-width: 401px) {
@@ -295,6 +315,13 @@ strike {
   nav {
     padding-bottom: 0;
   }
+  .hide-on-mobile {
+    display: none;
+  }
+  .show-on-mobile {
+    display: block;
+    visibility: visible;
+  }
 }
 
 @media (max-width: 500px) {
@@ -306,5 +333,12 @@ strike {
   }
   nav {
     padding-bottom: 0;
+  }
+  .hide-on-mobile {
+    display: none;
+  }
+  .show-on-mobile {
+    display: block;
+    visibility: visible;
   }
 }

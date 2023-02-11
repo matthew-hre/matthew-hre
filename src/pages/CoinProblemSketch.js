@@ -9,7 +9,7 @@ function CoinProblemSketch() {
   const setup = (p5, canvasParentRef) => {
     // use parent to render the canvas in this ref
     // (without that p5 will render the canvas outside of your component)
-    p5.createCanvas(500, 200).parent(canvasParentRef);
+    p5.createCanvas(500, 300).parent(canvasParentRef);
     p5.stroke(255);
     p5.fill(255);
   };

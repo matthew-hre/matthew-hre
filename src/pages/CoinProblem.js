@@ -147,13 +147,18 @@ function CoinProblem() {
         </ul>
       </p>
       <h3>The Actual Game</h3>
-      <p>
-        I haven't used p5.js since high school, and it does not play well with
-        React, so sorry this is a bit buggy when clicking. I couldn't get mouse
-        input to register with React getting in the way, so I needed to
-        implement mouse imputs and collisions by myself.
-      </p>
-      <CoinProblemSketch />
+      <div className="hide-on-mobile">
+        <p>
+          I haven't used p5.js since high school, and it does not play well with
+          React, so sorry this is a bit buggy when clicking. I couldn't get
+          mouse input to register with React getting in the way, so I needed to
+          implement mouse imputs and collisions by myself.
+        </p>
+        <CoinProblemSketch />
+      </div>
+      <div className="show-on-mobile">
+        <p>Sorry, you're on mobile.</p>
+      </div>
     </main>
   );
 }
