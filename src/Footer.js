@@ -39,6 +39,8 @@ function Footer() {
         Last updated on {commit.time} [
         <a
           href={`https://github.com/matthew-hre/matthew-hre/commit/${commit.sha}`}
+          target="_blank"
+          rel="noreferrer"
         >
           commit {commit.sha.split(" ")[0].substring(0, 7)}
         </a>

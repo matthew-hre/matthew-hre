@@ -12,7 +12,11 @@ function CoinProblem() {
       <h3>The Actual Problem</h3>
       <p>
         This was a problem I was given in my Puzzling Adventures in Mathematics
-        course.
+        course. The problem was written by Brady Killough, a professor at{" "}
+        <a href="https://www.mtroyal.ca/" target="_blank" rel="noreferrer">
+          Mount Royal University
+        </a>{" "}
+        in Calgary, Alberta.
       </p>
       <Snippet>
         You have n plates, each with one coin.

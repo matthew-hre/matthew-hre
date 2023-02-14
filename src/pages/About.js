@@ -9,9 +9,12 @@ function Home() {
 
       <p>
         Hello! I'm Matthew Hrehirchuk. I'm a Computer Information System student
-        at <a href="https://www.mtroyal.ca/">Mount Royal University</a> in
-        Calgary, Alberta, Canada. I make lots of games, a few helpful tools, and
-        at the moment, lots of studying resources for students like myself.
+        at{" "}
+        <a href="https://www.mtroyal.ca/" target="_blank" rel="noreferrer">
+          Mount Royal University
+        </a>{" "}
+        in Calgary, Alberta, Canada. I make lots of games, a few helpful tools,
+        and at the moment, lots of studying resources for students like myself.
       </p>
 
       <h3>My History</h3>
@@ -27,12 +30,15 @@ function Home() {
       <h3>Games</h3>
       <p>
         Tail end of middle school, I caught wind of a programming competition
-        called <a href="ldjam.com">Ludum Dare</a>: 48 hours to make a game from
-        scratch, based off a voted theme. I partnered with my buddy Connell and
-        my cousin Evan, and we ended up making a platformer mixed with a text
-        adventure for Ludum Dare 41. This game is now lost to time, as I cannot
-        find it. Connell, if you're reading this, please let me know if you have
-        a copy of platSCII.
+        called{" "}
+        <a href="ldjam.com" target="_blank" rel="noreferrer">
+          Ludum Dare
+        </a>
+        : 48 hours to make a game from scratch, based off a voted theme. I
+        partnered with my buddy Connell and my cousin Evan, and we ended up
+        making a platformer mixed with a text adventure for Ludum Dare 41. This
+        game is now lost to time, as I cannot find it. Connell, if you're
+        reading this, please let me know if you have a copy of platSCII.
       </p>
       <p>
         That project, I ended up taking the role of the artist. I was{" "}
@@ -42,8 +48,10 @@ function Home() {
         not) familiar with. I ended up investing some time learning GameMaker
         Studio, and started doing jams on my own. Put out a bunch of great
         games, met some great people, and ended up running the{" "}
-        <a href="https://discord.gg/ucGcvKK">Ludum Dare Discord server</a>. I've
-        personally run a few jams myself, and have only won one.
+        <a href="https://discord.gg/ucGcvKK" target="_blank" rel="noreferrer">
+          Ludum Dare Discord server
+        </a>
+        . I've personally run a few jams myself, and have only won one.
       </p>
 
       <h3>Web Dev</h3>

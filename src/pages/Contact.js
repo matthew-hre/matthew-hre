@@ -7,7 +7,7 @@ function Contact() {
       <h2>Contact</h2>
 
       <p>
-        <b>Email:</b>{" "}
+        <b>Personal Email:</b>{" "}
         <a href="mailto:matthew_hre@outlook.com">matthew_hre@outlook.com</a>
       </p>
       <p>
@@ -19,7 +19,13 @@ function Contact() {
       </p>
       <p>
         <b>Pager:</b>{" "}
-        <a href="https://tron.fandom.com/wiki/Alan_Bradley">Alan Bradley</a>{" "}
+        <a
+          href="https://tron.fandom.com/wiki/Alan_Bradley"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Alan Bradley
+        </a>{" "}
         called, he wants his pager back.
       </p>
     </main>

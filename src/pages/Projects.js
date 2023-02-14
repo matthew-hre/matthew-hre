@@ -6,7 +6,13 @@ function Projects() {
       <h1>Projects</h1>
       <h2>Projects</h2>
       <h3>
-        <a href="https://github.com/matthew-hre/hypixelbot">Hypixel Bot</a>
+        <a
+          href="https://github.com/matthew-hre/hypixelbot"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Hypixel Bot
+        </a>
       </h3>
 
       <p>
@@ -17,7 +23,11 @@ function Projects() {
       </p>
 
       <h3>
-        <a href="https://github.com/matthew-hre/minesweeper">
+        <a
+          href="https://github.com/matthew-hre/minesweeper"
+          target="_blank"
+          rel="noreferrer"
+        >
           React Minesweeper
         </a>
       </h3>
@@ -29,33 +39,64 @@ function Projects() {
       </p>
 
       <h3>
-        <a href="https://github.com/matthew-hre/adventOfCode2021">
+        <a
+          href="https://github.com/matthew-hre/adventOfCode2021"
+          target="_blank"
+          rel="noreferrer"
+        >
           Advent of Code '21
         </a>
       </h3>
 
       <p>
         My participation in{" "}
-        <a href="https://adventofcode.com/2021">Advent of Code 2021</a> in JS.
-        Every day, you get a new puzzle, and you have to solve it. Unique inputs
-        and solutions per user, was a whole lot of fun. Did not get far, because{" "}
-        <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">
+        <a
+          href="https://adventofcode.com/2021"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Advent of Code 2021
+        </a>{" "}
+        in JS. Every day, you get a new puzzle, and you have to solve it. Unique
+        inputs and solutions per user, was a whole lot of fun. Did not get far,
+        because{" "}
+        <a
+          href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm"
+          target="_blank"
+          rel="noreferrer"
+        >
           Dijkstra
         </a>{" "}
         is the worst.
       </p>
 
       <h3>
-        <a href="https://github.com/matthew-hre/AOC22">Advent of Code '22</a>
+        <a
+          href="https://github.com/matthew-hre/AOC22"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Advent of Code '22
+        </a>
       </h3>
 
       <p>
         I attempted{" "}
-        <a href="https://adventofcode.com/2022">Advent of Code 2022</a> in
-        Python. This time, I had created a boilerplate class that would
+        <a
+          href="https://adventofcode.com/2022"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Advent of Code 2022
+        </a>{" "}
+        in Python. This time, I had created a boilerplate class that would
         automatically grab my puzzle input from the site, as well as did some
         cool stuff like output formatting. Also, did not get far, because{" "}
-        <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">
+        <a
+          href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm"
+          target="_blank"
+          rel="noreferrer"
+        >
           Dijkstra
         </a>{" "}
         is still the worst.

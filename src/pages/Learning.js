@@ -6,7 +6,11 @@ function Learning() {
       <h1>Learning</h1>
       <h2>Learning</h2>
       <h3>
-        <a href="https://github.com/matthew-hre/1501-practice-site">
+        <a
+          href="https://github.com/matthew-hre/1501-practice-site"
+          target="_blank"
+          rel="noreferrer"
+        >
           1501 Practice Site
         </a>
       </h3>
@@ -19,11 +23,22 @@ function Learning() {
         Tailwind, as well as a tool called Prism for code snippets. Was a really
         fun project to work on, and I definitely have some ideas for expansion.
         theoretically, it should still be hosted{" "}
-        <a href="https://1501-practice-site.vercel.app/">here</a>.
+        <a
+          href="https://1501-practice-site.vercel.app/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          here
+        </a>
+        .
       </p>
 
       <h3>
-        <a href="https://github.com/matthew-hre/python_classes_practice">
+        <a
+          href="https://github.com/matthew-hre/python_classes_practice"
+          target="_blank"
+          rel="noreferrer"
+        >
           Python Classes Practice
         </a>
       </h3>
@@ -38,7 +53,11 @@ function Learning() {
       </p>
 
       <h3>
-        <a href="https://github.com/matthew-hre/python-to-java">
+        <a
+          href="https://github.com/matthew-hre/python-to-java"
+          target="_blank"
+          rel="noreferrer"
+        >
           Python to Java
         </a>
       </h3>
@@ -52,7 +71,11 @@ function Learning() {
       </p>
 
       <h3>
-        <a href="https://github.com/matthew-hre/BestVSCodeExtensions">
+        <a
+          href="https://github.com/matthew-hre/BestVSCodeExtensions"
+          target="_blank"
+          rel="noreferrer"
+        >
           Best VSCode Extensions
         </a>
       </h3>

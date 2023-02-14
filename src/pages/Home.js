@@ -23,7 +23,10 @@ function Home() {
         </a>
         . If you're interested in working with me,{" "}
         <Link to="contact">contact</Link> me! I'm always looking for&nbsp;
-        <a href="https://ldjam.com/">Ludum Dare</a> teammates.
+        <a href="https://ldjam.com/" target="_blank" rel="noreferrer">
+          Ludum Dare
+        </a>{" "}
+        teammates.
       </p>
       <h3>Some Recent Things</h3>
       <ul>
@@ -35,7 +38,11 @@ function Home() {
         </li>
         <li>
           <b>
-            <a href="https://github.com/matthew-hre/BestVSCodeExtensions">
+            <a
+              href="https://github.com/matthew-hre/BestVSCodeExtensions"
+              target="_blank"
+              rel="noreferrer"
+            >
               Best VSCode Extensions
             </a>
           </b>{" "}
