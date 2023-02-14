@@ -209,7 +209,7 @@ ul.nobull li {
 
 .snippet {
   padding-left: 30px;
-  border-left: 3px solid #555;
+  border-left: 3px solid #999;
   font-family: monospace;
   transition: 0.3s;
   font-size: 18px;
@@ -217,13 +217,36 @@ ul.nobull li {
 }
 
 .snippet:hover {
-  border-left: 3px solid #fff;
+  border-left: 3px solid #131313;
   transition: 0.3s;
 }
 
 .show-on-mobile {
   display: none;
   visibility: hidden;
+}
+
+.snippet-buttons > a {
+  text-decoration: underline;
+  font-family: sans-serif;
+  cursor: pointer;
+  font-size: 16px;
+  color: #999;
+  transition: 0.3s;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.snippet-buttons > a:hover {
+  color: #131313;
+  transition: 0.3s;
+}
+
+.snippet-buttons {
+  position: relative;
+  left: -20px;
 }
 
 strike {
@@ -245,6 +268,18 @@ strike {
   body select {
     color: #131313;
     background-color: white;
+  }
+  .snippet-buttons > a {
+    color: #ccc;
+  }
+  .snippet-buttons > a:hover {
+    color: #fff;
+  }
+  .snippet {
+    border-left: 3px solid #555;
+  }
+  .snippet:hover {
+    border-left: 3px solid #fff;
   }
 }
 

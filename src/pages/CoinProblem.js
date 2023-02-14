@@ -1,6 +1,7 @@
 import Contents from "../Contents";
 import "../index.css";
 import CoinProblemSketch from "./CoinProblemSketch";
+import Snippet from "../Snippet";
 
 function CoinProblem() {
   return (
@@ -13,7 +14,7 @@ function CoinProblem() {
         This was a problem I was given in my Puzzling Adventures in Mathematics
         course.
       </p>
-      <div className="snippet">
+      <Snippet>
         You have n plates, each with one coin.
         <br />
         There are two operations possible. Each operation costs you one coin.
@@ -34,12 +35,12 @@ function CoinProblem() {
         Note that you pay from one plate, and do something to the next plate(s).
         <br />
         Let c(n) be the maximum number of coins in plate n.
-        <ol>
+        <ol style={{ marginBottom: "0" }}>
           <li>Prove that c(4) ≥ 20.</li>
           <li>Prove that c(5) ≥ 300.</li>
           <li>What have you managed to get for c(5)? I can get over 800.</li>
         </ol>
-      </div>
+      </Snippet>
       <h3>My Manual Solution</h3>
       <p>
         Part 1 was a piece of cake, I just prioritized getting the most coins on
@@ -121,7 +122,7 @@ function CoinProblem() {
         look, shall we?
         <br />
         <br />
-        <div className="snippet">
+        <Snippet>
           PROCESS FOR (1) POINTS
           <br />
           [1, 1, 1, 1, 1]
@@ -133,7 +134,7 @@ function CoinProblem() {
           [0, 1, 1, 1, 1]
           <br />
           END OF PROGRAM OUTPUT
-        </div>
+        </Snippet>
         <br />
         See what it did there? It payed a coin from the first plate, and then
         swapped plates 2 and 3. Which worked, sure, but then it kept doing it.
@@ -142,7 +143,7 @@ function CoinProblem() {
         of its brothers:
         <br />
         <br />
-        <div className="snippet">
+        <Snippet>
           PROCESS FOR (3) POINTS
           <br />
           [1, 1, 1, 1, 1]
@@ -154,7 +155,7 @@ function CoinProblem() {
           [0, 1, 1, 0, 3]
           <br />
           END OF PROGRAM OUTPUT
-        </div>
+        </Snippet>
         <br />
         Yeah these robots fucking suck. But this one sucks less! See, it got
         three points! At this point, there are a few programs that have gotten
@@ -162,7 +163,7 @@ function CoinProblem() {
         this:
         <br />
         <br />
-        <div className="snippet">
+        <Snippet>
           PROCESS FOR (7) POINTS
           <br />
           [1, 1, 1, 1, 1]
@@ -180,7 +181,7 @@ function CoinProblem() {
           [1, 1, 0, 0, 7]
           <br />
           END OF PROGRAM OUTPUT
-        </div>
+        </Snippet>
         <br />
         Progress baby, yeah! It knows how to promote! It's getting a lot better
         at managing different columns, but that's where it gets stuck.
