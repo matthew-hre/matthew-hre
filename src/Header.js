@@ -11,7 +11,7 @@ function Header() {
     'prefixed "cool"',
     "artist",
     "graphic designer",
-    '<a href="https://en.wikipedia.org/wiki/Tron">fights for the users</a>',
+    '<a href="https://en.wikipedia.org/wiki/Tron" target="_blank" rel="noreferrer">fights for the users</a>',
     "student",
     "JavaScript developer",
     "React developer",
@@ -20,8 +20,8 @@ function Header() {
     "mediocre guitarist",
     "plastic disk enthusiast",
     "hobbyist game dev",
-    '<a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra</a> hater',
-    '<a href="https://bladerunner.fandom.com/wiki/Voight-Kampff_test">Voight-Kampf</a> proof',
+    '<a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm" target="_blank" rel="noreferrer">Dijkstra</a> hater',
+    '<a href="https://bladerunner.fandom.com/wiki/Voight-Kampff_test" target="_blank" rel="noreferrer">Voight-Kampf</a> proof',
   ];
 
   useEffect(() => {

@@ -53,22 +53,38 @@ function Nav() {
             </h2>
             <ul className="nobull">
               <li>
-                <a href="https://github.com/matthew-hre/hypixelbot">
+                <a
+                  href="https://github.com/matthew-hre/hypixelbot"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Hypixel Bot
                 </a>
               </li>
               <li>
-                <a href="https://github.com/matthew-hre/minesweeper">
+                <a
+                  href="https://github.com/matthew-hre/minesweeper"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   React Minesweeper
                 </a>
               </li>
               <li>
-                <a href="https://github.com/matthew-hre/adventOfCode2021">
+                <a
+                  href="https://github.com/matthew-hre/adventOfCode2021"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Advent of Code '21
                 </a>
               </li>
               <li>
-                <a href="https://github.com/matthew-hre/AOC22">
+                <a
+                  href="https://github.com/matthew-hre/AOC22"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Advent of Code '22
                 </a>
               </li>
@@ -85,22 +101,38 @@ function Nav() {
             </h2>
             <ul className="nobull">
               <li>
-                <a href="https://github.com/matthew-hre/1501-practice-site">
+                <a
+                  href="https://github.com/matthew-hre/1501-practice-site"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   1501 Practice Site
                 </a>
               </li>
               <li>
-                <a href="https://github.com/matthew-hre/python_classes_practice">
+                <a
+                  href="https://github.com/matthew-hre/python_classes_practice"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   1501 Python Classes
                 </a>
               </li>
               <li>
-                <a href="https://github.com/matthew-hre/python-to-java">
+                <a
+                  href="https://github.com/matthew-hre/python-to-java"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Python to Java
                 </a>
               </li>
               <li>
-                <a href="https://github.com/matthew-hre/BestVSCodeExtensions">
+                <a
+                  href="https://github.com/matthew-hre/BestVSCodeExtensions"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   VSCode Extensions
                 </a>
               </li>
@@ -114,27 +146,53 @@ function Nav() {
             </h2>
             <ul className="nobull">
               <li>
-                <a href="https://whycardboard.itch.io/populator">populator</a>
+                <a
+                  href="https://whycardboard.itch.io/populator"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  populator
+                </a>
               </li>
               <li>
-                <a href="https://whycardboard.itch.io/depopulator">
+                <a
+                  href="https://whycardboard.itch.io/depopulator"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   (de)populator
                 </a>
               </li>
               <li>
-                <a href="https://whycardboard.itch.io/rorschach">rorschach</a>
+                <a
+                  href="https://whycardboard.itch.io/rorschach"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  rorschach
+                </a>
               </li>
               <li>
-                <a href="https://whycardboard.itch.io/clipscale">clipscale</a>
+                <a
+                  href="https://whycardboard.itch.io/clipscale"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  clipscale
+                </a>
               </li>
               <li>
-                <a href="https://whycardboard.itch.io/bloodsucker">
+                <a
+                  href="https://whycardboard.itch.io/bloodsucker"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   bloodsucker
                 </a>
               </li>
             </ul>
           </section>
-          <section>
+          {/* <section>
             <h2>Design</h2>
             <ul className="nobull">
               <li>
@@ -144,7 +202,7 @@ function Nav() {
                 <Link to="band-posters">Band Posters</Link>
               </li>
             </ul>
-          </section>
+          </section> */}
         </section>
       </details>
     </nav>

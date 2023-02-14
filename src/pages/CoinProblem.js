@@ -7,7 +7,7 @@ function CoinProblem() {
     <main>
       <h1>Coin Problem</h1>
       <h2>The Coin Problem</h2>
-      <Contents data="The Actual Problem: 1, My Manual Solution: 2, NEAT: 3, Understanding AI: 4, Results: 5, Summary: 6, Source Code: 7, The Actual Game: 8" />
+      <Contents data="The Actual Problem: 1, My Manual Solution: 2, NEAT: 3, Understanding AI: 4, Evolution of the AI: 5, Species and Evolution: 6, Results: 7, Summary: 8, Source Code: 9, The Actual Game: 10" />
       <h3>The Actual Problem</h3>
       <p>
         This was a problem I was given in my Puzzling Adventures in Mathematics
@@ -51,7 +51,7 @@ function CoinProblem() {
         for a good half hour, and ended up getting 4096 as my answer. Pretty
         good! I had satisfied both parts 2 and 3, and was content. That is,
         until my professor let me know that my answer was not the largest answer
-        he had seen. My ego couldn't handle that.
+        possible. My ego couldn't handle that.
       </p>
       <h3>NeuroEvolution of Augmenting Topologies</h3>
       <p>
@@ -61,14 +61,15 @@ function CoinProblem() {
         it still sucked.
         <br />
         <br />
-        That night, after a few* drinks, I drunkenly Googled "python ai" and
-        started doing some reading. The biggest problem with implementing an AI
-        for this problem was needing a dataset. Most AI algorithms require a
-        handful of datasets so it can understand how the game / problem actually
-        works. I did not have these. At the same time, if I <i>did</i> have
-        these, they wouldn't be of a fixed size, and would make teaching the AI
-        a lot more difficult. I ended up settling on the NEAT algorithm, which
-        requires some arbitrary "input", and gives me some arbitrary "output".
+        That night, after chatting with some people smarter than me, I Googled
+        "python ai" and started doing some reading. The biggest problem with
+        implementing an AI for this problem was needing a dataset. Most AI
+        algorithms require a handful of datasets so it can understand how the
+        game / problem actually works. I did not have these. At the same time,
+        if I <i>did</i> have these, they wouldn't be of a fixed size, and would
+        make teaching the AI a lot more difficult. I ended up settling on the
+        NEAT algorithm, which requires some arbitrary "input", and gives me some
+        arbitrary "output".
       </p>
       <h3>Understanding AI</h3>
       <p>
@@ -113,6 +114,94 @@ function CoinProblem() {
         parents. These connections can be mutated a little bit, but it's mostly
         a copy of its parent. We do this 750 times.
       </p>
+      <h3>Robots Can Learn, But Can They Love?</h3>
+      <p>
+        Let's talk a bit about how the AI actually processed this problem. For
+        the first few generations, we got some pretty bad results. Let's take a
+        look, shall we?
+        <br />
+        <br />
+        <div className="snippet">
+          PROCESS FOR (1) POINTS
+          <br />
+          [1, 1, 1, 1, 1]
+          <br />
+          [0, 1, 1, 1, 1]
+          <br />
+          [0, 1, 1, 1, 1]
+          <br />
+          [0, 1, 1, 1, 1]
+          <br />
+          END OF PROGRAM OUTPUT
+        </div>
+        <br />
+        See what it did there? It payed a coin from the first plate, and then
+        swapped plates 2 and 3. Which worked, sure, but then it kept doing it.
+        Even though it couldn't afford it. It just kept on doing it until the
+        program decided to put this robot out of its misery. Let's look at one
+        of its brothers:
+        <br />
+        <br />
+        <div className="snippet">
+          PROCESS FOR (3) POINTS
+          <br />
+          [1, 1, 1, 1, 1]
+          <br />
+          [1, 1, 1, 0, 3]
+          <br />
+          [0, 1, 1, 0, 3]
+          <br />
+          [0, 1, 1, 0, 3]
+          <br />
+          END OF PROGRAM OUTPUT
+        </div>
+        <br />
+        Yeah these robots fucking suck. But this one sucks less! See, it got
+        three points! At this point, there are a few programs that have gotten
+        three points, so we've bred those together. Now we got outputs like
+        this:
+        <br />
+        <br />
+        <div className="snippet">
+          PROCESS FOR (7) POINTS
+          <br />
+          [1, 1, 1, 1, 1]
+          <br />
+          [1, 1, 0, 3, 1]
+          <br />
+          [1, 1, 0, 2, 3]
+          <br />
+          [1, 1, 0, 1, 5]
+          <br />
+          [1, 1, 0, 0, 7]
+          <br />
+          [1, 1, 0, 0, 7]
+          <br />
+          [1, 1, 0, 0, 7]
+          <br />
+          END OF PROGRAM OUTPUT
+        </div>
+        <br />
+        Progress baby, yeah! It knows how to promote! It's getting a lot better
+        at managing different columns, but that's where it gets stuck.
+        <br />
+        <br />
+        At this point, we've reached a problem. The AI really likes promoting,
+        because that's what allows it to continue breeding. It really doesn't
+        like swapping because it doesn't give that instant gratification.
+      </p>
+      <h3>Diversification of Robots</h3>
+      <p>
+        At this point, the maximum score the robot can get is 448. Here's the
+        problem: every AI is currently evolving in the exact same way. Their
+        neurons are connecting and working in the same way across the board. By
+        allowing new <b>species</b>, we can allow different neuron connections
+        without the risk of getting killed off for sucking. This may seem like a
+        waste of resources, but it's not. Sure, we'll have some stupid bot that
+        only like swapping, but eventually, that swapping "gene" is gonna get
+        breeded into the promoting bot. At that point, we can create a hardy mix
+        of swaps and promotions.
+      </p>
       <h3>Results</h3>
       <p>
         7,725,080. That's the highest it got without crashing my PC. I would
@@ -132,17 +221,29 @@ function CoinProblem() {
       <p>
         <ul>
           <li>
-            <a href="https://neat-python.readthedocs.io/en/latest/index.html">
+            <a
+              href="https://neat-python.readthedocs.io/en/latest/index.html"
+              target="_blank"
+              rel="noreferrer"
+            >
               NEAT-Python
             </a>
             , other than having a super complex configuration system, is a
             relatively intuitive library.
           </li>
           <li>
-            <a href="https://github.com/matthew-hre/NEAT-coin-problem">
+            <a
+              href="https://github.com/matthew-hre/NEAT-coin-problem"
+              target="_blank"
+              rel="noreferrer"
+            >
               NEAT-coin-problem
             </a>{" "}
             is the repo for this project. It's gross. I'm not sorry.
+          </li>
+          <li>
+            Some special thanks to Nathan, David, and Sunny for giving me some
+            pointers along the way.
           </li>
         </ul>
       </p>
