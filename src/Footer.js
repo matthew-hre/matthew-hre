@@ -10,6 +10,7 @@ function Footer() {
       .get(`https://api.github.com/repos/matthew-hre/matthew-hre/commits`)
       .then((response) => {
         const commitSha = response.data[0].sha;
+        const commitMessage = response.data[0].commit.message;
         let commitTime = response.data[0].commit.committer.date
           .replace("T", " at ")
           .replace("Z", " ");
@@ -25,6 +26,7 @@ function Footer() {
         setCommit({
           sha: commitSha,
           time: commitTime,
+          message: commitMessage,
         });
       })
       .catch((error) => {
@@ -41,6 +43,7 @@ function Footer() {
           href={`https://github.com/matthew-hre/matthew-hre/commit/${commit.sha}`}
           target="_blank"
           rel="noreferrer"
+          title={commit.message}
         >
           commit {commit.sha.split(" ")[0].substring(0, 7)}
         </a>

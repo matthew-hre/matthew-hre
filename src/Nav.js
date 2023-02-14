@@ -38,11 +38,11 @@ function Nav() {
               <li>
                 <Link to="socials">Socials</Link>
               </li>
-              <li>
+              {/* <li>
                 <a href="matthew-hrehirchuk-resume-2023.pdf" download>
                   Resume
                 </a>
-              </li>
+              </li> */}
             </ul>
           </section>
           <section>
