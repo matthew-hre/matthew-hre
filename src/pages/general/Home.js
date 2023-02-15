@@ -1,6 +1,6 @@
-import "../index.css";
+import "../../index.css";
 import { Link } from "react-router-dom";
-import Contents from "../Contents";
+import Contents from "../../Contents";
 
 function Home() {
   return (

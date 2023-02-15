@@ -1,5 +1,5 @@
-import "../index.css";
-import poster from "../images/poster-1984.png";
+import "../../index.css";
+import poster from "../../images/poster-1984.png";
 
 function Orwell() {
   return (

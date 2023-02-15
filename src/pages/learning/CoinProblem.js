@@ -1,7 +1,7 @@
-import Contents from "../Contents";
-import "../index.css";
+import Contents from "../../Contents";
+import "../../index.css";
 import CoinProblemSketch from "./CoinProblemSketch";
-import Snippet from "../Snippet";
+import Snippet from "../../Snippet";
 
 function CoinProblem() {
   return (

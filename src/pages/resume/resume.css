@@ -1,0 +1,115 @@
+fieldset {
+  margin-bottom: 12px;
+}
+
+input[type="reset"],
+input[type="submit"] {
+  border: 0;
+  color: #131313;
+  background: none;
+  font-size: 16px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.option input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border: 2px solid #131313;
+}
+
+/* On mouse-over, add a grey background color */
+.option:hover input ~ .checkmark {
+  background-color: #ddd;
+}
+
+/* When the checkbox is checked, add a blue background */
+.option input:checked ~ .checkmark {
+  background-color: #131313;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.option input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.option .checkmark:after {
+}
+
+.option {
+  position: relative;
+  padding-left: 30px;
+  margin-right: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.option-container {
+  min-width: 140px;
+  display: inline-block;
+  margin: 6px 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  input[type="reset"],
+  input[type="submit"] {
+    color: #fff;
+  }
+  .checkmark {
+    border: 2px solid #fff;
+  }
+
+  /* On mouse-over, add a grey background color */
+  .option:hover input ~ .checkmark {
+    background-color: #333;
+  }
+
+  /* When the checkbox is checked, add a blue background */
+  .option input:checked ~ .checkmark {
+    background-color: #fff;
+  }
+}
+
+@media (max-width: 1100px) {
+}
+
+@media (max-width: 1100px) and (min-width: 751px) {
+  .option-container {
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 750px) and (min-width: 601px) {
+  .option-container {
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 600px) and (min-width: 401px) {
+  .option-container {
+    min-width: 170px;
+  }
+}
