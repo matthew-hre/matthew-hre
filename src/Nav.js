@@ -87,6 +87,9 @@ function Nav() {
                 </a>
               </li>
               <li>
+                <Link to="calgary-hacks">Calgary Hacks</Link>
+              </li>
+              <li>
                 <Link to="coin-problem">Coin Problem</Link>
               </li>
             </ul>
@@ -186,6 +189,15 @@ function Nav() {
                   rel="noreferrer"
                 >
                   bloodsucker
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://ld53.matthew-hre.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Sender Not Found
                 </a>
               </li>
             </ul>

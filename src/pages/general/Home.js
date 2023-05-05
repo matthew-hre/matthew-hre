@@ -6,26 +6,34 @@ function Home() {
   return (
     <main>
       <h1>Home</h1>
-      <h2>February 2023</h2>
-      <Contents data="One Month Down: 1, Recent Projects: 2, Website Updates: 3, Website Roadmap: 4" />
-      <h3>One Month Down</h3>
+      <h2>May 2023</h2>
+      <Contents data="Life Up To Now: 1, Website Updates: 2, Website Roadmap: 3" />
+      <h3>Life, Up To Now</h3>
       <p>
-        Here's my project for this month: <b>AI Generated Resume</b>. I want my
-        resume to be generated on the fly. Of course, still reflecting my actual
-        skills. I want to be able to have users select what skills they're
-        looking for, and have my resume dynamically update to cater to the
-        skills they're looking for. I'm thinking of using the{" "}
-        <a href="https://openai.com/api/" target="_blank" rel="noreferrer">
-          OpenAI
-        </a>{" "}
-        API to generate the descriptions of each of my roles, as to cater to the
-        user. I could also organize the resume, style it depending on the needs
-        of the user, and even show off some relevant projects.
-        <br />
-        <br />
-        Theoretically, I should have a page for this done by the end of the
-        month, as well as my old resume being displayed as a webpage instead of
-        a pdf.
+        Happy May! Final exams are all wrapped up, and I'm now on full time
+        summer break. I'm going to be working on a couple of projects, as well
+        as doing some work, but if you want to hire me (internship plz) then I'm
+        all ears.
+      </p>
+      <p>
+        I've just recently finished my Ludum Dare 53 entry Sender Not Found,
+        which was made in React! A fun change from the usual GML or Godot
+        submission. This horror thriller game clocks in as my ninth Ludum Dare
+        entry, and my 17th game jam entry overall. Jesus Christ.{" "}
+        <a
+          href="https://ldjam.com/events/ludum-dare/53/sender-not-found"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Check it out here
+        </a>
+        .
+      </p>
+      <p>
+        Calgary Hacks 2023 happened a while back, and we ended up taking first
+        place in our category. I had a great team of people, and we ended up
+        making a really cool project.{" "}
+        <Link to="calgary-hacks">Check it out here</Link>.
       </p>
       <p>
         If you're a recruiter or someone looking to hire me, welcome! Take a
@@ -38,28 +46,6 @@ function Home() {
         </a>{" "}
         teammates.
       </p>
-      <h3>Some Recent Things</h3>
-      <ul>
-        <li>
-          <b>
-            <Link to="coin-problem">The Coin Problem</Link>
-          </b>{" "}
-          was a fun little introduction to AI and genetic algorithms.
-        </li>
-        <li>
-          <b>
-            <a
-              href="https://github.com/matthew-hre/BestVSCodeExtensions"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Best VSCode Extensions
-            </a>
-          </b>{" "}
-          is a handy little repo I made to show off some of my favourite VSCode
-          extensions.
-        </li>
-      </ul>
 
       <h3>Website Updates</h3>
       <ul>

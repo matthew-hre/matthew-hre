@@ -19,6 +19,7 @@ import Games from "./pages/games/Games.js";
 
 // Projects
 import Projects from "./pages/projects/Projects.js";
+import CalgaryHacks from "./pages/projects/CalgaryHacks";
 
 // Learning
 import Learning from "./pages/learning/Learning.js";
@@ -40,6 +41,7 @@ function App() {
           <Route path="resume" element={<Resume />} />
           <Route path="games" element={<Games />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="calgary-hacks" element={<CalgaryHacks />} />
           <Route path="learning" element={<Learning />} />
           <Route path="1984" element={<Orwell />} />
           <Route path="band-posters" element={<BandPosters />} />

@@ -68,7 +68,7 @@ function Home() {
         Ended up doing some more web dev in high school, mostly working with JS.
         Near the end of high school, I started working with React and Bootstrap
         to try and get an internship. Got one, just not with React. Nowadays
-        I'll use react with Tailwind to whip up some quick projects.
+        I'll use React with raw CSS to whip up some quick projects.
       </p>
     </main>
   );
