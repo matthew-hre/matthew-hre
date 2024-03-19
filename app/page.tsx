@@ -1,6 +1,3 @@
-// import { articles, Category } from "@/articles.config";
-import { filterArticlesByCategory } from "@/lib/articleUtils";
-
 import { SpotifyPresence } from "@/components/SpotifyPresence";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Link from "next/link";
