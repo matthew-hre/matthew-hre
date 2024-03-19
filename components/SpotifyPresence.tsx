@@ -21,7 +21,7 @@ export const SpotifyPresence = () => {
     try {
       console.log(lanyard?.data?.data?.spotify);
       await set({
-        apiKey: process.env.NEXT_PUBLIC_LANYARD_KV_KEY!,
+        apiKey: process.env.LANYARD_KV_KEY!,
         userId: "305065512457469952",
         key: "spotify_last_played",
         value: JSON.stringify(lanyard?.data?.data?.spotify),
