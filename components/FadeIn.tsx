@@ -1,3 +1,5 @@
+"use client";
+
 /* Modified from react-fade-in
  * https://www.npmjs.com/package/react-fade-in?activeTab=code
  */

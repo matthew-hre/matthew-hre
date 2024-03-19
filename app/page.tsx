@@ -1,6 +1,4 @@
-"use client";
-
-import { articles, Category } from "@/articles.config";
+// import { articles, Category } from "@/articles.config";
 import { filterArticlesByCategory } from "@/lib/articleUtils";
 
 import { SpotifyPresence } from "@/components/SpotifyPresence";
@@ -8,15 +6,19 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Link from "next/link";
 
 import FadeIn from "@/components/FadeIn";
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "@/keystatic.config";
 
-export default function Home() {
-  const blogPosts = filterArticlesByCategory(articles, Category.Blog);
-  const projectPosts = filterArticlesByCategory(articles, Category.Project);
-  const learningPosts = filterArticlesByCategory(articles, Category.Learning);
-  const gamePosts = filterArticlesByCategory(articles, Category.Game);
+export default async function Home() {
+  const reader = createReader(process.cwd(), keystaticConfig);
+
+  const blogPosts = await reader.collections.blog.all();
+  const projectPosts = await reader.collections.projects.all();
+  const learningPosts = await reader.collections.learning.all();
+  const gamePosts = await reader.collections.games.all();
 
   return (
-    <main className="flex min-h-screen flex-col px-20 mb-16">
+    <main className="flex min-h-screen flex-col px-8 md:px-20 mb-16">
       <FadeIn>
         <h1 className="text-foreground mb-6 font-light text-2xl font-serif w-full flex flex-row items-center justify-between">
           <p>Matthew Hrehirchuk</p>
@@ -53,8 +55,8 @@ export default function Home() {
             {projectPosts.map((post, idx) => (
               <Card
                 key={idx}
-                title={post.title}
-                description={post.description || ""}
+                title={post.entry.title}
+                description={post.entry.description || ""}
                 href={`/projects/${post.slug}`}
               />
             ))}
@@ -65,8 +67,8 @@ export default function Home() {
             {learningPosts.map((post, idx) => (
               <Card
                 key={idx}
-                title={post.title}
-                description={post.description || ""}
+                title={post.entry.title}
+                description={post.entry.description || ""}
                 href={`/learning/${post.slug}`}
               />
             ))}
@@ -77,8 +79,8 @@ export default function Home() {
             {gamePosts.map((post, idx) => (
               <Card
                 key={idx}
-                title={post.title}
-                description={post.description || ""}
+                title={post.entry.title}
+                description={post.entry.description || ""}
                 href={`/games/${post.slug}`}
               />
             ))}
@@ -92,8 +94,8 @@ export default function Home() {
           {blogPosts.map((post, idx) => (
             <BlogLink
               key={idx}
-              title={post.title}
-              date={post.date?.toLocaleDateString() || ""}
+              title={post.entry.title}
+              date={post.entry.createdDate || ""}
               href={`/blog/${post.slug}`}
             />
           ))}
@@ -144,6 +146,14 @@ const BlogLink = ({
   date: string;
   href: string;
 }) => {
+  const formattedDate = new Date(date)
+    .toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+    .replace("Invalid Date", "");
+
   return (
     <Link
       href={href}
@@ -153,7 +163,7 @@ const BlogLink = ({
         <p className="text-foreground">{title}</p>
       </h3>
       <p className="text-muted-foreground text-xs md:text-sm italic transition-all">
-        <time dateTime={date}>{date}</time>
+        <time dateTime={date}>{formattedDate}</time>
       </p>
     </Link>
   );

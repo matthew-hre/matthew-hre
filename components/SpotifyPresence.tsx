@@ -88,8 +88,8 @@ export const SpotifyPresence = () => {
               <span className="text-sm text-primary">Last played</span>
             )}
           </span>
-          <span className="text-md mb-2 line-clamp-2 font-bold leading-none">
-            {song}
+          <span className="text-md mb-2 font-bold leading-none">
+            {clampSongTitle(song)}
           </span>
           <span className="line-clamp-1 w-[85%] text-xs text-muted-foreground">
             <span className="text-secondary-foreground font-semibold">by</span>{" "}
@@ -104,3 +104,10 @@ export const SpotifyPresence = () => {
     </Link>
   );
 };
+
+function clampSongTitle(title: string) {
+  if (title.length > 40) {
+    return title.substring(0, 40) + "...";
+  }
+  return title;
+}

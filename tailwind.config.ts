@@ -22,6 +22,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-inter)", ...fontFamily.sans],
         serif: ["var(--font-eb-garamond)", ...fontFamily.serif],
+        mono: ["var(--font-fira-code)", ...fontFamily.mono],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -30,8 +31,8 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary)) / var(--tw-bg-opacity)",
-          foreground: "hsl(var(--primary-foreground)) / var(--tw-bg-opacity)",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
