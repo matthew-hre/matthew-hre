@@ -4,30 +4,33 @@ import { createReader } from "@keystatic/core/reader";
 import keystaticConfig from "@/keystatic.config";
 
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 const reader = createReader(process.cwd(), keystaticConfig);
 
 export default async function Post({ params }: { params: { slug: string } }) {
-  const post = await reader.collections.games.read(params.slug);
-  return post ? (
+  const { slug } = params;
+
+  const game = await reader.collections.games.read(slug);
+
+  if (!game) notFound();
+
+  return game ? (
     <>
-      <h1 className="text-foreground mb-6 font-light text-4xl font-serif">
-        {post.title}
-      </h1>
-      <DocumentRenderer
-        document={await post.content()}
-        componentBlocks={{
-          a: (props) => (
-            <Link href={props.href} {...props}>
-              {props.children}
-            </Link>
-          ),
-        }}
-      />
+      <h1>{game.title}</h1>
+      <DocumentRenderer document={await game.content()} />
       <hr />
       <Link href="/games">Back to Games</Link>
     </>
   ) : (
-    <div>No Post Found</div>
+    <div>No Game Found</div>
   );
+}
+
+export async function generateStaticParams() {
+  const slugs = await reader.collections.games.list();
+
+  return slugs.map((slug) => ({
+    slug,
+  }));
 }

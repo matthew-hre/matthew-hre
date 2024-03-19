@@ -1,19 +1,32 @@
-import { config, fields, collection } from "@keystatic/core";
+import {
+  config,
+  fields,
+  collection,
+  LocalConfig,
+  GitHubConfig,
+} from "@keystatic/core";
+
+const isProd = process.env.NODE_ENV === "production";
+
+const localMode: LocalConfig["storage"] = {
+  kind: "local",
+};
+
+const githubMode: GitHubConfig["storage"] = {
+  kind: "github",
+  repo: {
+    owner: "matthew-hre",
+    name: "matthew-hre",
+  },
+};
 
 export default config({
-  storage: {
-    kind: "github",
-    repo: {
-      owner: "matthew-hre",
-      name: "matthew-hre",
-    },
-    branchPrefix: "v2",
-  },
+  storage: isProd ? githubMode : localMode,
   collections: {
     blog: collection({
       label: "Blog",
       slugField: "title",
-      path: "public/content/blog/*",
+      path: "content/blog/*",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -49,7 +62,7 @@ export default config({
     projects: collection({
       label: "Projects",
       slugField: "title",
-      path: "public/content/projects/*",
+      path: "content/projects/*",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -90,7 +103,7 @@ export default config({
     learning: collection({
       label: "Learning",
       slugField: "title",
-      path: "public/content/learning/*",
+      path: "content/learning/*",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -131,7 +144,7 @@ export default config({
     games: collection({
       label: "Games",
       slugField: "title",
-      path: "public/content/games/*",
+      path: "content/games/*",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
