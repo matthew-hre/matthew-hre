@@ -21,11 +21,17 @@ export default async function Home() {
           <p>Matthew Hrehirchuk</p>
           <ThemeSwitcher />
         </h1>
+        <p className="border-l-2 border-yellow-500 italic border-foreground pl-2 mb-6 bg-muted py-2">
+          WARNING: This website is currently under heavy development. I pushed
+          to main by accident and now I&apos;m stuck here. Please be patient
+          while I fix it.
+        </p>
         <p className="text-foreground leading-7 mb-6">
           I&apos;m a web developer, a graphic designer, and a student at{" "}
           <Link
             className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
             href="https://mtroyal.ca"
+            target="_blank"
           >
             Mount Royal University
           </Link>{" "}
@@ -38,6 +44,7 @@ export default async function Home() {
           <Link
             className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
             href="https://mruhacks.ca"
+            target="_blank"
           >
             MRUHacks 2024
           </Link>
@@ -57,7 +64,7 @@ export default async function Home() {
                 href={`/projects/${post.slug}`}
               />
             ))}
-            <Card title="All Projects →" description="" href="localhost:3000" />
+            <Card title="All Projects →" description="" href="/projects" />
           </div>
           <div className="w-full md:w-48 md:ml-12 space-y-4">
             <h2 className="text-muted-foreground text-sm mb-4">Learning</h2>
@@ -69,7 +76,7 @@ export default async function Home() {
                 href={`/learning/${post.slug}`}
               />
             ))}
-            <Card title="All Learning →" description="" href="localhost:3000" />
+            <Card title="All Learning →" description="" href="/learning" />
           </div>
           <div className="w-full md:w-48 md:ml-12 space-y-4">
             <h2 className="text-muted-foreground text-sm mb-4">Games</h2>
@@ -81,7 +88,7 @@ export default async function Home() {
                 href={`/games/${post.slug}`}
               />
             ))}
-            <Card title="All Games →" description="" href="localhost:3000" />
+            <Card title="All Games →" description="" href="/games" />
           </div>
         </div>
         <h2 className="text-foreground mb-6 font-light text-2xl font-serif">
@@ -96,7 +103,7 @@ export default async function Home() {
               href={`/blog/${post.slug}`}
             />
           ))}
-          <BlogLink title="All Posts →" date="" href="localhost:3000" />
+          <BlogLink title="All Posts →" date="" href="/blog" />
         </div>
         <h2 className="text-foreground mb-2 font-light text-2xl font-serif">
           Now

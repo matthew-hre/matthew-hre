@@ -6,13 +6,13 @@ import Link from "next/link";
 const reader = createReader(process.cwd(), keystaticConfig);
 
 export default async function Page() {
-  const blog = await reader.collections.blog.all();
+  const projects = await reader.collections.projects.all();
 
   return (
     <ul>
-      {blog.map((post) => (
+      {projects.map((post) => (
         <li key={post.slug}>
-          <Link href={`/blog/${post.slug}`}>{post.entry.title}</Link>
+          <Link href={`/projects/${post.slug}`}>{post.entry.title}</Link>
         </li>
       ))}
     </ul>

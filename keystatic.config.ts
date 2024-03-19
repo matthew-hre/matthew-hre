@@ -13,7 +13,7 @@ export default config({
     blog: collection({
       label: "Blog",
       slugField: "title",
-      path: "content/blog/*",
+      path: "public/content/blog/*",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -49,7 +49,7 @@ export default config({
     projects: collection({
       label: "Projects",
       slugField: "title",
-      path: "content/projects/*",
+      path: "public/content/projects/*",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -90,7 +90,7 @@ export default config({
     learning: collection({
       label: "Learning",
       slugField: "title",
-      path: "content/learning/*",
+      path: "public/content/learning/*",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -131,7 +131,7 @@ export default config({
     games: collection({
       label: "Games",
       slugField: "title",
-      path: "content/games/*",
+      path: "public/content/games/*",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),

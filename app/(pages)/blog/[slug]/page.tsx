@@ -14,7 +14,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
       <h1>{post.title}</h1>
       <DocumentRenderer document={await post.content()} />
       <hr />
-      <Link href="/blog">Back to Posts</Link>
+      <Link href="/blog">Back to Blog</Link>
     </>
   ) : (
     <div>No Post Found</div>

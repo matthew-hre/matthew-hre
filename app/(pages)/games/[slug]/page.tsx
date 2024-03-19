@@ -25,7 +25,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
         }}
       />
       <hr />
-      <Link href="/blog">Back to Posts</Link>
+      <Link href="/games">Back to Games</Link>
     </>
   ) : (
     <div>No Post Found</div>
