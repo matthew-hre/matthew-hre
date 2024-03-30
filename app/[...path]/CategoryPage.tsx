@@ -1,14 +1,20 @@
-import { reader } from "@/lib/createGitHubReader";
-
+import { reader } from "@/lib/createReader";
 import CategoryPageClient from "./CategoryPageClient";
 
-export default async function CategoryPage({ category }: { category: string }) {
+import Footer from "@/components/Footer";
+export default async function CategoryPage({
+  params,
+}: {
+  params: {
+    path: string[];
+  };
+}) {
   const collection = await reader.collections[
-    category as keyof typeof reader.collections
+    params.path[0] as keyof typeof reader.collections
   ];
 
   if (!collection) {
-    throw new Error(`No collection found for ${category}`);
+    throw new Error(`No collection found for ${params.path[0]}`);
   }
 
   const all = await collection.all();
@@ -24,5 +30,10 @@ export default async function CategoryPage({ category }: { category: string }) {
     },
   }));
 
-  return <CategoryPageClient category={category} posts={trimmedPosts} />;
+  return (
+    <>
+      <CategoryPageClient category={params.path[0]} posts={trimmedPosts} />{" "}
+      <Footer />
+    </>
+  );
 }

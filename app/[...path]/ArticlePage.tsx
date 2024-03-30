@@ -1,17 +1,15 @@
 import { type MDXRemoteSerializeResult } from "next-mdx-remote";
-import { serialize } from "next-mdx-remote/serialize";
 
-import { reader } from "@/lib/createGitHubReader";
-
-import ArticlePage from "./ArticlePage";
-import CategoryPage from "./CategoryPage";
-import HomePage from "./HomePage";
-import Footer from "@/components/Footer";
+import { reader } from "@/lib/createReader";
 
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
 import { notFound } from "next/navigation";
+
+import { serialize } from "next-mdx-remote/serialize";
+import ArticlePage from "./ArticlePageClient";
+import Footer from "@/components/Footer";
 
 type Frontmatter = {
   title: string;
@@ -26,9 +24,6 @@ type Post<TFrontmatter> = {
   serialized: MDXRemoteSerializeResult;
   frontmatter: TFrontmatter;
 };
-
-type DynamicStaticPaths = { path: string[] };
-type DynamicParams = { params: DynamicStaticPaths };
 
 async function getPost(
   category: string,
@@ -79,40 +74,25 @@ async function getPost(
   };
 }
 
-export default async function Page({ params }: DynamicParams) {
-  const { path = [] } = params;
-
-  if (path.length === 0) {
-    return (
-      <>
-        <HomePage />
-        <Footer />
-      </>
-    );
-  }
-
-  if (path.length === 1) {
-    return (
-      <>
-        <CategoryPage category={path[0]} />
-        <Footer />
-      </>
-    );
-  }
-
-  if (path[0] === "_next") {
-    return null;
-  }
-
-  const { serialized, frontmatter } = await getPost(path[0], path[1]);
+export default async function Page({
+  params,
+}: {
+  params: {
+    path: string[];
+  };
+}) {
+  const { serialized, frontmatter } = await getPost(
+    params.path[0],
+    params.path[1]
+  );
 
   const formattedPath = [
     {
-      slug: path[0],
-      title: toTitleCase(path[0]),
+      slug: params.path[0],
+      title: toTitleCase(params.path[0]),
     },
     {
-      slug: path[0] + "/" + path[1],
+      slug: params.path[0] + "/" + params.path[1],
       title: frontmatter.title,
     },
   ];
@@ -127,6 +107,13 @@ export default async function Page({ params }: DynamicParams) {
       <Footer />
     </>
   );
+}
+
+function toTitleCase(str: string) {
+  return str
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 export async function generateStaticParams() {
@@ -162,11 +149,8 @@ export async function generateStaticParams() {
     },
   }));
 
+  console.log("Generated paths for pages");
+  console.log([...learningPaths, ...blogPaths, ...projectPaths, ...gamePaths]);
+
   return [...learningPaths, ...blogPaths, ...projectPaths, ...gamePaths];
-}
-function toTitleCase(str: string) {
-  return str
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
 }

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import FadeIn from "@/components/FadeIn";
 
-import { reader } from "@/lib/createGitHubReader";
+import { reader } from "@/lib/createReader";
 
 export default async function Home() {
   const blogPosts = await reader.collections.blog.all();
