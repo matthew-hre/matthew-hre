@@ -11,6 +11,8 @@ import { serialize } from "next-mdx-remote/serialize";
 import ArticlePage from "./ArticlePageClient";
 import Footer from "@/components/Footer";
 
+import { toTitleCase } from "@/lib/utils";
+
 type Frontmatter = {
   title: string;
   description: string;
@@ -107,50 +109,4 @@ export default async function Page({
       <Footer />
     </>
   );
-}
-
-function toTitleCase(str: string) {
-  return str
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-
-export async function generateStaticParams() {
-  const learningSlugs = await reader.collections.learning.list();
-
-  const learningPaths = learningSlugs.map((slug) => ({
-    params: {
-      path: ["learning", slug],
-    },
-  }));
-
-  const blogSlugs = await reader.collections.blog.list();
-
-  const blogPaths = blogSlugs.map((slug) => ({
-    params: {
-      path: ["blog", slug],
-    },
-  }));
-
-  const projectSlugs = await reader.collections.projects.list();
-
-  const projectPaths = projectSlugs.map((slug) => ({
-    params: {
-      path: ["projects", slug],
-    },
-  }));
-
-  const gamesSlugs = await reader.collections.games.list();
-
-  const gamePaths = gamesSlugs.map((slug) => ({
-    params: {
-      path: ["games", slug],
-    },
-  }));
-
-  console.log("Generated paths for pages");
-  console.log([...learningPaths, ...blogPaths, ...projectPaths, ...gamePaths]);
-
-  return [...learningPaths, ...blogPaths, ...projectPaths, ...gamePaths];
 }

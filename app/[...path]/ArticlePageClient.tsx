@@ -11,6 +11,8 @@ import { DarkTheme, LightTheme } from "@/styles/github-themes";
 
 import { useEffect, useState } from "react";
 
+import { formatDate } from "@/lib/utils";
+
 export default function ArticlePage({
   frontmatter,
   serialized,
@@ -61,15 +63,3 @@ export default function ArticlePage({
     </div>
   );
 }
-
-const formatDate = (date: string) => {
-  // march 17, 2024, 2:00 pm
-  const d = new Date(date);
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
-};
