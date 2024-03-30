@@ -64,5 +64,9 @@ export async function generateStaticParams() {
     ...learningPaths.map((slug) => ({ path: ["learning", slug] })),
     ...projectPaths.map((slug) => ({ path: ["projects", slug] })),
     ...gamePaths.map((slug) => ({ path: ["games", slug] })),
+    { path: ["games"] },
+    { path: ["projects"] },
+    { path: ["blog"] },
+    { path: ["learning"] },
   ];
 }
