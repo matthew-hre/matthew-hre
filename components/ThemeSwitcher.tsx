@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { GoSun, GoMoon } from "react-icons/go";
 
-export default function ThemeSwitcher() {
+export default function ThemeSwitcher({ className }: { className?: string }) {
   const { theme, setTheme, systemTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -24,7 +24,10 @@ export default function ThemeSwitcher() {
   return (
     <button
       onClick={toggleTheme}
-      className="rounded-md bg-background text-foreground group-hover:bg-primary group-hover:text-primary"
+      className={
+        "rounded-md bg-background text-foreground group-hover:bg-primary group-hover:text-primary" +
+        (className ? ` ${className}` : "")
+      }
     >
       {theme === "dark" ? <GoSun /> : <GoMoon />}
     </button>

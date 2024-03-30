@@ -8,7 +8,7 @@ import { GoArrowUpRight } from "react-icons/go";
 import Image from "next/image";
 import Link from "next/link";
 
-export const SpotifyPresence = () => {
+export default function SpotifyPresence() {
   const lanyard = useLanyard({
     userId: "305065512457469952",
   });
@@ -21,7 +21,7 @@ export const SpotifyPresence = () => {
     try {
       console.log(lanyard?.data?.data?.spotify);
       await set({
-        apiKey: process.env.LANYARD_KV_KEY!,
+        apiKey: process.env.NEXT_PUBLIC_LANYARD_KV_KEY!,
         userId: "305065512457469952",
         key: "spotify_last_played",
         value: JSON.stringify(lanyard?.data?.data?.spotify),
@@ -61,7 +61,7 @@ export const SpotifyPresence = () => {
     return (
       <p>
         Something went wrong. This is likely due to Matthew not listening to
-        Spotify since the last time NextJS built this page.
+        Spotify since the last time NextJS built this page. Yell at him.
       </p>
     );
   }
@@ -69,7 +69,11 @@ export const SpotifyPresence = () => {
   const { song, artist, album, album_art_url, track_id } = displayData;
 
   return (
-    <Link href={`https://open.spotify.com/track/${track_id}`} passHref>
+    <Link
+      href={`https://open.spotify.com/track/${track_id}`}
+      target="_blank"
+      passHref
+    >
       <div className="relative flex z-1 h-32 w-full flex-row items-center hover:border hover:bg-accent hover:border-muted-foreground rounded-md group transition-all">
         <Image
           src={album_art_url}
@@ -103,7 +107,7 @@ export const SpotifyPresence = () => {
       </div>
     </Link>
   );
-};
+}
 
 function clampSongTitle(title: string) {
   if (title.length > 40) {

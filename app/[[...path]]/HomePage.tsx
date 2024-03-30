@@ -1,4 +1,4 @@
-import { SpotifyPresence } from "@/components/SpotifyPresence";
+import SpotifyPresence from "@/components/SpotifyPresence";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Link from "next/link";
 

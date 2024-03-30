@@ -3,7 +3,6 @@ import { Inter, EB_Garamond, Fira_Code } from "next/font/google";
 import "./globals.css";
 
 import ThemeProvider from "@/components/ThemeProvider";
-import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,9 +30,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${ebGaramond.variable} ${firaCode.variable} max-w-screen-md mx-auto mt-0 md:mt-24 font-sans`}
+        className={`${inter.variable} ${ebGaramond.variable} ${firaCode.variable} max-w-screen-md mx-auto pt-8 mt-0 md:pt-24 font-sans min-h-screen`}
       >
         <ThemeProvider
           attribute="class"
@@ -41,9 +40,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <header className="sticky w-full left-0 top-0 h-12 bg-gradient-to-b from-background z-5" /> */}
           {children}
-          {/* <Footer /> */}
         </ThemeProvider>
       </body>
     </html>

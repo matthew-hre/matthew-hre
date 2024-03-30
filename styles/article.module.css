@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .article h1 {
+    @apply text-4xl font-serif mb-6;
+  }
+
+  .article h2 {
+    @apply text-3xl font-serif mb-6;
+  }
+
+  .article h3 {
+    @apply text-2xl font-serif mb-6;
+  }
+
+  .article h4 {
+    @apply text-xl font-sans mb-6;
+  }
+
+  .article p {
+    @apply leading-7 mb-6;
+  }
+
+  .article a {
+    @apply underline decoration-muted-foreground hover:decoration-foreground transition-all;
+  }
+
+  .article blockquote {
+    @apply border-l-4 border-primary-foreground pl-4 my-6;
+  }
+
+  .article img {
+    @apply my-6;
+  }
+
+  .article ul {
+    @apply list-disc list-outside mb-6 ml-8;
+  }
+
+  .article ol {
+    @apply list-decimal list-outside mb-6 ml-8;
+  }
+
+  .article li {
+    @apply mb-2 leading-7;
+  }
+
+  .article code {
+    @apply bg-muted py-0.5 px-1 rounded;
+  }
+
+  .article pre {
+    @apply p-2 mb-6 max-w-full overflow-x-auto font-mono;
+  }
+
+  .article pre > code {
+    @apply p-0 bg-transparent;
+  }
+}

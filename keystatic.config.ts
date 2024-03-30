@@ -27,6 +27,7 @@ export default config({
       label: "Blog",
       slugField: "title",
       path: "content/blog/*",
+      entryLayout: "content",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -40,22 +41,8 @@ export default config({
           itemLabel: (props) => props.value,
         }),
 
-        content: fields.document({
+        content: fields.mdx({
           label: "Content",
-          formatting: true,
-          dividers: true,
-          links: true,
-          images: {
-            directory: "public/images",
-            publicPath: "/images",
-            schema: {
-              title: fields.text({
-                label: "Caption",
-                description:
-                  "The text to display under the image in a caption.",
-              }),
-            },
-          },
         }),
       },
     }),
@@ -63,6 +50,7 @@ export default config({
       label: "Projects",
       slugField: "title",
       path: "content/projects/*",
+      entryLayout: "content",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -81,22 +69,8 @@ export default config({
           description: "The link to the project.",
         }),
 
-        content: fields.document({
+        content: fields.mdx({
           label: "Content",
-          formatting: true,
-          dividers: true,
-          links: true,
-          images: {
-            directory: "public/images",
-            publicPath: "/images",
-            schema: {
-              title: fields.text({
-                label: "Caption",
-                description:
-                  "The text to display under the image in a caption.",
-              }),
-            },
-          },
         }),
       },
     }),
@@ -104,6 +78,7 @@ export default config({
       label: "Learning",
       slugField: "title",
       path: "content/learning/*",
+      entryLayout: "content",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -122,22 +97,8 @@ export default config({
           description: "The link to the... learning.",
         }),
 
-        content: fields.document({
+        content: fields.mdx({
           label: "Content",
-          formatting: true,
-          dividers: true,
-          links: true,
-          images: {
-            directory: "public/images",
-            publicPath: "/images",
-            schema: {
-              title: fields.text({
-                label: "Caption",
-                description:
-                  "The text to display under the image in a caption.",
-              }),
-            },
-          },
         }),
       },
     }),
@@ -145,6 +106,7 @@ export default config({
       label: "Games",
       slugField: "title",
       path: "content/games/*",
+      entryLayout: "content",
       format: { contentField: "content" },
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
@@ -166,23 +128,8 @@ export default config({
           label: "Splash Image",
           description: "The image to display as a splash image.",
         }),
-
-        content: fields.document({
+        content: fields.mdx({
           label: "Content",
-          formatting: true,
-          dividers: true,
-          links: true,
-          images: {
-            directory: "public/images",
-            publicPath: "/images",
-            schema: {
-              title: fields.text({
-                label: "Caption",
-                description:
-                  "The text to display under the image in a caption.",
-              }),
-            },
-          },
         }),
       },
     }),
