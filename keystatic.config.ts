@@ -10,16 +10,14 @@ const localMode: LocalConfig["storage"] = {
   kind: "local",
 };
 
-const githubMode: GitHubConfig["storage"] = {
-  kind: "github",
-  repo: {
-    owner: "matthew-hre",
-    name: "matthew-hre",
-  },
-};
-
 export default config({
-  storage: githubMode,
+  storage: {
+    kind: "github",
+    repo: {
+      owner: "matthew-hre",
+      name: "matthew-hre",
+    },
+  },
   collections: {
     blog: collection({
       label: "Blog",

@@ -3,12 +3,10 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Link from "next/link";
 
 import FadeIn from "@/components/FadeIn";
-import { createReader } from "@keystatic/core/reader";
-import keystaticConfig from "@/keystatic.config";
+
+import { reader } from "@/lib/createReader";
 
 export default async function Home() {
-  const reader = createReader(process.cwd(), keystaticConfig);
-
   const blogPosts = await reader.collections.blog.all();
   const projectPosts = await reader.collections.projects.all();
   const learningPosts = await reader.collections.learning.all();
