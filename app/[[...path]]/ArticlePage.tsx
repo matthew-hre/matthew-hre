@@ -1,6 +1,6 @@
 "use client";
 
-import { MdxContent } from "../../components/mdx-content";
+import { MdxContent } from "@/components/mdx-content";
 import styles from "@/styles/article.module.css";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Badge } from "@/components/ui/badge";

@@ -3,18 +3,14 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Link from "next/link";
 
 import FadeIn from "@/components/FadeIn";
-import { createReader } from "@keystatic/core/reader";
-import keystaticConfig from "@/keystatic.config";
+
+import { reader } from "@/lib/createGitHubReader";
 
 export default async function Home() {
-  const reader = createReader(process.cwd(), keystaticConfig);
-
   const blogPosts = await reader.collections.blog.all();
   const projectPosts = await reader.collections.projects.all();
   const learningPosts = await reader.collections.learning.all();
   const gamePosts = await reader.collections.games.all();
-
-  console.log(blogPosts, projectPosts, learningPosts, gamePosts);
 
   return (
     <main className="flex min-h-screen flex-col px-8 md:px-20 mb-16">

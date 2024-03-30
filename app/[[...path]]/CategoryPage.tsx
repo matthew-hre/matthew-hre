@@ -1,9 +1,6 @@
-import { createReader } from "@keystatic/core/reader";
-import keystaticConfig from "@/keystatic.config";
+import { reader } from "@/lib/createGitHubReader";
 
 import CategoryPageClient from "./CategoryPageClient";
-
-const reader = createReader(process.cwd(), keystaticConfig);
 
 export default async function CategoryPage({ category }: { category: string }) {
   const collection = await reader.collections[

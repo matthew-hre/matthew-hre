@@ -1,8 +1,8 @@
 import { type MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 
-import { createReader } from "@keystatic/core/reader";
-import keystaticConfig from "@/keystatic.config";
+import { reader } from "@/lib/createGitHubReader";
+
 import ArticlePage from "./ArticlePage";
 import CategoryPage from "./CategoryPage";
 import HomePage from "./HomePage";
@@ -29,8 +29,6 @@ type Post<TFrontmatter> = {
 
 type DynamicStaticPaths = { path: string[] };
 type DynamicParams = { params: DynamicStaticPaths };
-
-const reader = createReader(process.cwd(), keystaticConfig);
 
 async function getPost(
   category: string,
