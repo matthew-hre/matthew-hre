@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
+import { notFound } from "next/navigation";
 
 type Frontmatter = {
   title: string;
@@ -26,7 +27,7 @@ type Post<TFrontmatter> = {
   frontmatter: TFrontmatter;
 };
 
-type DynamicStaticPaths = { path: Array<string> };
+type DynamicStaticPaths = { path: string[] };
 type DynamicParams = { params: DynamicStaticPaths };
 
 const reader = createReader(process.cwd(), keystaticConfig);
@@ -40,13 +41,15 @@ async function getPost(
   ];
 
   if (!collection) {
-    throw new Error(`No collection found for ${category}`);
+    console.log("Collection not found: " + category);
+    return notFound();
   }
 
   const page = await collection.read(fileName);
 
   if (!page) {
-    throw new Error(`No page found at ${category}/${fileName}`);
+    console.log("Page not found: " + fileName);
+    return notFound();
   }
 
   const frontmatter = {
@@ -129,30 +132,40 @@ export default async function Page({ params }: DynamicParams) {
 }
 
 export async function generateStaticParams() {
-  const projectsSlugs = await reader.collections.projects.list();
-  const blogSlugs = await reader.collections.blog.list();
-  const gamesSlugs = await reader.collections.games.list();
   const learningSlugs = await reader.collections.learning.list();
 
-  const slugs = [
-    ...mapSlugs(projectsSlugs),
-    ...mapSlugs(blogSlugs),
-    ...mapSlugs(gamesSlugs),
-    ...mapSlugs(learningSlugs),
-  ];
-
-  return slugs.map((slug) => ({
-    params: { path: slug },
+  const learningPaths = learningSlugs.map((slug) => ({
+    params: {
+      path: ["learning", slug],
+    },
   }));
-}
 
-function mapSlugs(slugs: string[]) {
-  return slugs.map((slug) => {
-    const [category, fileName] = slug.split("/");
-    return [category, fileName];
-  });
-}
+  const blogSlugs = await reader.collections.blog.list();
 
+  const blogPaths = blogSlugs.map((slug) => ({
+    params: {
+      path: ["blog", slug],
+    },
+  }));
+
+  const projectSlugs = await reader.collections.projects.list();
+
+  const projectPaths = projectSlugs.map((slug) => ({
+    params: {
+      path: ["projects", slug],
+    },
+  }));
+
+  const gamesSlugs = await reader.collections.games.list();
+
+  const gamePaths = gamesSlugs.map((slug) => ({
+    params: {
+      path: ["games", slug],
+    },
+  }));
+
+  return [...learningPaths, ...blogPaths, ...projectPaths, ...gamePaths];
+}
 function toTitleCase(str: string) {
   return str
     .split("-")

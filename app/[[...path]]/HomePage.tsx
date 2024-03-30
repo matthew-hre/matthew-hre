@@ -21,11 +21,6 @@ export default async function Home() {
           <p>Matthew Hrehirchuk</p>
           <ThemeSwitcher />
         </h1>
-        <p className="border-l-2 border-yellow-500 italic border-foreground pl-2 mb-6 bg-muted py-2">
-          WARNING: This website is currently under heavy development. I pushed
-          to main by accident and now I&apos;m stuck here. Please be patient
-          while I fix it.
-        </p>
         <p className="text-foreground leading-7 mb-6">
           I&apos;m a web developer, a graphic designer, and a student at{" "}
           <Link
