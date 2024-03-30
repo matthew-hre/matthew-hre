@@ -6,8 +6,6 @@ import {
   GitHubConfig,
 } from "@keystatic/core";
 
-const isProd = process.env.NODE_ENV === "production";
-
 const localMode: LocalConfig["storage"] = {
   kind: "local",
 };
@@ -21,7 +19,7 @@ const githubMode: GitHubConfig["storage"] = {
 };
 
 export default config({
-  storage: isProd ? githubMode : localMode,
+  storage: githubMode,
   collections: {
     blog: collection({
       label: "Blog",
