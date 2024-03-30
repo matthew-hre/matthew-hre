@@ -14,6 +14,8 @@ export default async function Home() {
   const learningPosts = await reader.collections.learning.all();
   const gamePosts = await reader.collections.games.all();
 
+  console.log(blogPosts, projectPosts, learningPosts, gamePosts);
+
   return (
     <main className="flex min-h-screen flex-col px-8 md:px-20 mb-16">
       <FadeIn>
