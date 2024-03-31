@@ -19,16 +19,23 @@ export default async function CategoryPage({
 
   const all = await collection.all();
 
-  const trimmedPosts = all.map((post: any) => ({
-    slug: post.slug,
-    entry: {
-      title: post.entry.title,
-      createdDate: post.entry.createdDate,
-      lastModifiedDate: post.entry.lastModifiedDate,
-      tags: post.entry.tags,
-      externalLink: post.entry.externalLink,
-    },
-  }));
+  const trimmedPosts = all
+    .map((post: any) => ({
+      slug: post.slug,
+      entry: {
+        title: post.entry.title,
+        createdDate: post.entry.createdDate,
+        lastModifiedDate: post.entry.lastModifiedDate,
+        tags: post.entry.tags,
+        externalLink: post.entry.externalLink,
+      },
+    }))
+    .sort((a: any, b: any) => {
+      return (
+        new Date(b.entry.createdDate).getTime() -
+        new Date(a.entry.createdDate).getTime()
+      );
+    });
 
   return (
     <>

@@ -4,6 +4,59 @@ createdDate: 2024-03-18T21:34:00.000Z
 lastModifiedDate: 2024-03-18T22:53:00.000Z
 tags:
   - Testing
+  - Development Log
 ---
 
-Holy moly! Now this is sweet.
+## Hello Keystatic!
+
+When I originally started building my personal website, I didn't really have a lot of content to showcase. It really started off as just a way to show off my game jam projects along side my personal projects. I mean, it was literally HTML and CSS to start off.
+
+As time went on, and as I started to have a lot more content to show off, I realized I hated manually updating my website's source when I wanted to add a new project. I wanted to be able to write my content in markdown, and have it automatically update my website. Plus, I was already using Obsidian for my personal notes, so I was already writing a good amount of markdown.
+
+## The Old Site
+
+It's time I made a confession. I absolutely stole this layout from [100 Rabbits](https://100r.co). Like, unabashidly stole it. I loved the simplicity of it, and I wanted to have something similar. I did make some changes to it, but the core layout is still basically the same.
+
+The old site really was my first foray into using React. It's a gross machination of a website, but it worked. I ended up using some react markdown parser to parse my markdown files, which of course I stored in the public folder, duh. Retrospectively, gross.
+
+Now, I am pretty proud of the fact that I was able to get it to work. I had a lot of fun building it, and I learned a lot. But, it was time to move on.
+
+## NextJS My Beloved
+
+I've been using NextJS for a while now, and I absolutely love it. It's so easy to use, and it's so powerful. I knew I wanted to use it for my new site. I also knew I wanted to use markdown files for my content, since I really did not want to rewrite all of my content.
+
+Now, this is where I started to hit a structural crossroads. Did I want to use a CMS, and store the markdown separately? Or did I want to store the markdown in the project itself? Storing the markdown in the project itself would make it easier to version control, but it would also make it harder to update the content.
+
+I flip flopped on this for a while. I started fooling around with a separate Github repo for the markdown, and using Personal Access Tokens to pull the markdown in. I also tried setting up a CI/CD pipeline to manage deployments so I wasn't rebuilding the site every time I updated the markdown. But, I just couldn't get it to work the way I wanted it to.
+
+## The CMS Hunt
+
+I eventually gave up on reinventing the wheel and went on the hunt for a CMS.
+
+### Payload
+
+I had heard about [Payload](https://payloadcms.com) from a Reddit post forever ago, but never really looked into it. On first glance, it was a little too much for what I needed. I didn't need a full blown CMS, I just needed a way to manage my markdown files.
+
+### Decap
+
+Next on the chopping block was [Decap](https://decapcms.org). It had a really sweet concept of just creating a decap route and adding an `index.html` file to it. Easy as that, I'd have a CMS. It was neat, but the UI felt pretty 2012, and I wasn't a huge fan of the way it handled markdown.
+
+### Keystatic
+
+Finally, I stumbled upon [Keystatic](https://keystatic.io). I was looking through some Reddit posts of people complaining about Decap, and someone quite literally said "Just use Keystatic, it does everything Decap does but better." So I did. And it does.
+
+I was able to set up Keystatic in about 10 minutes. I created a new project, added a new collection, and added a markdown field. I then added a new markdown file to the collection, and it was live on my site. It was that easy. They even gave me a Reader API for rendering the markdown, so I didn't have to worry about that.
+
+## Tailwind Migraine
+
+Remember that Reader API? Actually a nightmare to style. Like, oh my god. I was manually pulling out every. Single. Component. And then adding my class names. It was a nightmare. I was about to throw in the towel and look for another CMS, when I actually read the docs. Turns out a) using MDX with Keystatic will just give me the raw markdown, and b) I can use Tailwind's `@apply` directive to apply my styles.
+
+I could also use Remark and Rehype, but that's just a nice little bonus. As a treat.
+
+## The Future
+
+I'm really excited to see where this goes. I'm planning on adding a lot more content to my site, and I'm planning on using Keystatic to manage it all. I'm also planning on adding a blog to my site, so I can write about my projects and my thoughts. Oh wait, this is a blog post. I guess I already did that. Good work Matt.
+
+I'm also planning on adding a lot more features to my site. I want to add by-tag filtering, so you can see all of my projects by tag. I also want to add a search feature, so you can search for a specific project. I'll also add an RSS feed, for one specific person. You know who you are.
+
+Sorry the old site was dormant for so long, but hopefully this new site will be a lot more active. I'm really excited to see where this goes. Thanks for reading!

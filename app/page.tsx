@@ -7,10 +7,10 @@ import FadeIn from "@/components/FadeIn";
 import { reader } from "@/lib/createReader";
 
 export default async function Home() {
-  const blogPosts = await reader.collections.blog.all();
-  const projectPosts = await reader.collections.projects.all();
-  const learningPosts = await reader.collections.learning.all();
-  const gamePosts = await reader.collections.games.all();
+  const blogPosts = await getHighlightedPosts(reader.collections.blog);
+  const projectPosts = await getHighlightedPosts(reader.collections.projects);
+  const learningPosts = await getHighlightedPosts(reader.collections.learning);
+  const gamePosts = await getHighlightedPosts(reader.collections.games);
 
   return (
     <main className="flex min-h-screen flex-col px-8 md:px-20 mb-16">
@@ -49,7 +49,7 @@ export default async function Home() {
         <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 mb-12">
           <div className="w-full md:w-48 space-y-4">
             <h2 className="text-muted-foreground text-sm mb-4">Projects</h2>
-            {projectPosts.map((post, idx) => (
+            {projectPosts.map((post: any, idx: number) => (
               <Card
                 key={idx}
                 title={post.entry.title}
@@ -61,7 +61,7 @@ export default async function Home() {
           </div>
           <div className="w-full md:w-48 md:ml-12 space-y-4">
             <h2 className="text-muted-foreground text-sm mb-4">Learning</h2>
-            {learningPosts.map((post, idx) => (
+            {learningPosts.map((post: any, idx: number) => (
               <Card
                 key={idx}
                 title={post.entry.title}
@@ -73,7 +73,7 @@ export default async function Home() {
           </div>
           <div className="w-full md:w-48 md:ml-12 space-y-4">
             <h2 className="text-muted-foreground text-sm mb-4">Games</h2>
-            {gamePosts.map((post, idx) => (
+            {gamePosts.map((post: any, idx: number) => (
               <Card
                 key={idx}
                 title={post.entry.title}
@@ -88,7 +88,7 @@ export default async function Home() {
           Blog
         </h2>
         <div className="flex flex-col mb-12">
-          {blogPosts.map((post, idx) => (
+          {blogPosts.map((post: any, idx: number) => (
             <BlogLink
               key={idx}
               title={post.entry.title}
@@ -165,3 +165,16 @@ const BlogLink = ({
     </Link>
   );
 };
+
+async function getHighlightedPosts(collection: any) {
+  const data = await collection.all();
+
+  const sorted = data.sort((a: any, b: any) => {
+    return (
+      new Date(b.entry.createdDate).getTime() -
+      new Date(a.entry.createdDate).getTime()
+    );
+  });
+
+  return sorted.slice(0, 3);
+}
