@@ -1,14 +1,24 @@
-import {
-  config,
-  fields,
-  collection,
-  LocalConfig,
-  GitHubConfig,
-} from "@keystatic/core";
+import { config, fields, collection, LocalConfig } from "@keystatic/core";
 
 const localMode: LocalConfig["storage"] = {
   kind: "local",
 };
+
+const MDXContent = fields.mdx({
+  label: "Content",
+  options: {
+    image: {
+      directory: "public/images",
+      publicPath: "/images",
+      schema: {
+        title: fields.text({
+          label: "Caption",
+          description: "The text to display under the image in a caption.",
+        }),
+      },
+    },
+  },
+});
 
 export default config({
   storage: {
@@ -36,10 +46,7 @@ export default config({
           label: "Tag",
           itemLabel: (props) => props.value,
         }),
-
-        content: fields.mdx({
-          label: "Content",
-        }),
+        content: MDXContent,
       },
     }),
     projects: collection({
@@ -64,10 +71,7 @@ export default config({
           label: "External Link",
           description: "The link to the project.",
         }),
-
-        content: fields.mdx({
-          label: "Content",
-        }),
+        content: MDXContent,
       },
     }),
     learning: collection({
@@ -93,22 +97,7 @@ export default config({
           description: "The link to the... learning.",
         }),
 
-        content: fields.mdx({
-          label: "Content",
-          options: {
-            image: {
-              directory: "public/images",
-              publicPath: "/images",
-              schema: {
-                title: fields.text({
-                  label: "Caption",
-                  description:
-                    "The text to display under the image in a caption.",
-                }),
-              },
-            },
-          },
-        }),
+        content: MDXContent,
       },
     }),
     games: collection({
@@ -133,13 +122,7 @@ export default config({
           label: "External Link",
           description: "The link to the game.",
         }),
-        splashImage: fields.image({
-          label: "Splash Image",
-          description: "The image to display as a splash image.",
-        }),
-        content: fields.mdx({
-          label: "Content",
-        }),
+        content: MDXContent,
       },
     }),
   },
