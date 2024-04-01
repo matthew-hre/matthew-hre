@@ -95,6 +95,19 @@ export default config({
 
         content: fields.mdx({
           label: "Content",
+          options: {
+            image: {
+              directory: "public/images",
+              publicPath: "/images",
+              schema: {
+                title: fields.text({
+                  label: "Caption",
+                  description:
+                    "The text to display under the image in a caption.",
+                }),
+              },
+            },
+          },
         }),
       },
     }),
