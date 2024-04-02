@@ -26,12 +26,15 @@ export async function generateStaticParams() {
   const learningPaths = await reader.collections.learning.list();
   const projectPaths = await reader.collections.projects.list();
   const gamePaths = await reader.collections.games.list();
+  const progPaths = await reader.collections.prog_3.list();
 
   return [
     ...blogPaths.map((slug) => ({ path: ["blog", slug] })),
     ...learningPaths.map((slug) => ({ path: ["learning", slug] })),
     ...projectPaths.map((slug) => ({ path: ["projects", slug] })),
     ...gamePaths.map((slug) => ({ path: ["games", slug] })),
+    ...progPaths.map((slug) => ({ path: ["learning/prog_3", slug] })),
+    { path: ["prog_3"] },
     { path: ["games"] },
     { path: ["projects"] },
     { path: ["blog"] },
