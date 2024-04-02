@@ -1,0 +1,182 @@
+---
+title: Stacks
+description: How to implement stacks in Java.
+createdDate: 2023-11-01T16:00:00.000Z
+lastModifiedDate: 2023-11-01T16:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+## Last In, First Out
+
+Stacks are a data structure that follow the Last In, First Out (LIFO) principle. This means that the last element added to the stack will be the first element removed from the stack. Think of a stack of plates. You add plates to the top of the stack, and you remove plates from the top of the stack. You don't add plates to the bottom of the stack, and you don't remove plates from the bottom of the stack. Unless you stack your big plates under your small plates, in which case, you've got your own problems.
+
+Some other examples of stacks are the back button in your browser, the undo button in your text editor, and the call stack in your computer's memory. Let's take a look at the call stack.
+
+## The Call Stack
+
+The call stack is a stack that stores information about the functions that are currently being executed. When a function is called, it's added to the top of the call stack. When a function returns, it's removed from the top of the call stack. This is how your computer keeps track of which function is currently being executed. Let's look at an example.
+
+```java
+public void function1() {
+  System.out.println("Hello from function1!");
+}
+
+public void function2() {
+  System.out.println("Hello from function2!");
+  function1();
+}
+
+public void function3() {
+  System.out.println("Hello from function3!");
+  function2();
+}
+```
+
+Let's walk through this code. When we call `function3`, it's added to the top of the call stack. Then, when we call `function2` from `function3`, it's added to the top of the call stack. Then, when we call `function1` from `function2`, it's added to the top of the call stack. Finally, when `function1` returns, it's removed from the top of the call stack. Then, when `function2` returns, it's removed from the top of the call stack. Finally, when `function3` returns, it's removed from the top of the call stack. This is how your computer keeps track of which function is currently being executed.
+
+Y'know that website we all go to whenever our code breaks? Stack Overflow? That's a reference to the call stack. When you add too many functions to the call stack, it overflows. Get it? Stack Overflow? I'll see myself out.
+
+## Stacks - Adding Elements
+
+Now that we know what a stack is, let's implement one! We'll start with the `push` method. This method adds an element to the top of the stack. Here's an example:
+
+```java
+public void push(T data) {
+  // First, we'll create a new node - the node we want to add!
+  Node newNode = new Node(data);
+
+  // Now, let's check if the stack is empty.
+  if (this.isEmpty()) {
+    // If the stack is empty, we'll just set the head to our new node.
+    this.head = newNode;
+    return;
+  }
+
+  // Since this will be our new top, let's have it point towards the old top.
+  newNode.setNext(this.head);
+
+  // finally, let's set the head to our new node!
+  this.head = newNode;
+}
+```
+
+Just a quick aside, before you get confused: This node class is the same one we used for our Singly Linked List.
+
+## Stacks - Peeking and Popping Elements
+
+Now that we can add elements to our stack, let's try to peek at the top element of the stack. This method returns the top element of the stack, but doesn't remove it. Here's an example:
+
+```java
+public T peek() {
+  // First, let's check if the stack is empty.
+  if (this.isEmpty()) {
+    // If the stack is empty, there's nothing to peek at!
+    return null;
+  }
+
+  // Now, let's return the top element of the stack!
+  return this.head.getData();
+}
+```
+
+Finally, let's try to remove the top element of the stack. This method returns the top element of the stack, and removes it. Here's an example:
+
+```java
+public T pop() {
+  // First, let's check if the stack is empty.
+  if (this.isEmpty()) {
+    // If the stack is empty, there's nothing to pop!
+    return null;
+  }
+
+  // Now, let's set up a variable to store the top element of the stack.
+  T topElement = this.head.getData();
+
+  // Now, let's set the head to the second element of the stack!
+  // Without any variables referencing the first element, it will be removed from memory.
+  this.head = this.head.getNext();
+
+  // Finally, let's return the top element of the stack!
+  return topElement;
+}
+```
+
+## Stacks - Getting the Size
+
+Now that we can add and remove elements from our stack, let's try to get the size of the stack. You won't be getting any code for this one, but I'll walk you through it.
+
+```java
+public int size() {
+  // First, let's check if the stack is empty.
+  // If the stack is empty, it has a size of 0.
+
+  // Now, let's set up our current node variable.
+
+  // We'll also need to set up a variable to keep track of our size.
+
+  // Now, let's traverse the stack until we find the node whose next property is null.
+  // For each node we find, we'll update our size.
+
+  // Finally, let's return the size of the stack!
+}
+```
+
+## Stacks - Clearing
+
+Now that we can add and remove elements from our stack, let's try to clear the stack. This method removes all of the elements from the stack.
+
+```java
+// y'know what? you don't need my help with this one! you can do it!
+```
+
+## Stacks - Reversing a List
+
+Here's a fun, practical use of stacks. Let's say we have a list of integers, and we want to reverse it. We can use a stack to do this! Here's an example:
+
+```java
+
+public int[] ReverseList(int[] listToReverse) {
+  // just for reference, let's say our listToReverse is [1, 2, 3, 4, 5]
+
+  // First, let's create a stack to store our list.
+  Stack<Integer> stack = new Stack<Integer>();
+
+  // And an index for later.
+  int index = 0;
+
+  // Now, let's add our list to the stack, one element at a time.
+  for (int num : listToReverse) {
+    stack.push(num);
+  }
+
+  /*
+  At this point, we'll need to replace each number in our list with the
+  number at the top of the stack. We'll do this by popping each element
+  off the stack, and replacing the corresponding element in our list.
+  This is why we needed the index variable!
+  */
+
+  // Let's keep popping while our stack isn't empty.
+  while (!stack.isEmpty()) {
+    /*
+    Let's replace the element at the current index with the
+    top element of the stack. Remember that the top of our stack
+    used to be the end of our list!
+    */
+    listToReverse[index] = stack.pop();
+    // Finally, we can increment our index.
+    index++;
+  }
+
+  // Now, let's return our reversed list!
+  return listToReverse;
+
+}
+```
+
+## Stacks - Practice Problems
+
+I'll add more here if I find them, but off the top of my head, this [Advent of Code](https://adventofcode.com/2021/day/10) problem
+from a few years back is a good one. It's a bit tricky, but it's a good way to practice using stacks.

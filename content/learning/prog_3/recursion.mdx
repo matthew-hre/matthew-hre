@@ -1,0 +1,127 @@
+---
+title: Recursion
+description: How to use recursion in Java
+createdDate: 2023-11-01T14:00:00.000Z
+lastModifiedDate: 2023-11-01T14:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+## What is Recursion?
+
+Recursion is a method of solving problems that involves breaking a problem down into smaller and smaller subproblems until you reach a base case. A base case is a case where the problem can be solved without further recursion. A recursive method is a method that calls itself.
+
+## Recursion - Factorial
+
+Let's look at an example of recursion. We'll start with a simple problem: factorial. Factorial is defined as the product of an integer and all the integers below it. For example, the factorial of 5 is:
+
+```txt
+5 * 4 * 3 * 2 * 1 = 120
+```
+
+But that could also be written as:
+
+```txt
+5 * 4!
+```
+
+And 4! could be written as:
+
+```txt
+5 * 4 * 3!
+```
+
+And so on... This is a recursive definition of factorial. We can write a recursive method to solve this problem:
+
+```java
+public int factorial(int n) {
+  // First, let's check if n is 0.
+  // If n is 0, we can return 1.
+  if (n == 0) {
+    return 1;
+  }
+
+  // Now, let's return n times the factorial of n - 1.
+  return n * factorial(n - 1);
+}
+```
+
+Let's break this down. First, we check if n is 0. If it is, we return 1. This is our **base case**. If n is 0, we can return 1, because 0! is 1. If n is not 0, we return n times the factorial of n - 1. This is the **recursive case**. We're calling the factorial method inside itself. This will continue until we reach our base case.
+
+## Head-end and Tail-end Recursion
+
+There are two types of recursion: head-end recursion and tail-end recursion. Head-end recursion is when the recursive call is at the beginning of the method. Tail-end recursion is when the recursive call is at the end of the method. The example above was an example of tail-end recursion.
+
+## Tracing Recursion
+
+Tracing recursion can be a bit tricky. Let's look at our example again:
+
+```java
+public int factorial(int n) {
+  // First, let's check if n is 0.
+  // If n is 0, we can return 1.
+  if (n == 0) {
+    return 1;
+  }
+
+  // Now, let's return n times the factorial of n - 1.
+  return n * factorial(n - 1);
+}
+```
+
+Let's trace the factorial of 3. First, we check if 3 is 0. It's not, so we return 3 times the factorial of 2. Now, we check if 2 is 0. It's not, so we return 2 times the factorial of 1. Now, we check if 1 is 0. It's not, so we return 1 times the factorial of 0. Now, we check if 0 is 0. It is, so we return 1. Now, we can solve the rest of the problem. We return 1 times the factorial of 0, which is 1. We return 2 times 1, which is 2. We return 3 times 2, which is 6. And we're done!
+
+## Recursion - Flood Fill
+
+Y'know the paint bucket tool in MS Paint? That's a flood fill algorithm. It's a way of filling in an area with a color. Let's look at an example, given a 2D array of colors:
+
+```py
+[["red", "blue", "red", "red", "red"],
+ ["red", "blue", "red", "red", "red"],
+ ["red", "blue", "red", "red", "red"]]
+```
+
+Let's say we want to start filling on the righthand side. We'd want only the 9 reds on the right to be filled in. We can do this with a flood fill algorithm. Here's an example:
+
+```java
+public void floodFill(int x, int y, String colorToReplace, String newColor) {
+  // First, let's check if the current pixel is already the color we want to fill.
+  // If it is, we can return.
+    if (this.pixels[x][y] == newColor) {
+        return;
+    }
+
+    // Now, let's check if the current pixel is the color we want to replace.
+    // If it is, we can replace it with the new color.
+    if (this.pixels[x][y] == colorToReplace) {
+        this.pixels[x][y] = newColor;
+    }
+
+    // Now, let's check if the pixel to the left is the color we want to replace.
+    // If it is, we can call floodFill on it.
+    if (x > 0 && this.pixels[x - 1][y] == colorToReplace) {
+        floodFill(x - 1, y, colorToReplace, newColor);
+    }
+
+    // Now, let's check if the pixel to the right is the color we want to replace.
+    // If it is, we can call floodFill on it.
+    if (x < this.pixels.length - 1 && this.pixels[x + 1][y] == colorToReplace) {
+        floodFill(x + 1, y, colorToReplace, newColor);
+    }
+
+    // Now, let's check if the pixel above is the color we want to replace.
+    // If it is, we can call floodFill on it.
+    if (y > 0 && this.pixels[x][y - 1] == colorToReplace) {
+        floodFill(x, y - 1, colorToReplace, newColor);
+    }
+
+    // Now, let's check if the pixel below is the color we want to replace.
+    // If it is, we can call floodFill on it.
+    if (y < this.pixels[0].length - 1 && this.pixels[x][y + 1] == colorToReplace) {
+        floodFill(x, y + 1, colorToReplace, newColor);
+    }
+}
+```
+
+Let's break this down. First, we check if the current pixel is already the color we want to fill. If it is, we can return. This is our **base case**. If the current pixel is already the color we want to fill, we don't need to do anything. Next, we check if the current pixel is the color we want to replace. If it is, we replace it with the new color. This is the **recursive case**. We're calling the floodFill method inside itself. This will continue until we reach our base case.

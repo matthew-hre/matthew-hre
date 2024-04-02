@@ -1,0 +1,325 @@
+---
+title: Linked Lists
+description: How to implement a linked list in Java.
+createdDate: 2023-11-01T17:00:00.000Z
+lastModifiedDate: 2023-11-01T17:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+## What are Linked Structures?
+
+Linked Structures are data structures that are made up of nodes. Each node contains a value, some data, and a pointer to the next node in the structure. Here's an example in beautiful ASCII art:
+
+```plaintext
+Node 1 -> Node 2 -> Node 3 -> Node 4 -> Node 5
+```
+
+This will be the last ASCII art I make you look at, I promise.
+
+## Why are Linked Structures Useful?
+
+Linked Structures are useful because they allow us to store data in a way that's easy to traverse, while being memory efficient. Let's look at an example.
+
+Let's say we want to store the numbers `1` through `5`. We could store them in an array, like this:
+
+```java
+int[] numbers = {1, 2, 3, 4, 5};
+```
+
+But this has some shortcomings. First, arrays are fixed in size. If we want to add or remove elements from the array, we'll need to create a new array with the correct size and copy the elements over. Second, arrays are stored in contiguous memory. This means that the elements are stored one after the other in memory. This means that if we want to insert an element into the middle of the array, we'll need to shift all of the elements after it over by one. This is inefficient.
+
+But why not use an ArrayList? Well, ArrayLists are stored in **contiguous memory**, just like arrays. So, they have similar shortcomings. If we want to insert an element into the middle of the ArrayList, we'll need to shift all of the elements after it over by one. This is inefficient.
+
+So, what do we do? We use a Linked Structure! Linked Structures are stored in **non-contiguous memory**. This means that each node can be stored anywhere in memory. So, if we want to insert an element into the middle of the Linked Structure, we can just change the pointers of the nodes around it. This is much more efficient.
+
+## Nodes
+
+Nodes are the building blocks of Linked Structures. Each node contains some data and a pointer to the next node in the structure (for now, hehehe). Here's an example:
+
+```java
+public class Node {
+  // This is the data of the node
+  String data;
+
+  // This is the pointer to the next node in the structure
+  Node next;
+}
+```
+
+This is pretty simple. Each node has some data and a pointer to the next node in the structure. Let's make some quick changes before we move on.
+
+First, let's make the value and data properties private. We don't want anyone to be able to change them. We'll add getters and setters later.
+
+```java
+public class Node {
+  // This is the data of the node
+  private String data;
+
+  // This is the pointer to the next node in the structure
+  Node next;
+}
+```
+
+Next, when we create our nodes, we want to be able to have them store whatever type of data we want. So, let's make our node generic. We'll use the letter `T` to represent the type of data that the node will store. Make sure our `T` is uppercase, or Steve will get mad at me on Discord again. Sorry Steve.
+
+```java
+public class Node<T> {
+  // This is the data of the node. It's of type T!
+  private T data;
+
+  // This is the pointer to the next node in the structure
+  Node next;
+}
+```
+
+Finally, let's add a constructor, some getters, and some setters. Here's what our final Node class looks like:
+
+```java
+public class Node<T> {
+
+  private T data;
+  Node next;
+
+  // This is the constructor for the Node class
+  public Node(int value, T data) {
+    this.value = value;
+    this.data = data;
+  }
+
+  // This is the getter for the data property
+  public T getData() {
+    return this.data;
+  }
+
+  // This is the setter for the data property
+  public void setData(T data) {
+    this.data = data;
+  }
+
+  // This is the getter for the next property
+  public Node getNext() {
+    return this.next;
+  }
+
+  // This is the setter for the next property
+  public void setNext(Node next) {
+    this.next = next;
+  }
+}
+```
+
+## Singly Linked Lists
+
+This is where things get funky. Now that we have this node, we've gotta figure out how to use it. Let's create a `SinglyLinkedList` class. Singly Linked Lists are Linked Lists where each node only has a pointer to the next node in the structure. Here's an example:
+
+```java
+public class SinglyLinkedList<T> {
+
+  // This is the head of the Singly Linked List. The head is the first node
+  // in the structure, and our starting point for traversing the structure.
+  Node head;
+
+  // This is the constructor for the SinglyLinkedList class
+  public SinglyLinkedList() {
+    this.head = null;
+  }
+
+  // This is the getter for the head property
+  public boolean isEmpty() {
+    return this.head == null;
+  }
+}
+```
+
+Let's break this down. First, we have a `head` property. Some people will also call this the `start`. This is the first node in the structure, and our starting point for traversing the structure. Whenever we want to access the Singly Linked List, we'll start at the head and traverse the structure from there.
+
+Next, we have a constructor. This is how we create a Singly Linked List. When we create a Singly Linked List, we'll set the head to `null`. This means that the Singly Linked List is empty.
+
+Finally, we have our `isEmpty` method. This method returns `true` if the Singly Linked List is empty, and `false` if it's not. We can determine if the Singly Linked List is empty by checking if the head is `null`.
+
+## Singly Linked Lists - Adding Nodes
+
+Now that we have our Singly Linked List, let's add some nodes to it. We'll start with the `addFirst` method. This method adds a node to the beginning of the Singly Linked List. Here's an example, and why it works.
+
+```java
+public void addFirst(T data) {
+  // First, we'll create a new node - the node we want to add!
+  Node newNode = new Node(data);
+
+  // Now, let's check if the Singly Linked List is empty.
+  if (this.isEmpty()) {
+    // If the Singly Linked List is empty, we'll just set the head to our new node.
+    this.head = newNode;
+    return;
+  }
+
+  // Since this will be our new start, let's have it point towards the old start.
+  newNode.setNext(this.head);
+
+  // finally, let's set the head to our new node!
+  this.head = newNode;
+}
+```
+
+Easy peasy. Let's try adding a node to the end of the Singly Linked List now!
+
+```java
+public void addLast(T data) {
+  // Once again, we'll create a new node - the node we want to add!
+  Node newNode = new Node(data);
+
+  // Now, let's check if the Singly Linked List is empty.
+  if (this.isEmpty()) {
+    // If the Singly Linked List is empty, we'll just set the head to our new node.
+    this.head = newNode;
+    return;
+  }
+
+  /*
+  Let's take a second to break down our next few steps.
+  In a singly linked list, the end of the list - the tail -
+  is the node that doesn't have anything after it. In other words,
+  its next property is null. So, we'll need to traverse the list
+  until we find the node whose next property is null!
+  */
+
+  // Let's start at the head. We'll create a variable to keep track of our current node.
+  // As we traverse the list, we'll update this variable to keep track of where we are.
+  Node currentNode = this.head;
+
+  // Now, let's traverse the list until we find the node whose next property is null.
+  while (currentNode.getNext() != null) {
+    currentNode = currentNode.getNext(); // Update our current node
+  }
+
+  /* Aha! We've found the node whose next property is null.
+  It's our currentNode! All we need to do now is set its next property
+  to our new node! */
+
+  currentNode.setNext(newNode);
+}
+```
+
+That while loop structure is going to be pretty common, so let's break down how and why we do that again. Firstly, we create a variable to keep track of our current node. As we traverse the list, we'll update this variable to keep track of where we are. Remember how we used an index like `i` when we traversed arrays? This is the same thing, but with nodes. In our loop, we then update our current node to be the next node in the list. We keep doing this until we find the node whose next property is null. This is the last node in the list, so we can add our new node after it.
+
+## Singly Linked Lists - Removing Nodes
+
+Now that we can add nodes to our Singly Linked List, let's remove some nodes! We'll start with the `removeFirst` method. This method removes the first node in the Singly Linked List.
+
+```java
+public void removeFirst() {
+  // First, let's check if the Singly Linked List is empty.
+  if (this.isEmpty()) {
+    // If the Singly Linked List is empty, there's nothing to remove!
+    return;
+  }
+
+  // Now, let's check if the Singly Linked List only has one node.
+  if (this.head.getNext() == null) {
+    // If the Singly Linked List only has one node, we'll set the head to null.
+    this.head = null;
+    return;
+  }
+
+  // Finally, if the Singly Linked List has more than one node, we'll set the head to the second node!
+  // Without any variables referencing the first node, it will be removed from memory,
+  // lost in time, like tears in rain. Time to die.
+  this.head = this.head.getNext();
+}
+```
+
+Now, let's try removing the last node in the Singly Linked List.
+
+```java
+public void removeLast() {
+  // First, let's check if the Singly Linked List is empty.
+  if (this.isEmpty()) {
+    // If the Singly Linked List is empty, there's nothing to remove!
+    return;
+  }
+
+  // Now, let's check if the Singly Linked List only has one node.
+  if (this.head.getNext() == null) {
+    // If the Singly Linked List only has one node, we'll set the head to null.
+    this.head = null;
+    return;
+  }
+
+  /*
+  This time around, we're not looking for the node whose next property is null.
+  We're looking for the node whose next property's next property is null. Weird, right?
+  We need to stop looking when the node we land on is looking at the tail. We know
+  the tail is the node whose next property is null, so we need to stop when we find
+  the node whose next property's is the tail.
+  */
+
+  // Set up our current node variable
+  Node currentNode = this.head;
+
+  // Now, let's traverse the list until we find the node whose next property's next property is null.
+  while (currentNode.getNext().getNext() != null) { // Note the extra .getNext()!
+    currentNode = currentNode.getNext(); // Update our current node
+  }
+
+  /* Aha! We've found the node whose next property's next property is null.
+  It's our currentNode! All we need to do now is set its next property
+  to null! */
+
+  currentNode.setNext(null);
+}
+```
+
+## Singly Linked Lists - Getting the Size
+
+Now that we can add and remove nodes from our Singly Linked List, let's try to get the size of the Singly Linked List. You won't be getting any code for this one, but I'll walk you through it.
+
+```java
+public int size() {
+  // First, let's check if the Singly Linked List is empty.
+  // If the Singly Linked List is empty, it has a size of 0.
+
+  // Now, let's set up our current node variable.
+
+  // We'll also need to set up a variable to keep track of our size.
+
+  // Now, let's traverse the list until we find the node whose next property is null.
+  // For each node we find, we'll update our size.
+
+  // Finally, let's return the size of the Singly Linked List!
+}
+```
+
+You didn't think I'd just hand you the code, did you? You think I want an academic misconduct?
+
+## Singly Linked Lists - Getting Nodes by Index
+
+Now that we can add and remove nodes from our Singly Linked List, let's try to get a node by its index. Finally a `for` loop!
+
+```java
+public Node get(int index) {
+  // First, let's check if the Singly Linked List is empty.
+  if (this.isEmpty()) {
+    // If the Singly Linked List is empty, there's nothing to get!
+    return null;
+  }
+
+  // Now, let's check if the index is out of bounds.
+  if (index < 0 || index >= this.size()) { // Note the use of the size() method!
+    // If the index is out of bounds, there's nothing to get!
+    return null;
+  }
+
+  // Now, let's set up our current node variable.
+  Node currentNode = this.head;
+
+  // Now, let's traverse the list until we find the node at the given index.
+  for (int i = 0; i < index; i++) {
+    currentNode = currentNode.getNext(); // Update our current node
+  }
+
+  // Finally, let's return the node at the given index!
+  return currentNode;
+}
+```

@@ -35,7 +35,7 @@ export default function ArticlePage({
   }
 
   return (
-    <div className="flex flex-col px-8 md:px-20 mb-16 relative min-h-[calc(100vh-9.3em)] md:min-h-[calc(100vh-13.3rem)]">
+    <div className="flex flex-col px-8 md:px-20 mb-16 relative min-h-[calc(100dvh-9.3em)] md:min-h-[calc(100dvh-13.3rem)]">
       <Breadcrumb path={path} />
       <div className="mb-4">
         <h1 className="text-4xl font-serif mb-4">{frontmatter.title}</h1>

@@ -1,7 +1,21 @@
-import { config, fields, collection, LocalConfig } from "@keystatic/core";
+import {
+  config,
+  fields,
+  collection,
+  LocalConfig,
+  GitHubConfig,
+} from "@keystatic/core";
 
 const localMode: LocalConfig["storage"] = {
   kind: "local",
+};
+
+const githubMode: GitHubConfig["storage"] = {
+  kind: "github",
+  repo: {
+    owner: "matthew-hre",
+    name: "matthew-hre",
+  },
 };
 
 const MDXContent = fields.mdx({
@@ -20,14 +34,10 @@ const MDXContent = fields.mdx({
   },
 });
 
+const isProd = process.env.NODE_ENV === "production";
+
 export default config({
-  storage: {
-    kind: "github",
-    repo: {
-      owner: "matthew-hre",
-      name: "matthew-hre",
-    },
-  },
+  storage: isProd ? githubMode : localMode,
   collections: {
     blog: collection({
       label: "Blog",
@@ -97,6 +107,27 @@ export default config({
           description: "The link to the... learning.",
         }),
 
+        content: MDXContent,
+      },
+    }),
+    prog_3: collection({
+      label: "Prog III",
+      slugField: "title",
+      path: "content/learning/prog_3/*",
+      entryLayout: "content",
+      format: { contentField: "content" },
+      schema: {
+        title: fields.slug({ name: { label: "Title" } }),
+        description: fields.text({ label: "Description" }),
+        createdDate: fields.datetime({
+          label: "Created",
+          description: "The date the post was created.",
+        }),
+        lastModifiedDate: fields.datetime({ label: "Last Modified" }),
+        tags: fields.array(fields.text({ label: "Tag" }), {
+          label: "Tag",
+          itemLabel: (props) => props.value,
+        }),
         content: MDXContent,
       },
     }),

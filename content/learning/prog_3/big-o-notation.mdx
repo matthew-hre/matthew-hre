@@ -1,0 +1,130 @@
+---
+title: Big O Notation
+description: A look into Big O Notation with Java.
+createdDate: 2023-11-01T18:00:00.000Z
+lastModifiedDate: 2023-11-01T18:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+Big O Notation is a way to describe the efficiency of an algorithm.
+We'll be using it to compare the efficiency of different sorting and
+searching algorithms.
+
+## What is Big O Notation?
+
+Big O Notation is a way to describe the efficiency of an algorithm. It's a way to describe how the runtime of an algorithm changes as the size of the input changes. It's important to note that Big O Notation describes the _worst case_ runtime of an algorithm.
+
+Let's look at an example. Here's a function that prints the numbers `1` through `n`:
+
+```java
+public void printNumbers(int n) {
+  for (int i = 1; i <= n; i++) {
+    System.out.println(i);
+  }
+}
+```
+
+The runtime of this function is `O(n)`, or linear. This means that the runtime of the function increases linearly as the size of the input increases. If we double the size of the input, the runtime will double.
+
+We can determine that the Big O Notation of this function is `O(n)` by looking at the for loop. The for loop will run `n` times, so the runtime of the function is `O(n)`.
+
+Let's look at another example. Here's a function that prints the numbers `1` through `n`, then prints the numbers `1` through `n` again:
+
+```java
+public void printNumbersTwice(int n) {
+  for (int i = 1; i <= n; i++) {
+    System.out.println(i);
+  }
+  for (int i = 1; i <= n; i++) {
+    System.out.println(i);
+  }
+}
+```
+
+Even though this function has two for loops, the runtime is still `O(n)`. Let's break it down.
+
+1. The first for loop iterates from `1` to `n` once, and each iteration involves a constant-time operation (printing the value of `i`). So, the time complexity of the first for loop is `O(n)`.
+
+2. Similarly, the second for loop also iterates from `1` to `n` once and performs constant-time operations (printing the value of `i`). So, the time complexity of the second for loop is also `O(n)`.
+
+3. Since the two for loops are executed sequentially (one after the other), we simply add their time complexities together. Therefore, the overall time complexity of our method is `O(n) + O(n) = O(2n)`.
+
+4. But wait! Since we drop the constants in Big O Notation, the overall time complexity of our method is `O(2n) = O(n)`.
+
+Finally, let's take a look at a function that draws a square with hashtags. The size of the square is determined by the input `n`.
+
+```java
+public void drawSquare(int n) {
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+      System.out.print("#");
+    }
+    System.out.println();
+  }
+}
+```
+
+The runtime of this function is `O(n^2)`, or quadratic. This means that the runtime of the function increases quadratically as the size of the input increases. If we double the size of the input, the runtime will quadruple.
+
+We can determine that the Big O Notation of this function is `O(n^2)` by looking at the nested for loops. The outer for loop will run n times, and the inner for loop will run n times for each iteration of the outer for loop. So, the runtime of the function is `O(n^2)`.
+
+## Big O Notation Practice
+
+I'll give you a few functions, and you tell me the Big O Notation of each one. Here's the first one:
+
+```java
+public void printNumbers(int n) {
+  for (int i = 1; i <= n; i++) {
+    System.out.println(i);
+  }
+}
+```
+
+Here's the second one:
+
+```java
+public void printNumbersButDifferent(int n) {
+  for (int i = 1; i <= n; i++) {
+    System.out.println(i);
+  }
+  for (int j = n; j >= 1; j--) {
+    System.out.println(j);
+  }
+}
+```
+
+Here's the third one:
+
+```java
+public void bigSmilesAllAround(int n) {
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+      for (int k = 1; k <= n; k++) {
+        System.out.print(":)");
+      }
+      System.out.println();
+    }
+    System.out.println();
+  }
+}
+```
+
+Here's the fourth one:
+
+```java
+public void printNiceGreeting(int n) {
+  System.out.println("What's up buttercup?");
+}
+```
+
+Here's the fifth one:
+
+```java
+public void printNumbersWeirdly(int n) {
+  for (int i = 1; i <= n; i = i * 2) { // hehe, good luck
+    System.out.println(i);
+  }
+}
+```

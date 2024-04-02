@@ -1,0 +1,260 @@
+---
+title: Trees
+description: How to implement a tree in Java.
+createdDate: 2023-11-01T13:00:00.000Z
+lastModifiedDate: 2023-11-01T13:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+## What is a Tree?
+
+A big leafy thing that grows out of the ground. Duh.
+
+## Fuck you Matthew. Fuck you
+
+Sorry. A tree is a type of graph that has a root node, and a bunch of child nodes. Each node can have any number of children, but each child can only have one parent. This is different from a binary tree, which can only have two children per node.
+
+## Defining a Tree
+
+Let's define a tree. First, we'll need a node class. This'll be pretty similar to our linked list node class, but with a few changes.
+
+```java
+public class Node<T> {
+    private T data;
+    private Node<T> parent;
+    private Node<T> left;
+    private Node<T> right;
+
+    public Node(T data) {
+        this.data = data;
+        this.parent = null;
+        this.left = null;
+        this.right = null;
+    }
+
+    // You know the drill.
+    public T getData() {...}
+    public void setData(T data) {...}
+    public Node<T> getParent() {...}
+    public void setParent(Node<T> parent) {...}
+    public Node<T> getLeft() {...}
+    public void setLeft(Node<T> left) {...}
+    public Node<T> getRight() {...}
+    public void setRight(Node<T> right) {...}
+}
+```
+
+Now, let's define our tree class.
+
+```java
+public class Tree<T> {
+    // GET IT? CAUSE IT'S A TREE? HAHAHAHAHAHHAH...
+    private Node<T> root;
+
+    public Tree() {
+        this.root = null;
+    }
+
+    public Node<T> getRoot() {
+        return this.root;
+    }
+
+    public void setRoot(Node<T> root) {
+        this.root = root;
+    }
+}
+```
+
+## How Deep is Your ~~Love~~ Tree?
+
+The **depth** of a tree is the number of edges from the root node to the deepest leaf node. The **height** of a tree is the number of edges from the root node to the furthest leaf node. The **level** of a node is the number of edges from the root node to that node. The **degree** of a node is the number of children that node has. The **degree** of a tree is the maximum degree of any node in the tree. You probably won't need to know most of this, but it's good to hear these terms.
+
+## Trees - Traversing a Tree
+
+There are a few ways to traverse a tree. Let's look at four of them: **preorder**, **inorder**, **postorder**, and **levelorder**.
+
+We'll use the following tree for our examples:
+
+```txt
+        1
+       / \
+      2   3
+     / \
+    4   5
+```
+
+Isn't it beautiful? I made it myself. I call it "tree1.txt". It's available for purchase on [my Etsy store](https://grandma.zip/).
+
+### Preorder Traversal
+
+**Preorder traversal** is a depth-first traversal method. This means that we'll visit all the nodes on a branch before moving on to the next branch. Preorder traversal visits the root node, then the left node, then the right node. Here's an example:
+
+```java
+public void preorder(Node<T> node) {
+    // First, let's check if the node is null.
+    if (node == null) {
+        // If the node is null, we can return.
+        return;
+    }
+
+    // Now, let's print the node's data.
+    System.out.println(node.getData());
+
+    // Now, let's call preorder on the left node.
+    preorder(node.getLeft());
+
+    // Finally, let's call preorder on the right node.
+    preorder(node.getRight());
+}
+```
+
+In this case, our output would be `1 2 4 5 3`.
+
+### Inorder Traversal
+
+With **inorder traversal** we'll visit all the nodes on a branch before moving on to the next branch. Inorder traversal visits the left node, then the root node, then the right node. Here's an example:
+
+```java
+public void inorder(Node<T> node) {
+    // First, let's check if the node is null.
+    if (node == null) {
+        // If the node is null, we can return.
+        return;
+    }
+
+    // Now, let's call inorder on the left node.
+    inorder(node.getLeft());
+
+    // Now, let's print the node's data.
+    System.out.println(node.getData());
+
+    // Finally, let's call inorder on the right node.
+    inorder(node.getRight());
+}
+```
+
+In this case, our output would be `4 2 5 1 3`.
+
+### Postorder Traversal
+
+**Postorder traversal** visits all the nodes on a branch before moving on to the next branch. Postorder traversal visits the left node, then the right node, then the root node. Here's an example:
+
+```java
+public void postorder(Node<T> node) {
+    // First, let's check if the node is null.
+    if (node == null) {
+        // If the node is null, we can return.
+        return;
+    }
+
+    // Now, let's call postorder on the left node.
+    postorder(node.getLeft());
+
+    // Now, let's call postorder on the right node.
+    postorder(node.getRight());
+
+    // Finally, let's print the node's data.
+    System.out.println(node.getData());
+}
+```
+
+In this case, our output would be `4 5 2 3 1`.
+
+### Levelorder Traversal
+
+**Levelorder traversal** visits all the nodes on a level before moving on to the next level. Levelorder traversal visits the root node, then the left node, then the right node. Here's an example:
+
+```java
+public void levelorder(Node<T> node) {
+    // First, let's check if the node is null.
+    if (node == null) {
+        // If the node is null, we can return.
+        return;
+    }
+
+    // Now, let's create a queue to store the nodes we need to visit.
+    Queue<Node<T>> queue = new Queue<>();
+
+    // Now, let's enqueue the root node.
+    queue.enqueue(node);
+
+    // Now, let's loop until the queue is empty.
+    while (!queue.isEmpty()) {
+        // First, let's dequeue the node at the front of the queue.
+        Node<T> currentNode = queue.dequeue();
+
+        // Now, let's print the node's data.
+        System.out.println(currentNode.getData());
+
+        // Now, let's enqueue the left node.
+        if (currentNode.getLeft() != null) {
+            queue.enqueue(currentNode.getLeft());
+        }
+
+        // Finally, let's enqueue the right node.
+        if (currentNode.getRight() != null) {
+            queue.enqueue(currentNode.getRight());
+        }
+    }
+}
+```
+
+That one's a bit more complicated, but it's still pretty simple. In this case, our output would be `1 2 3 4 5`.
+
+## Expression Trees
+
+An **expression tree** is a binary tree that stores an arithmetic expression. Each node in the tree is either an operator or an operand. The leaves of the tree are operands, and the internal nodes are operators. Here's an example:
+
+```txt
+        +
+       / \
+      *   3
+     / \
+    2   1
+```
+
+This tree represents the expression `2 * 1 + 3`. What kind of traversal would we use to get the expression `2 * 1 + 3`?
+
+## Parse Trees
+
+Fun fact: HTML is a tree! A **parse tree** is a tree that represents the syntactic structure of a string. A parse tree is also known as a **concrete syntax tree**. Here's an example:
+
+```txt
+        <html>
+       /       \
+    <head>    <body>
+              /     \
+            <h1>    <p>
+```
+
+My ASCII art skills are unmatched. This tree represents the HTML:
+
+```html
+<html>
+  <head></head>
+  <body>
+    <h1></h1>
+    <p></p>
+  </body>
+</html>
+```
+
+## Marie Kondo Trees
+
+No, these do not spark joy. These are actually **decision trees**, which are used to make decisions. Each node in the tree represents a decision, and each leaf represents an outcome. The example that comes to mind are those stupid "shrinking your closet" trees that are all over Instagram. Here's an example:
+
+```txt
+        Do you like this shirt?
+       /                       \
+      Yes                       No
+     /                            \
+  Keep it                       Is it green?
+                                /         \
+                             Yes           No
+                            /                \
+                        Keep it            Donate it
+```
+
+Something like that.

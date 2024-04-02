@@ -1,6 +1,8 @@
 import { reader } from "@/lib/createReader";
 import CategoryPageClient from "./CategoryPageClient";
 
+import { toTitleCase } from "@/lib/utils";
+
 import Footer from "@/components/Footer";
 export default async function CategoryPage({
   params,
@@ -9,12 +11,14 @@ export default async function CategoryPage({
     path: string[];
   };
 }) {
+  const category = params.path[params.path.length - 1];
+
   const collection = await reader.collections[
-    params.path[0] as keyof typeof reader.collections
+    category as keyof typeof reader.collections
   ];
 
   if (!collection) {
-    throw new Error(`No collection found for ${params.path[0]}`);
+    throw new Error(`No collection found for ${category}`);
   }
 
   const all = await collection.all();
@@ -37,9 +41,14 @@ export default async function CategoryPage({
       );
     });
 
+  const formattedPath = params.path.map((item, index) => ({
+    slug: params.path.slice(0, index + 1).join("/"),
+    title: toTitleCase(item),
+  }));
+
   return (
     <>
-      <CategoryPageClient category={params.path[0]} posts={trimmedPosts} />{" "}
+      <CategoryPageClient path={formattedPath} posts={trimmedPosts} />{" "}
       <Footer />
     </>
   );

@@ -1,0 +1,45 @@
+---
+title: Queues
+description: How to implement a Queue in Java.
+createdDate: 2023-11-01T15:00:00.000Z
+lastModifiedDate: 2023-11-01T15:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+## First In, First Out
+
+If you've ever worked in food service, this term should be familiar to you. Queues are a data structure that follow the First In, First Out (FIFO) principle. This means that the first element added to the queue will be the first element removed from the queue. My analogy for this comes from my time working at a seniors home.
+
+We used to have these god awful single use jam holders at all the dining room tables, and every night, I'd have to go to each and every table and refill the jam. I had to slot the new jams into the bottom, so that the old jams were used first. First in, first out. The problem here is that these shitty, god awful, stupid jam holders were probably pried out of Satan's kitchen. Every time I tried to put a jam in, either all the other jam would pop out of the top, or the lid of the new jam would get caught on the weird metal gate to keep the seniors from getting at the new stuff, and then jam would leek everywhere and I'd then have to take all the jam out, just to put it all back in. And it didn't even matter, because all the jam came in one massive crate every month! It was useless! Utterly useless!
+
+...I'm sorry. I didn't mean to freak out like that. That was unprofessional. I'm sorry.
+
+## Defining a queue
+
+Queues are a data structure that follow the First In, First Out (FIFO) principle. This means that the first element added to the queue will be the first element removed from the queue. Queues are useful for storing data that needs to be processed in the order it was received. Some examples of queues are the line at the grocery store, the line at the bank, and the line at the DMV.
+
+Let's get some code goin'.
+
+```java
+public class Queue<T> extends LinkedList<T> {
+  private Node<T> head;
+
+    public Queue() {
+        this.head = null;
+    }
+
+    public void enqueue(T data) {
+        // We're lazy, so let's just add to the end of the list.
+        this.add(data);
+    }
+
+    public T dequeue() {
+        // We're lazy, so let's just remove from the front of the list.
+        return this.removeHead();
+    }
+}
+```
+
+This is a pretty simple implementation of a queue. We're just using a linked list, and adding to the end of the list, and removing from the front of the list.

@@ -84,20 +84,23 @@ export default async function Page({
   };
 }) {
   const { serialized, frontmatter } = await getPost(
-    params.path[0],
-    params.path[1]
+    params.path[params.path.length - 2],
+    params.path[params.path.length - 1]
   );
 
-  const formattedPath = [
-    {
-      slug: params.path[0],
-      title: toTitleCase(params.path[0]),
-    },
-    {
-      slug: params.path[0] + "/" + params.path[1],
-      title: frontmatter.title,
-    },
-  ];
+  const formattedPath = params.path.map((item, index) => {
+    if (index === params.path.length - 1) {
+      return {
+        slug: item,
+        title: frontmatter.title,
+      };
+    } else {
+      return {
+        slug: params.path.slice(0, index + 1).join("/"),
+        title: toTitleCase(item),
+      };
+    }
+  });
 
   return (
     <>

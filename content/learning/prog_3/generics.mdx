@@ -1,0 +1,33 @@
+---
+title: Generics
+description: An introduction to generics in Java.
+createdDate: 2023-11-01T21:00:00.000Z
+lastModifiedDate: 2023-11-01T21:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+## What are Generics?
+
+Generics are used to create classes that can work with different types of data. Y'know how when we create an ArrayList, we have to specify the type of data that it will hold? That's generics. Let's try to create our own generic class. Here's an example:
+
+```java
+// This is how we create a generic class
+public class GenericClass<T> { // T is the type of data we want to use
+  // Notice how we use T as the type of the variable
+  // instead of a specific type? That's generics!
+  T myVariable;
+
+  // Same deal here
+  public void myMethod(T myParameter) {
+    // Do something
+  }
+}
+```
+
+These are super helpful when we want to create a class that can work with different types of data.
+
+## Generics Practice
+
+Let's try some practical examples of generics. Create a generic `Pair` class that has two properties, `first` and `second`. Then, create a `Pair` object that holds a `String` and an `Integer`. If you'd like a further challenge, create a `Triple` class that holds three properties!

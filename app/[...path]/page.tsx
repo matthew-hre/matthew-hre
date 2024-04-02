@@ -10,7 +10,11 @@ export default async function Page({
     path: string[];
   };
 }) {
-  if (params.path.length === 1) {
+  const collection = await reader.collections[
+    params.path[params.path.length - 1] as keyof typeof reader.collections
+  ];
+
+  if (collection || params.path.length === 1) {
     return <CategoryPage params={params} />;
   }
 

@@ -1,0 +1,45 @@
+---
+title: Interfaces
+description: An introduction to Interfaces in Java.
+createdDate: 2023-11-01T22:00:00.000Z
+lastModifiedDate: 2023-11-01T22:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+If we're in the same Prog III section, you'll probably be confused about interfaces. I'll try to explain them as best I can. If you need a refresher, check out the [Java Interfaces](https://www.w3schools.com/java/java_interface.asp) page on W3Schools.
+
+## What is an Interface?
+
+An interface is a collection of abstract methods. It's used to define a set of methods that a class must implement. An interface is like a contract. If a class implements an interface, it must implement all of the methods defined in the interface. Here's an example:
+
+```java
+public interface Saveable {
+  public void save(); // Note: no method body
+}
+```
+
+Here, we've defined an interface called `Saveable`. It has one abstract method, `save()`. Any class that implements the `Saveable` interface must implement the `save()` method.
+
+This is one of my favorite examples of interfaces, as it's a use case that could realistically pop up. Let's create two different file types: `.txt` and `.json`. We'll create an interface called `Saveable` that defines a `save()` method. Then, we'll create two classes, `TextFile` and `JsonFile`, that implement the `Saveable` interface. Here's what that looks like:
+
+```java
+public class TextFile implements Saveable {
+  public void save() {
+    // Code to save a text file
+  }
+}
+
+public class JsonFile implements Saveable {
+  public void save() {
+    // Code to save a JSON file
+  }
+}
+```
+
+Now, these are two different file types that need to be saved differently. But, they both implement the `Saveable` interface, so we know that they both have a `save()` method. This is a great example of how interfaces can be used to define a set of methods that a class must implement.
+
+## Interface Practice
+
+Let's practice using interfaces. Create a `Shape` interface that defines a `getArea()` method. Then, create two classes, `Circle` and `Rectangle`, that implement the `Shape` interface! If you'd like a further challenge, create a `Square` class that extends the `Rectangle` class.

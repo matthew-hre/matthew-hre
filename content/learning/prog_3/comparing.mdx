@@ -1,0 +1,82 @@
+---
+title: Comparing
+description: A guide on comparing objects in Java.
+createdDate: 2023-11-01T20:00:00.000Z
+lastModifiedDate: 2023-11-01T20:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+## What are Comparables?
+
+Comparables are interfaces that are used to compare objects. They're used to define a method that compares two objects. Here's an example:
+
+```java
+public class Person implements Comparable<Person> {
+  // In order to implement the Comparable interface, we need to overload
+  // the compareTo method. This is how we tell Java how to compare two
+  // Person objects.
+  public int compareTo(Person otherPerson) {
+    // Compare the two Person objects
+    // Return -1 if this Person is less than otherPerson
+    // Return 0 if this Person is equal to otherPerson
+    // Return 1 if this Person is greater than otherPerson
+  }
+}
+```
+
+Notice how we return a number between -1 and 1? This is how we can use the built-in `Collections.sort()` method. Here's an example:
+
+```java
+// Create an ArrayList of Person objects
+ArrayList<Person> people = new ArrayList<Person>();
+
+// Add some Person objects to the ArrayList
+people.add(new Person("Jaunie", 20));
+people.add(new Person("Sunny", 18));
+people.add(new Person("Riley", 25));
+
+// Sort the ArrayList
+Collections.sort(people);
+
+// Print the sorted ArrayList
+System.out.println(people);
+```
+
+Easy peasy. But what if we want to sort the ArrayList in a different way? What if we want to sort the ArrayList by age, or by name? We can use the `Comparator` interface to do that. Here's an example:
+
+```java
+// Create a Comparator that sorts by age
+Comparator<Person> ageComparator = new Comparator<Person>() {
+  // In order to implement the Comparator interface, we need to overload
+  // the compare method. This is how we tell Java how to compare two
+  // Person objects.
+  public int compare(Person person1, Person person2) {
+    // Compare the two Person objects
+    // Return -1 if person1 is less than person2
+    // Return 0 if person1 is equal to person2
+    // Return 1 if person1 is greater than person2
+  }
+};
+```
+
+## Comparables and Comparators Practice
+
+Let's practice using Comparables and Comparators. Let's create a `Book` class that has three properties, `title`, `author`, and `year`. Then, let's create a `Comparator` that sorts by all three properties. If you'd like a further challenge, create a `Comparator` that sorts by a single property, and a `Comparator` that sorts by two properties!
+
+Now, we can use the `Collections.sort()` method to sort the ArrayList by age. Here's an example:
+
+```java
+// Create an ArrayList of Person objects
+ArrayList<Person> people = new ArrayList<Person>();
+
+// Add some Person objects to the ArrayList
+people.add(new Person("Jaunie", 20));
+people.add(new Person("Sunny", 18));
+people.add(new Person("Riley", 25));
+
+// Sort the ArrayList by age
+// Note the second parameter, where we pass in our Comparator
+Collections.sort(people, ageComparator);
+```

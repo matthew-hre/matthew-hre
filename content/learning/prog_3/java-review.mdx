@@ -1,0 +1,365 @@
+---
+title: Java Review
+description: An quick refresher on Java programming.
+createdDate: 2023-11-01T23:00:00.000Z
+lastModifiedDate: 2023-11-01T23:00:00.000Z
+tags:
+  - Java
+  - Guide
+---
+
+## Variables and Math
+
+I'll burn through this section quickly, as it's mostly review. If you need a refresher on any of this, check out the [Java Basics](https://www.w3schools.com/java/java_variables.asp) page on W3Schools.
+
+### Variables
+
+Variables are used to store information in a program. They can be used to store numbers, text, or other data types. In Java, variables are declared with a type and a name. Here's pretty much every data type in Java that we care about:
+
+```java
+int myInt = 5;
+double myDouble = 5.99;
+float myFloat = 5.99f;
+char myChar = 'A';
+String myString = "Hello";
+boolean myBool = true;
+```
+
+### Math
+
+Of course, we can do math in Java. Here are the basic operators and some
+methods you'll probably use:
+
+```java
+int x = 5;
+int y = 3;
+
+// Addition
+int sum = x + y;
+
+// Subtraction
+int difference = x - y;
+
+// Multiplication
+int product = x * y;
+
+// Division
+int quotient = x / y;
+
+// Modulus
+int remainder = x % y;
+
+// Absolute Value
+int absoluteValue = Math.abs(x);
+
+// Square Root
+double squareRoot = Math.sqrt(x);
+
+// Random Number
+double randomNumber = Math.random();
+```
+
+## Conditionals and Loops
+
+Once again, this is mostly review. If you need a refresher, check out the [Java Conditions](https://www.w3schools.com/java/java_conditions.asp) and [Java Loops](https://www.w3schools.com/java/java_while_loop.asp) pages on W3Schools.
+
+### Conditionals
+
+Conditionals are used to make decisions in a program. They allow us to run different code depending on the value of a variable. Here are the basic conditional operators:
+
+```java
+int x = 5;
+int y = 3;
+
+if (x == y) {
+  // Do something
+} else if (x > y) {
+  // Do something else
+} else {
+  // Do something else
+}
+```
+
+### Switch Statements
+
+Switch statements are a special type of conditional that allow us to check the value of a variable against a list of possible values. Here's an example:
+
+```java
+int day = 4;
+
+switch (day) {
+  case 1:
+    // This is how we output text in Java, by the way
+    System.out.println("Monday");
+    break; // This is how we end a case
+  case 2:
+    System.out.println("Tuesday");
+    break;
+  case 3:
+    System.out.println("Wednesday");
+    break;
+  case 4:
+    System.out.println("Thursday");
+    break;
+  case 5:
+    System.out.println("Friday");
+    break;
+  case 6:
+    System.out.println("Saturday");
+    break;
+  case 7:
+    System.out.println("Sunday");
+    break;
+  default: // This is what happens if none of the cases match
+    System.out.println("Invalid day");
+}
+```
+
+### Loops
+
+Loops are used to repeat code. There are three main types of loops in Java: `for` loops, `while` loops, and `do...while` loops. Here's an example of each:
+
+```java
+/*
+    For loops are defined with three parts:
+    1. The initialization of the loop variable
+    2. The condition that the loop variable must meet to continue looping
+    3. The change to the loop variable after each iteration
+*/
+for (int i = 0; i < 5; i++) {
+  System.out.println(i);
+}
+
+/*
+    While loops are defined with a single condition. The loop will continue
+    looping as long as the condition is true.
+*/
+int i = 0;
+while (i < 5) {
+  System.out.println(i);
+  i++;
+}
+
+/*
+    Do...while loops are defined with a single condition. The loop will
+    continue looping as long as the condition is true. The difference between
+    a do...while loop and a while loop is that a do...while loop will always
+    run at least once.
+*/
+
+int i = 0;
+do {
+  System.out.println(i);
+  i++;
+} while (i < 5);
+```
+
+## Arrays and ArrayLists
+
+Arrays and ArrayLists are used to store lists of data. Arrays are fixed in size, while ArrayLists can grow and shrink. Here's how to declare and use them:
+
+```java
+// Arrays
+
+// This is how we declare an array
+String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};
+
+// If we want the first element in the array, we use the index 0
+System.out.println(cars[0]); // Volvo
+
+// If we want to change the first element in the array, we use the index 0
+cars[0] = "Opel";
+
+// If we want to get the length of the array, we use the length property
+System.out.println(cars.length); // 4
+
+// Arrays without predefined values are declared like this
+String[] newCars = new String[4];
+```
+
+Keep in mind that Arrays are fixed in size. If you want to add or remove elements from an array, you'll need to create a new array with the correct size and copy the elements over. If you like being all loosey-goosey with your data, you can use an ArrayList instead. Here's how to declare and use an ArrayList:
+
+```java
+// ArrayLists
+
+// This is how we declare an ArrayList
+ArrayList<String> cars = new ArrayList<String>();
+
+// This is how we add an element to the ArrayList
+cars.add("Volvo");
+
+// This is how we get an element from the ArrayList
+System.out.println(cars.get(0)); // Volvo
+
+// This is how we change an element in the ArrayList
+cars.set(0, "Opel");
+
+// This is how we get the length of the ArrayList
+System.out.println(cars.size()); // 1
+```
+
+## File I/O and Exceptions
+
+### File I/O
+
+File I/O is used to read and write files. Here's an example of reading a file:
+
+```java
+try {
+  // Create a file object
+  File myObj = new File("filename.txt");
+  // Create a scanner object
+  Scanner myReader = new Scanner(myObj);
+  // Read the file
+  while (myReader.hasNextLine()) {
+    // Print each line
+    String data = myReader.nextLine();
+    System.out.println(data);
+  }
+  myReader.close();
+} catch (FileNotFoundException e) { // We'll talk about exceptions later
+  System.out.println("An error occurred.");
+  e.printStackTrace();
+}
+```
+
+We're also able to write to files. Here's an example:
+
+```java
+try {
+  // Create a file object
+  FileWriter myWriter = new FileWriter("filename.txt");
+  // Write to the file
+  myWriter.write("Files in Java might be tricky, but it is fun enough!");
+  // Close the file
+  myWriter.close();
+  System.out.println("Successfully wrote to the file.");
+} catch (IOException e) { // We'll talk about exceptions later
+  System.out.println("An error occurred.");
+  e.printStackTrace();
+}
+```
+
+### Exceptions
+
+Exceptions are used to handle errors in Java. All exceptions are subclasses of the `Exception` class. Here's an example of how to handle an exception:
+
+```java
+try {
+  // Code that might throw an exception
+} catch (Exception e) {
+  // Code to handle the exception
+}
+```
+
+We're also able to throw our own exceptions. Here's an example:
+
+```java
+// This is how we throw an exception
+throw new Exception("Something went wrong");
+```
+
+And, of course, we can create our own exceptions. Here's an example:
+
+```java
+// This is how we create a custom exception
+class MyException extends Exception {
+  public MyException(String errorMessage) {
+    super(errorMessage);
+  }
+}
+
+// This is how we throw a custom exception
+throw new MyException("Something went wrong");
+```
+
+## Classes and Objects
+
+Here's where we may need a little refresher. If you need a refresher, check out the [Java Classes and Objects](https://www.w3schools.com/java/java_classes.asp) page on W3Schools.
+
+### Classes
+
+Classes are used to define objects. They contain the properties and methods that objects of that class will have. Here's an example of a class:
+
+```java
+public class Car {
+  // This is a property of the Car class
+  String color = "red";
+
+  // This is a method of the Car class
+  public void drive() {
+    System.out.println("The car is driving");
+  }
+}
+```
+
+### Objects
+
+Objects are instances of a class. They have the properties and methods defined in the class. Here's an example of an object:
+
+```java
+// This is how we create an object of the Car class
+Car myCar = new Car();
+
+// This is how we access the properties of the Car class
+System.out.println(myCar.color); // red
+
+// This is how we access the methods of the Car class
+myCar.drive(); // The car is driving
+```
+
+## Inheritance
+
+Inheritance is a way to create a new class that inherits the properties and methods of another class. Here's an example:
+
+```java
+
+// This is the parent class
+public class Animal {
+  public void eat() {
+    System.out.println("The animal is eating");
+  }
+}
+
+// This is the child class
+public class Dog extends Animal {
+  public void bark() {
+    System.out.println("The dog is barking");
+  }
+}
+
+// This is how we create an object of the Dog class
+Dog myDog = new Dog();
+
+// This is how we access the inherited methods of the Animal class
+myDog.eat(); // The animal is eating
+
+// and, of course, the methods of the Dog class
+myDog.bark(); // The dog is barking
+```
+
+## Abstract Classes
+
+Abstract classes are classes that can't be instantiated. They're used to define a base class that other classes can extend. Here's an example:
+
+```java
+// This is an abstract class.
+abstract class Animal {
+  // This is an abstract method. It doesn't have a body.
+  public abstract void eat();
+
+  // This is a normal method
+  public void makeSound() {
+    System.out.println("The animal is making a sound");
+  }
+}
+
+// This is a class that extends the Animal class
+class Cat extends Animal {
+  public void eat() {
+    System.out.println("The cat is eating");
+  }
+}
+```
+
+It's important to note that a class can only extend one class. If you want to extend multiple classes, you'll need to use interfaces.

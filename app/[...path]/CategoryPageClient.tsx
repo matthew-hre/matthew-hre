@@ -9,10 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 
 export default function CategoryPageClient({
-  category,
+  path,
   posts,
 }: {
-  category: string;
+  path: { slug: string; title: string }[];
   posts: any[];
 }) {
   const [isMounted, setIsMounted] = useState(false);
@@ -28,17 +28,10 @@ export default function CategoryPageClient({
   return (
     <>
       <div className="flex flex-col px-8 md:px-20 mb-16 relative min-h-[calc(100vh-9.3em)] md:min-h-[calc(100vh-13.3rem)]">
-        <Breadcrumb
-          path={[
-            {
-              slug: category,
-              title: category[0].toUpperCase() + category.slice(1),
-            },
-          ]}
-        />
+        <Breadcrumb path={path} />
         <div className="mb-4">
           <h1 className="text-4xl font-serif mb-4">
-            {category[0].toUpperCase() + category.slice(1)}
+            {path[path.length - 1].title}
           </h1>
         </div>
 
@@ -48,7 +41,7 @@ export default function CategoryPageClient({
               {posts.map((post, idx) => (
                 <div key={idx} className="mb-4">
                   <Link
-                    href={`/${category}/${post.slug}`}
+                    href={`/${path[path.length - 1].slug}/${post.slug}`}
                     className="text-foreground hover:underline"
                   >
                     <h2 className="text-2xl font-serif">{post.entry.title}</h2>
