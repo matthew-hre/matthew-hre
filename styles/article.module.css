@@ -42,6 +42,18 @@
   @apply mb-2 leading-7;
 }
 
+.article li > p {
+  @apply mb-2;
+}
+
+.article li > ul {
+  @apply mt-2;
+}
+
+.article li > ul {
+  @apply mb-2;
+}
+
 .article code {
   @apply bg-muted py-0.5 px-1 rounded;
 }
@@ -52,4 +64,28 @@
 
 .article pre > code {
   @apply p-0 bg-transparent;
+}
+
+.article table {
+  @apply w-full border-collapse mb-6;
+}
+
+.article th {
+  @apply font-bold text-left border-b border-primary-foreground py-2 px-4;
+}
+
+.article td {
+  @apply border-b border-primary-foreground py-2 px-4;
+}
+
+.article thead th {
+  @apply text-primary;
+}
+
+.article tbody tr:nth-child(odd) {
+  @apply bg-muted;
+}
+
+.article tbody tr:nth-child(even) {
+  @apply bg-background;
 }

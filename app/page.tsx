@@ -8,7 +8,7 @@ import { reader } from "@/lib/createReader";
 import Footer from "@/components/Footer";
 
 export default async function Home() {
-  const blogPosts = await getHighlightedPosts(reader.collections.blog);
+  const blogPosts = await getHighlightedPosts(reader.collections.blog, 5);
   const projectPosts = await getHighlightedPosts(reader.collections.projects);
   const learningPosts = await getHighlightedPosts(reader.collections.learning);
   const gamePosts = await getHighlightedPosts(reader.collections.games);
@@ -170,7 +170,7 @@ const BlogLink = ({
   );
 };
 
-async function getHighlightedPosts(collection: any) {
+async function getHighlightedPosts(collection: any, count: number = 3) {
   const data = await collection.all();
 
   const sorted = data.sort((a: any, b: any) => {
@@ -180,5 +180,5 @@ async function getHighlightedPosts(collection: any) {
     );
   });
 
-  return sorted.slice(0, 3);
+  return sorted.slice(0, count);
 }

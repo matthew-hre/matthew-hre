@@ -66,6 +66,11 @@
   }
 }
 
+* {
+  scroll-behavior: smooth;
+  scroll-margin-top: 3.5rem;
+}
+
 @layer base {
   * {
     @apply border-border;

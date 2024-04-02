@@ -4,6 +4,7 @@ import { reader } from "@/lib/createReader";
 
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
+import remarkToc from "remark-toc";
 import rehypeHighlight from "rehype-highlight";
 import { notFound } from "next/navigation";
 
@@ -65,7 +66,7 @@ async function getPost(
   }
   const serialized = await serialize(String(content), {
     mdxOptions: {
-      remarkPlugins: [remarkGfm],
+      remarkPlugins: [remarkGfm, remarkToc],
       rehypePlugins: [rehypeSlug, rehypeHighlight],
     },
   });
@@ -83,6 +84,14 @@ export default async function Page({
     path: string[];
   };
 }) {
+  if (params.path[params.path.length - 1].includes(".")) {
+    return notFound();
+  }
+
+  if (params.path[0] === "_next") {
+    return notFound();
+  }
+
   const { serialized, frontmatter } = await getPost(
     params.path[params.path.length - 2],
     params.path[params.path.length - 1]
