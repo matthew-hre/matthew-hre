@@ -29,9 +29,7 @@ export default function BreadcrumbDemo({
         {path.map((segment, index) => (
           <BreadcrumbItem key={segment.slug} className="text-xs">
             <BreadcrumbLink asChild>
-              <Link href={`/${segment.slug}`} passHref>
-                {segment.title}
-              </Link>
+              <Link href={`/${segment.slug}`}>{segment.title}</Link>
             </BreadcrumbLink>
             {index < path.length - 1 && (
               <BreadcrumbSeparator className="size-3.2" />

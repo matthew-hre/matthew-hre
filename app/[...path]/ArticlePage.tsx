@@ -100,7 +100,8 @@ export default async function Page({
   const formattedPath = params.path.map((item, index) => {
     if (index === params.path.length - 1) {
       return {
-        slug: item,
+        slug:
+          params.path.slice(0, index + 1).join("/") + "#" + params.path[index],
         title: frontmatter.title,
       };
     } else {
