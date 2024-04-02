@@ -1,0 +1,102 @@
+---
+title: Hunchifier
+description: A full-stack app for managing software project ideas
+createdDate: 2024-04-02T12:34:00.000Z
+lastModifiedDate: 2024-04-02T12:34:00.000Z
+tags:
+  - NextJS
+  - Post Mortem
+  - PostgreSQL
+  - Web Development
+externalLink: >-
+  https://github.com/matthew-hre/hunchifier
+---
+
+## Preface
+
+This year, I've been participating in a program called [Tech Liftoff](https://www.mtroyal.ca/ProgramsCourses/FacultiesSchoolsCentres/Business/Institutes/InstituteInnovationEntrepreneurship/Tech-Liftoff-Business.htm), a program hosted by the [Institute for Innovation and Entrepreneurship](https://www.mtroyal.ca/ProgramsCourses/FacultiesSchoolsCentres/Business/Institutes/InstituteInnovationEntrepreneurship/index.htm). Basically, they've thrown a handful of business students into a pile of computing students, and are coaching us through designing, developing, and shipping a software product / project in eight short months. This has been a phenomenal experience so far… apart from a few hiccups.
+
+## Table of Contents
+
+## Hiccups
+
+The first two months of the program were allocated for "Project Ideation". In essence, we needed to actually come up with something to spend six months building. I was looking forward to this part, as I had come into this program with a few ideas already in mind. I was excited to see what the other students had in mind, and to see if we could collaborate on something.
+
+Then, we were informed that we'd need to create **fifty** project ideas. Fifty. Five-zero. I understood where they were coming from, we wanted lots of ideas floating around and we wanted to make sure we were building something that we were passionate about. But fifty? That's a lot of ideas. But that's fine, that's workable. I can do that.
+
+## PDFs
+
+That old joke about hard things in software development is actually missing a point. There are actually **three** hard things in software development: naming things, cache invalidation, off by one errors, and PDFs. It's sort of a universal experience for computing students to try and work with PDFs, only to be met with a wall of frustration.
+
+Now, imagine my joy when I'm given a link to a **51 page fillable PDF** for all my project ideas. I was not a happy camper. I was not a happy camper at all. I was a very unhappy camper. I was a very unhappy camper who was very unhappy with the PDF that was thrust upon me.
+
+## Initial Development
+
+On Thursday, just after the session, I headed back to the computer lab where most of the CS kids hang around. At this point, I _should_ be working on my project ideas, but I'm still a little miffed about the PDF. I decide to take a break and work on something else for a bit.
+
+At this point, I've started complaining to my buddies in the lab about not wanting to put my ideas into a PDF. "I mean, I'm going to end up putting these ideas in my notes app to start anyways. It's gonna be a pain to copy them over." I say. "What if I just... make an app to do it for me?"
+
+With very little forethought, I create a NextJS app and start hacking away at it. There is no rhyme or reason to anything I'm doing. I'm just throwing code at the wall and seeing what sticks. "I'll probably need a database," I think to myself, as I set up Supabase. "I'll need to authenticate users," I think, as I set
+up GitHub OAuth. "There's gotta be a better way to lay out this login page," I think, as I start installing shadcn components.
+
+## Deployment
+
+Four days after the original project was created, Hunchifier was live. I had a working prototype that could take in project ideas, store them in a database, and spit them back out for users - and admins - to see. I was ecstatic. I had built something that was actually useful, and I had done it in four days. Immediately, I popped a link into the Tech Liftoff Discord server and started getting people to test it out.
+
+## Updates, Updates, Updates
+
+By the first week, almost half of the program was using Hunchifier. I was getting feedback from all over the place, and I was loving it. I was getting feature requests, bug reports, and general feedback on the app. I was updating the app almost daily, and I was loving every second of it.
+
+### The Leaderboard
+
+The program coordinators had mentioned in a session that the person with the most hunches by the end of February would win a prize. Of course I had to build a leaderboard. I had to. I had no choice. I had to build a leaderboard. Seven days after the initial launch, the leaderboard was live.
+
+### Editing
+
+A little quality of life update in early February allowed users to edit their hunches. There were some bigger updates on the roadmap, but out of fear, I decided to push this one out first. I was terrified of breaking something, and I wanted to make sure I had a quick win before I started working on the bigger features.
+
+### UI Changes
+
+During this whole project, I was tweaking the UI almost daily. Mostly, I was making sure it looked good on mobile. Now, because of the way I set up OAuth, and because I'm not the smartest guy, a lot of this mobile testing was absolutely done in production. So I thought I'd share some entertaining Git commit messages with you:
+
+![](/images/hunchifier/no-one-gets-dark-theme.png)
+
+### Deeper Hunches
+
+Now, when I mentioned that we needed fifty project ideas each, I forgot to mention that our best five needed to be "Deeper Hunches," where we flesh out the idea a little more. I had been putting this off for a while, but I finally got around to building a feature that would allow users to mark their hunches as "Deeper Hunches." This was a bit of a nighmare feature, as it required new tables, new UI, and a bunch of new UI logic. UI logic?
+
+Here's the jist: Before deeper hunches, there was one place you could create a new hunch, which was just the home page. Now, with the addition of deeper hunches, there were even more places you could create a new hunch. I had to make sure that the UI was consistent across all of these places, and that the user experience was the same no matter where you were creating a hunch.
+
+Now, instead of just hitting "New Hunch" on the home screen, you'd be able to hit "New Hunch" and then create a deeper hunch from there, or you could convert an existing hunch into a deeper hunch. It was a lot of work, but I was happy with the result.
+
+### Customer Discovery
+
+You thought that was some nightmare UI logic? Brace yourself.
+
+The program coordinators had mentioned that we needed to do some customer discovery. We needed to talk to people about our ideas, and see if they were actually interested in them. I had been putting this off for a while, but I finally got around to building a feature that would allow users to add "Customer Discovery" notes to their deeper hunches. On top of this, we also needed to create a "Customer Persona" for each of our deeper hunches.
+
+I delayed this feature way too much, just because of all the UI logic that would be involved. I basically had to redesign the way the app handled hunches. We ended up settling on this structure:
+
+- Hunches can be created from the home page
+  - Hunches can be turned into deeper hunches during creation
+  - Deeper hunches can have customer discovery notes and customer personas attached to them during creation
+- Hunches can be converted into deeper hunches from the home page
+  - Deeper hunches can have customer discovery notes and customer personas attached to them during conversion
+- Deeper hunches can have customer discovery notes and customer personas attached to them from the deeper hunch page
+- Hunches now have their own page, where they can be edited, deleted, converted into deeper hunches, and have customer discovery notes and customer personas attached to them.
+
+Oh, did I mention that customer personas are one-to-one with deeper hunches, but customer discovery notes are many-to-one? Yeah, that was fun.
+
+## The Future
+
+I loved working on this project. I loved the feedback I was getting, and I loved the community that was forming around it. Mostly, I loved building something that people were actually using! Now that the ideation phase is over, and we're beginning to form teams around our ideas, I'm not sure what the future holds for Hunchifier. Currently, it's gathering dust in my GitHub account, but I'm hoping to revitalize it if they run this program again next year. I'd love to add a way to make hunches public, or a way to form your teams in the interface itself. Comments? Maybe a chat client built right in? Who knows.
+
+This was a fantastic experience, and I'm so glad I got to build something that people actually used. I'm looking forward to the next project, and I'm hoping I can build something just as cool.
+
+## Special Thanks
+
+- Thanks to the Tech Liftoff program for giving me the opportunity to build this project
+- Thanks to Taylor for helping me with the database schema and the analytics page
+- Thanks to Thomas for listening to me complain about PDFs
+- Thanks to the entire Tech Liftoff community for using Hunchifier and giving me feedback
+- NO thanks to Khalaf for making too many hunches and lagging the whole app in the process
