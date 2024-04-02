@@ -30,7 +30,7 @@ Alright, let's get into the fun stuff. Let's create a project.
 
 First, open up your command palette with `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) and type in "Java Project". Select "Java: Create Java Project".
 
-![](/images/vscode-java/image.png)
+![](/images/vscode-java/create.png)
 
 Next, you'll be asked to select your build tools. You don't care. Select "No build tools". You'll then be prompted to select a folder. This is the folder where your project **folder** will be created, not just the raw project files. Just keep that in mind, you won't have to make a new folder for your project.
 
@@ -38,7 +38,7 @@ Finally, you'll be asked to name your project. Name it whatever you want. Just m
 
 ## Navigating a Project
 
-![](/images/vscode-java/image.png)
+![](/images/vscode-java/navigate.png)
 
 Nice, you've got a project. Let's run through what was generated for us. We've got a `bin` folder and a `lib` folder, a `.vscode` folder, and most importantly, a `src` folder. The `bin` and `lib` folders are for compiled code and libraries, respectively. The `.vscode` folder is for VSCode settings. The `src` folder is where all of our code will go. Important to note, there's no package structure in this project. Let's fix that.
 
@@ -46,7 +46,7 @@ Nice, you've got a project. Let's run through what was generated for us. We've g
 
 Packages are traditionally the companies domain name reversed, so let's stick with something like that. My name's "Cool Matt", so I'll make my package com.matt.cool. Let's do that. The quickest way to do this is to set our package in our `App.java` file. Open up `App.java` and change the package to `com.matt.cool`. Now we can hover over the `App` class and click "Move `App.java` to package 'com.matt.cool'".
 
-![](/images/vscode-java/image.png)
+![](/images/vscode-java/package.png)
 
 Packages are basically folders, so you're also able to do this by making a handful of folders and naming them as such. This is good to know when we want to follow a MVC pattern.
 
@@ -78,11 +78,11 @@ If you're like me, you're lazy. You don't want to type out getters and setters. 
 
 Pop open the command palette and type in "User Settings". Select "Preferences: Open User Settings". You'll need to change the Target Folder to `doc`. Should look a little like this.
 
-![](/images/vscode-java/image.png)
+![](/images/vscode-java/javadocdir.png)
 
 ### Generating JavaDoc Comments
 
-![](/images/vscode-java/image.png)
+![](/images/vscode-java/javadoc.png)
 
 Command palette once again, this time type in "JavaDoc". You'll be prompted with a few options. Any of the "Generate" options are fine, but are a bit glitchy.
 
