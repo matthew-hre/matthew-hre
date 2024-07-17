@@ -12,6 +12,7 @@ import { DarkTheme, LightTheme } from "@/styles/github-themes";
 import { useEffect, useState } from "react";
 
 import { formatDate } from "@/lib/utils";
+import FadeIn from "@/components/FadeIn";
 
 export default function ArticlePage({
   frontmatter,

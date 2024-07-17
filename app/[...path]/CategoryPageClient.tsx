@@ -7,6 +7,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { Badge } from "@/components/ui/badge";
 
 import { useEffect, useState } from "react";
+import FadeIn from "@/components/FadeIn";
 
 export default function CategoryPageClient({
   path,
