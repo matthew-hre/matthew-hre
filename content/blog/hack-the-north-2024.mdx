@@ -1,10 +1,9 @@
 ---
 title: Hack the North 2024
-createdDate: 2024-09-15T21:34:00.000Z
-lastModifiedDate: 2024-09-15T22:53:00.000Z
+createdDate: 2024-09-16T20:00:00.000Z
+lastModifiedDate: 2024-09-16T20:00:00.000Z
 tags:
   - Hackathon
-  - Development Log
 ---
 
 ## Hack the North 2024
@@ -72,12 +71,19 @@ Hack the North had a really unique approach to judging! Instead of science-fair 
 Hack the North had some of the best swag I've ever seen at a hackathon. Bulleted list time:
 
 - Custom Hack the North 2024 stickers
+
 - T-shirts
+
 - Tote bag
+
 - Hoodie
+
 - HTN branded chocolate
+
 - Playing cards
+
 - Custom mechanical keycaps
+
 - Mini HTN Lego set
 
 Such creative merch ideas, and I'm definitely going to be looking into some of these for future MRUHacks events.
@@ -85,62 +91,3 @@ Such creative merch ideas, and I'm definitely going to be looking into some of t
 ## tl;dr
 
 Hack the North 2024 was an incredible experience, and I had a ton of fun. I met some great people, and I learned a lot. I'm excited to see where Tabinator goes, and I'm looking forward to implementing some of the ideas I stole from HTN at MRUHacks. Peace!
-
----
-
-title: Tabintaor
-createdDate: 2024-09-15T21:34:00.000Z
-lastModifiedDate: 2024-09-15T22:53:00.000Z
-tags:
-
-- Hackathon
-- Rust
-- React
-
----
-
-# Tabinator
-
-I recently participated in Hack the North 2024, and my team and I built a project called Tabinator. Tabinator is a window management tool that lets you save your window layout and load it back up with a single click. It's like you never left.
-
-## The Problem
-
-When you're developing, or working on a school project, or even just playing games, you have a ton of tabs open. Everything from Chrome tabs to VSCode instances, to terminals and Spotify. When you're in the moment, this workflow is perfect, everything is where you remember putting it and you can get to it quickly. The problem comes when you have to switch gears and, god forbid, close your tabs. Now your nice workflow is gone, and you have to spend time setting everything back up.
-
-## The Solution
-
-This is where Tabinator comes in. Instead of painfully booting all those tabs and windows back up, Tabinator lets you load back your window layout with a single click. You can save your layout, and load it back up whenever you need it. And we're not just saving your open tabs. We're saving your window size, your window position, and even your scroll position. It's like you never left.
-
-## The Stack
-
-Tabinator is built with... _deep breath_... Powershell, Python, Swift, Rust, React, Typescript, Tailwind, and Convex. Woof. In order to break down this stack, let's instead break down how we developed this project.
-
-## Scoping the Project
-
-First, we had to narrow down exactly what we wanted our app to do. We started this with our **User Story**. Say I'm a user. What does my day using your program look like? For Tabinator, it was dead easy.
-
-### Initial Use Case
-
-First, I visit the Tabinator website, sign up for an account, and download the app. Now, opening the app logs me in, and I see a blank page. I do some browsing, maybe some coding, whatever. Now, I want to save my layout. I head back to Tabintaor, click the save button, and give it a name. Now, I close all my windows. I open Tabinator, click the load button, and select my layout. Boom, all my windows are back.
-
-### Cross-Platform
-
-This is a real example I had at my last job. I was tasked with doing come .NET 7 to 8 upgrades, and I had a ton of tabs open on my Windows computer for research, as well as a couple VSCode instances open. I had to switch to my Mac to do some iOS work, and I had to close all my tabs. I would have loved to have Tabinator then. In this case, I would have saved my layout on my Windows computer, headed back over to my Mac, hit the "sync" button, and loaded my newly appeared layout. Boom(x2), all my windows are back.
-
-## Breaking it Down
-
-Initially, this sounds like a nightmare to build. But, if we break it down into smaller pieces, it's not so bad. Let's take a look at each of the major components of Tabinator.
-
-- **Auth**: We need to be able to authenticate users.
-- **Web App**: We need a way for users to discover and sign up for Tabinator.
-- **Desktop App**: We need a way for users to interact with Tabinator.
-- **Window Management**: We need a way to save and load window layouts.
-- **Sync**: We need a way to sync layouts across devices.
-
-## The MVP
-
-This whole thing falls apart if we can't interact with windows, so that was our starting point.
-
-### Getting our windows
-
-I'll just focus
