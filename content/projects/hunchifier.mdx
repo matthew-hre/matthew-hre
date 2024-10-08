@@ -1,0 +1,105 @@
+---
+title: Tabinator
+description: A full-stack app for managing software project ideas
+createdDate: 2024-04-02T11:37:00.000Z
+lastModifiedDate: 2024-04-02T11:37:00.000Z
+tags:
+  - NextJS
+  - PostgreSQL
+  - Post Mortem
+  - Web Development
+externalLink: https://github.com/matthew-hre/HackTheNorth2024
+---
+# Tabinator
+
+I recently participated in Hack the North 2024, and my team and I built a project called Tabinator. Tabinator is a window management tool that lets you save your window layout and load it back up with a single click. It's like you never left.
+
+## The Problem
+
+When you're developing, or working on a school project, or even just playing games, you have a ton of tabs open. Everything from Chrome tabs to VSCode instances, to terminals and Spotify. When you're in the moment, this workflow is perfect, everything is where you remember putting it and you can get to it quickly. The problem comes when you have to switch gears and, god forbid, close your tabs. Now your nice workflow is gone, and you have to spend time setting everything back up.
+
+## The Solution
+
+This is where Tabinator comes in. Instead of painfully booting all those tabs and windows back up, Tabinator lets you load back your window layout with a single click. You can save your layout, and load it back up whenever you need it. And we're not just saving your open tabs. We're saving your window size, your window position, and even your scroll position. It's like you never left.
+
+## The Stack
+
+Tabinator is built with... *deep breath*... Powershell, Python, Swift, Rust, React, Typescript, Tailwind, and Convex. Woof. In order to break down this stack, let's instead break down how we developed this project.
+
+## Scoping the Project
+
+First, we had to narrow down exactly what we wanted our app to do. We started this with our **User Story**. Say I'm a user. What does my day using your program look like? For Tabinator, it was dead easy.
+
+### Initial Use Case
+
+First, I visit the Tabinator website, sign up for an account, and download the app. Now, opening the app logs me in, and I see a blank page. I do some browsing, maybe some coding, whatever. Now, I want to save my layout. I head back to Tabintaor, click the save button, and give it a name. Now, I close all my windows. I open Tabinator, click the load button, and select my layout. Boom, all my windows are back.
+
+### Cross-Platform
+
+This is a real example I had at my last job. I was tasked with doing come .NET 7 to 8 upgrades, and I had a ton of tabs open on my Windows computer for research, as well as a couple VSCode instances open. I had to switch to my Mac to do some iOS work, and I had to close all my tabs. I would have loved to have Tabinator then. In this case, I would have saved my layout on my Windows computer, headed back over to my Mac, hit the "sync" button, and loaded my newly appeared layout. Boom(x2), all my windows are back.
+
+## Breaking it Down
+
+Initially, this sounds like a nightmare to build. But, if we break it down into smaller pieces, it's not so bad. Let's take a look at each of the major components of Tabinator.
+
+* **Auth**: We need to be able to authenticate users.
+* **Web App**: We need a way for users to discover and sign up for Tabinator.
+* **Desktop App**: We need a way for users to interact with Tabinator.
+* **Window Management**: We need a way to save and load window layouts.
+* **Sync**: We need a way to sync layouts across devices.
+
+## The MVP
+
+This whole thing falls apart if we can't interact with windows, so that was our starting point.
+
+### Getting Our Windows
+
+I'll just focus on the Windows side of things here, since that was what I worked with mostly during the project. Our first job was to figure out what windows are on the screen, and can we change their size, position, and state?
+
+This proved easy enough, as Powershell let us grab all the windows, what was on them, where they were, and their size. After a little tweaking, we managed to get all that information displaying in a nice JSON format.
+
+```json
+[
+    {
+        "application":  "chrome",
+        "x":  -0.0045,
+        "y":  -0.0084,
+        "width":  1,
+        "height":  1,
+        "tabs": ["https://google.com", "https://nixos.org"],
+    },
+    {
+        "application":  "Notepad",
+        "x":  0,
+        "y":  0.4916,
+        "width":  0.4955,
+        "height":  0.4916
+    },
+]
+```
+
+Important to note here that we're using percentages for our width and height. I'm on a 2K screen, one of our teammates is on a 4K screen, and another one was on a 1080p screen. In order to prevent windows from clipping out of bounds, we use values relative to the size of the screen for our width and height.
+
+### Sizing Our Windows
+
+Next, how can we read this information in, and how can we actually change the programs on the screen? We broke this process down into a few key steps:
+
+1. First, we closed all the windows the user had open. We don't want conflicting "Chrome"s when we do our resizing.
+2. Next, we loop over our array of JSON objects, and open each of those programs. We assign their application id to a variable.
+3. Now that we have their application id, we can use that to change the position of the window.
+4. Now that we're in the right spot, we can use the screen width and height to change the size of the window.
+5. Finally, any additional data, such as the active tabs, get loaded into the program. Easy!
+
+Important to note that saving those tabs was not an easy process. We ended up writing a little Python script to manually click on, and subsequently grab the URL of, every single chrome tab we had open. Ugh.
+
+### Cross-Platform Support
+
+This part was relatively easy. See how in that example data, we have Notepad open? That doesn't exist on MacOS. All we did here was create some key-value pairs of programs in each of the given OS scripts. So when MacOS saw Notepad, it would map it to Notes. When Windows saw Notes, it'd open Notepad.
+
+### Putting It All Together
+
+Finally, we had to rig everything together. We used Convex for our authentication and our database, and used a React app to interface with that. We then used Tauri to put that React app on the desktop. Finally, we used Tauri's Sidechaining to allow us to run our shell scripts on the desktop! Done!
+
+## Retrospective
+
+Honestly, this was such a fun project to work on. Next time, we'll lean further into the Rust aspect of Tauri, to better interface with our database and to (possibly) handle the window sizing regardless of platform. Finally, one last shoutout to my incredible team, read more about how great they were at my [Hack the North Blog Post](https://matthew-hre.com/blog/hack-the-north-2024).&#x20;
