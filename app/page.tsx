@@ -15,8 +15,6 @@ import {
   GitHubLogoIcon,
 } from "@radix-ui/react-icons";
 
-import { Disc3, Music } from "lucide-react";
-
 export const metadata: Metadata = {
   title: "Matthew Hrehirchuk",
   description:
