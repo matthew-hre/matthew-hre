@@ -22,10 +22,10 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-grow w-full flex flex-col md:flex-row md:space-x-8 lg:space-x-16 2xl:space-x-32 px-8 lg:px-24 2xl:px-32">
+    <div className="min-h-screen flex flex-col items-center">
+      <main className="flex-grow w-full flex max-w-screen-xl flex-col md:flex-row md:space-x-16 2xl:space-x-32 px-8 md:px-20">
         <div className="w-full md:sticky md:top-0 md:h-screen md:overflow-auto">
-          <div className="pt-12 2xl:py-24 space-y-8">
+          <div className="pt-12 xl:py-24 space-y-8">
             <Header />
             <Introduction />
             <div className="hidden md:block">
@@ -33,7 +33,7 @@ export default async function Home() {
             </div>
           </div>
         </div>
-        <aside className="w-full py-12 2xl:py-24">
+        <aside className="w-full py-12 xl:py-24">
           <WorkSection />
           <div className="block md:hidden">
             <SocialsSection />
