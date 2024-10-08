@@ -1,7 +1,6 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useMemo } from "react";
 import { GoSun, GoMoon } from "react-icons/go";
 
 export default function ThemeSwitcher({ className }: { className?: string }) {
@@ -24,7 +23,7 @@ export default function ThemeSwitcher({ className }: { className?: string }) {
         (className ? ` ${className}` : "")
       }
     >
-      {theme === "dark" ? <GoSun size={24} /> : <GoMoon size={24} />}
+      {theme === "light" ? <GoMoon size={24} /> : <GoSun size={24} />}
     </button>
   );
 }

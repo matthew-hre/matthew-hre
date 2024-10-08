@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 
@@ -24,24 +23,18 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-grow w-full flex flex-col md:flex-row lg:space-x-16 2xl:space-x-32 px-4 md:px-4 xl:px-8 2xl:px-24">
+      <main className="flex-grow w-full flex flex-col md:flex-row md:space-x-8 lg:space-x-16 2xl:space-x-32 px-8 lg:px-24 2xl:px-32">
         <div className="w-full md:sticky md:top-0 md:h-screen md:overflow-auto">
-          <div className="py-8 2xl:py-16 space-y-8">
+          <div className="pt-12 2xl:py-24 space-y-8">
             <Header />
             <Introduction />
-            <div className="hidden 2xl:block">
-              <BlogSection />
-            </div>
             <div className="hidden md:block">
               <SocialsSection />
             </div>
           </div>
         </div>
-        <aside className="w-full py-8 2xl:py-16">
+        <aside className="w-full py-12 2xl:py-24">
           <WorkSection />
-          <div className="block 2xl:hidden">
-            <BlogSection />
-          </div>
           <div className="block md:hidden">
             <SocialsSection />
           </div>
@@ -103,7 +96,7 @@ function Introduction() {
 
 function SocialsSection() {
   return (
-    <div className="flex flex-row space-x-6 w-full px-16 md:px-0 justify-around md:justify-start pt-2">
+    <div className="flex flex-row space-x-6 w-1/2 mx-auto md:mx-0 md:px-0 justify-around md:justify-start pt-2">
       <Link
         href="https://instagram.com/matthew_hre"
         target="_blank"
@@ -140,6 +133,7 @@ async function WorkSection() {
   const projectPosts = await getHighlightedPosts("projects");
   const learningPosts = await getHighlightedPosts("learning");
   const gamePosts = await getHighlightedPosts("games");
+  const blogPosts = await getHighlightedPosts("blog");
 
   return (
     <>
@@ -155,6 +149,7 @@ async function WorkSection() {
           allLink="/learning"
         />
         <WorkCategory title="Games" posts={gamePosts} allLink="/games" />
+        <WorkCategory title="Blog" posts={blogPosts} allLink="/blog" />
       </div>
     </>
   );
@@ -176,33 +171,25 @@ function WorkCategory({
         <Card
           key={idx}
           title={post.entry.title}
-          description={post.entry.description || ""}
+          description={
+            post.entry.description ||
+            new Date(post.entry.createdDate)
+              .toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+              .replace("Invalid Date", "")
+          }
           href={`/${title.toLowerCase()}/${post.slug}`}
         />
       ))}
-      <Card title={`All ${title} →`} description="" href={allLink} />
+      <Card
+        title={`All ${title === "Blog" ? "Posts" : title} →`}
+        description=""
+        href={allLink}
+      />
     </div>
-  );
-}
-
-async function BlogSection() {
-  const blogPosts = await getHighlightedPosts("blog", 3);
-
-  return (
-    <>
-      <h2 className="text-xl text-muted-foreground font-sans mb-4">Blog</h2>
-      <div className="flex flex-col">
-        {blogPosts.map((post, idx: number) => (
-          <BlogLink
-            key={idx}
-            title={post.entry.title}
-            date={post.entry.createdDate || ""}
-            href={`/blog/${post.slug}`}
-          />
-        ))}
-        <BlogLink title="All Posts →" date="" href="/blog" />
-      </div>
-    </>
   );
 }
 
@@ -224,37 +211,5 @@ const Card = ({
       </h3>
       <p className="text-muted-foreground leading-7">{description}</p>
     </div>
-  );
-};
-
-const BlogLink = ({
-  title,
-  date,
-  href,
-}: {
-  title: string;
-  date: string;
-  href: string;
-}) => {
-  const formattedDate = new Date(date)
-    .toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })
-    .replace("Invalid Date", "");
-
-  return (
-    <Link
-      href={href}
-      className="flex flex-col 2xl:flex-row justify-between 2xl:items-end mb-4"
-    >
-      <h3 className="underline decoration-muted-foreground hover:decoration-foreground group flex flex-row transition-all leading-7">
-        <p className="text-foreground">{title}</p>
-      </h3>
-      <p className="text-muted-foreground leading-7 transition-all">
-        <time dateTime={date}>{formattedDate}</time>
-      </p>
-    </Link>
   );
 };
