@@ -1,0 +1,22 @@
+---
+title: MRUHacks 2024 Library display
+description: An interactive photo display for MRUHacks 2024
+createdDate: 2024-10-07T12:45:00.000Z
+lastModifiedDate: 2024-10-07T12:45:00.000Z
+tags:
+  - NextJS
+  - TailwindCSS
+  - Web Development
+externalLink: https://github.com/matthew-hre/mruhackslibrarydisplay
+---
+# MRUHacks Library Display
+
+![](/images/mruhacks-library-display/image.png)
+
+For MRUHacks 2024, we wanted to go all out. As a fun little side project, I designed and developed an interactive photo wall! This wall displayed a live countdown of when the event ended, all our social QR codes, a live calendar of events, and a regularly updated wall of photos.
+
+The reason this project gets a post on the website, and doesn't just collect dust in my file system, is because I *need* to tell someone about how I hacked together the image loading.
+
+In order to have my team send photos to the wall, I created a shared Google Drive folder, which I refreshed every thirty minutes in order to scrape the photos and display them on the wall. In order to avoid setting up an S3 bucket, I had to create a custom API route for querying a Google Drive folder of all the photos in it, and grabbed the high-quality version of those photos.
+
+After the event, I went and overhauled the code base to make it easier to use in the future. All the configuration is broken out into a `photowall.config.ts` file, and is easily customizable for the future.
