@@ -3,8 +3,8 @@ import { getCommitData } from "@/lib/getCommitData";
 export default async function Footer() {
   const commitData = await getCommitData();
   return (
-    <footer className="border-t border-muted absolute mt-auto w-full left-0 flex flex-col md:flex-row justify-between p-4 font-mono">
-      <p className="md:hidden text-muted-foreground text-sm w-full text-center">
+    <footer className="w-full flex-col font-sans items-center space-y-1 mt-6">
+      <p className="md:hidden text-muted-foreground/80 text-sm w-full text-center">
         <a
           href="
           https://creativecommons.org/licenses/by-nc-sa/4.0"
@@ -23,7 +23,7 @@ export default async function Footer() {
         </a>
         ]
       </p>
-      <p className="text-muted-foreground text-sm hidden md:block">
+      <p className="text-muted-foreground/80 text-sm hidden md:block text-center">
         Matthew Hrehirchuk © 2024 —{" "}
         <a
           href="
@@ -34,7 +34,7 @@ export default async function Footer() {
           BY-NC-SA 4.0
         </a>
       </p>
-      <p className="text-muted-foreground text-sm hidden md:block">
+      <p className="text-muted-foreground/80 text-sm hidden md:block text-center">
         Last updated on{" "}
         {commitData?.time.substring(0, commitData?.time.length - 3)} [
         <a

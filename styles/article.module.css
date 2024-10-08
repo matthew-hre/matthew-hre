@@ -1,17 +1,17 @@
 .article h1 {
-  @apply text-4xl font-serif mb-6;
+  @apply text-3xl font-sans mb-6;
 }
 
 .article h2 {
-  @apply text-3xl font-serif mb-6;
+  @apply text-2xl font-sans mb-6;
 }
 
 .article h3 {
-  @apply text-2xl font-serif mb-6;
+  @apply text-xl font-sans mb-6;
 }
 
 .article h4 {
-  @apply text-xl font-sans mb-6;
+  @apply text-xl font-sans mb-6 text-muted-foreground;
 }
 
 .article p {

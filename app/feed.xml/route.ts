@@ -1,5 +1,5 @@
 import RSS from "rss";
-import { getAllPosts } from "@/lib/getAllPosts";
+import { getAllPosts } from "@/lib/posts";
 
 export async function GET() {
   const feed = new RSS({

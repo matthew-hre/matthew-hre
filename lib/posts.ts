@@ -1,5 +1,41 @@
 import { reader } from "@/lib/createReader";
 
+export async function getHighlightedPosts(
+  collectionName: any,
+  count: number = 3
+) {
+  let collection = null;
+
+  switch (collectionName) {
+    case "projects":
+      collection = reader.collections.projects;
+      break;
+    case "learning":
+      collection = reader.collections.learning;
+      break;
+    case "games":
+      collection = reader.collections.games;
+      break;
+    case "prog_3":
+      collection = reader.collections.prog_3;
+      break;
+    default:
+      collection = reader.collections.blog;
+      break;
+  }
+
+  const data = await collection.all();
+
+  const sorted = data.sort((a: any, b: any) => {
+    return (
+      new Date(b.entry.createdDate).getTime() -
+      new Date(a.entry.createdDate).getTime()
+    );
+  });
+
+  return sorted.slice(0, count);
+}
+
 export async function getAllPosts() {
   const blogPosts = await getPosts(reader.collections.blog, "blog");
   const projectPosts = await getPosts(reader.collections.projects, "projects");
@@ -14,8 +50,6 @@ export async function getAllPosts() {
       new Date(a.entry.createdDate).getTime()
     );
   });
-
-  console.log(sorted);
 
   return sorted;
 }

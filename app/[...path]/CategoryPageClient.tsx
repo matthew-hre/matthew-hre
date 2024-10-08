@@ -7,7 +7,6 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { Badge } from "@/components/ui/badge";
 
 import { useEffect, useState } from "react";
-import FadeIn from "@/components/FadeIn";
 
 export default function CategoryPageClient({
   path,
@@ -28,10 +27,10 @@ export default function CategoryPageClient({
 
   return (
     <>
-      <div className="flex flex-col px-8 md:px-20 mb-16 relative min-h-[calc(100vh-9.3em)] md:min-h-[calc(100vh-13.3rem)]">
+      <div className="flex flex-col px-8 md:px-20 relative min-h-[calc(100vh-9.3em)] md:min-h-[calc(100vh-13.3rem)]">
         <Breadcrumb path={path} />
         <div className="mb-4">
-          <h1 className="text-4xl font-serif mb-4">
+          <h1 className="text-4xl font-sans mb-4">
             {path[path.length - 1].title}
           </h1>
         </div>
@@ -45,7 +44,7 @@ export default function CategoryPageClient({
                     href={`/${path[path.length - 1].slug}/${post.slug}`}
                     className="text-foreground hover:underline"
                   >
-                    <h2 className="text-2xl font-serif">{post.entry.title}</h2>
+                    <h2 className="text-2xl font-sans">{post.entry.title}</h2>
                   </Link>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {post.entry.tags.map((tag: string) => (

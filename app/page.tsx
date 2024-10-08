@@ -1,118 +1,209 @@
+import { Suspense } from "react";
+import Link from "next/link";
+import { Metadata } from "next";
+
 import SpotifyPresence from "@/components/SpotifyPresence";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import Link from "next/link";
 
-import FadeIn from "@/components/FadeIn";
-
-import { reader } from "@/lib/createReader";
+import { getHighlightedPosts } from "@/lib/posts";
 import Footer from "@/components/Footer";
 
+import {
+  InstagramLogoIcon,
+  LinkedInLogoIcon,
+  EnvelopeClosedIcon,
+  GitHubLogoIcon,
+} from "@radix-ui/react-icons";
+
+import { Disc3, Music } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Matthew Hrehirchuk",
+  description:
+    "Web developer, graphic designer, and student at Mount Royal University",
+};
+
 export default async function Home() {
-  const blogPosts = await getHighlightedPosts(reader.collections.blog, 5);
-  const projectPosts = await getHighlightedPosts(reader.collections.projects);
-  const learningPosts = await getHighlightedPosts(reader.collections.learning);
-  const gamePosts = await getHighlightedPosts(reader.collections.games);
+  return (
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-grow w-full flex flex-col md:flex-row md:space-x-32 px-4 md:px-8 lg:px-32">
+        <div className="w-full md:sticky md:top-0 md:h-screen md:overflow-auto">
+          <div className="py-8 md:py-16 space-y-8">
+            <Header />
+            <Introduction />
+            <div className="hidden 2xl:block">
+              <BlogSection />
+            </div>
+            <div className="hidden md:block">
+              <SocialsSection />
+            </div>
+          </div>
+        </div>
+        <aside className="w-full py-8 md:py-16">
+          <WorkSection />
+          <div className="block 2xl:hidden">
+            <BlogSection />
+          </div>
+          <div className="block md:hidden">
+            <SocialsSection />
+          </div>
+          <Footer />
+        </aside>
+      </main>
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <h1 className="mb-6 w-full flex flex-row items-center justify-between col-span-2">
+      <div className="flex flex-col w-full">
+        <p className="text-foreground font-semibold text-2xl font-inter w-full flex flex-row justify-between">
+          Matthew Hrehirchuk
+          <ThemeSwitcher />
+        </p>
+        <SpotifyPresence />
+      </div>
+    </h1>
+  );
+}
+
+function Introduction() {
+  return (
+    <div className="flex flex-col">
+      <p className="text-foreground leading-7 mb-6">
+        I&apos;m a web developer, a graphic designer, and a student at{" "}
+        <Link
+          className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
+          href="https://mtroyal.ca"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Mount Royal University
+        </Link>{" "}
+        in Calgary, Alberta. I make plenty of games, a few helpful tools, and
+        &ndash; at the moment &ndash; lots of studying resources for students
+        like myself.
+      </p>
+      <p className="text-foreground leading-7">
+        I was previously the Executive Director of{" "}
+        <Link
+          className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
+          href="https://mruhacks.ca"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          MRUHacks 2024
+        </Link>
+        , Mount Royal University&apos;s premier hackathon. Nowadays, I&apos;m
+        taking some much needed rest and relaxation, and focusing on my studies,
+        my personal projects, and my record collection.
+      </p>
+    </div>
+  );
+}
+
+function SocialsSection() {
+  return (
+    <div className="flex flex-row space-x-6 w-full px-16 md:px-0 justify-around md:justify-start pt-2">
+      <Link
+        href="https://instagram.com/matthew_hre"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <InstagramLogoIcon className="text-foreground hover:text-muted-foreground transition-all w-6 h-6" />
+      </Link>
+      <Link
+        href="https://linkedin.com/in/matthew-hre"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <LinkedInLogoIcon className="text-foreground hover:text-muted-foreground transition-all w-6 h-6" />
+      </Link>
+      <Link
+        href="mailto:mhreh594@mtroyal.ca"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <EnvelopeClosedIcon className="text-foreground hover:text-muted-foreground transition-all w-6 h-6" />
+      </Link>
+      <Link
+        href="https://github.com/matthew-hre"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <GitHubLogoIcon className="text-foreground hover:text-muted-foreground transition-all w-6 h-6" />
+      </Link>
+    </div>
+  );
+}
+
+async function WorkSection() {
+  const projectPosts = await getHighlightedPosts("projects");
+  const learningPosts = await getHighlightedPosts("learning");
+  const gamePosts = await getHighlightedPosts("games");
 
   return (
     <>
-      <main className="flex min-h-screen flex-col px-8 md:px-20 mb-16">
-        <FadeIn>
-          <h1 className="text-foreground mb-6 font-light text-2xl font-serif w-full flex flex-row items-center justify-between">
-            <p>Matthew Hrehirchuk</p>
-            <ThemeSwitcher />
-          </h1>
-          <p className="text-foreground leading-7 mb-6">
-            I&apos;m a web developer, a graphic designer, and a student at{" "}
-            <Link
-              className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
-              href="https://mtroyal.ca"
-              target="_blank"
-            >
-              Mount Royal University
-            </Link>{" "}
-            in Calgary, Alberta. I make plenty of games, a few helpful tools,
-            and &ndash; at the moment &ndash; lots of studying resources for
-            students like myself.
-          </p>
-          <p className="text-foreground leading-7 mb-16">
-            I&apos;m currently the Executive Director of{" "}
-            <Link
-              className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
-              href="https://mruhacks.ca"
-              target="_blank"
-            >
-              MRUHacks 2024
-            </Link>
-            , Mount Royal University&apos;s premier hackathon.
-          </p>
-          <h2 className="text-foreground mb-6 font-light text-2xl font-serif">
-            Work
-          </h2>
-          <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 mb-12">
-            <div className="w-full md:w-48 space-y-4">
-              <h2 className="text-muted-foreground text-sm mb-4">Projects</h2>
-              {projectPosts.map((post: any, idx: number) => (
-                <Card
-                  key={idx}
-                  title={post.entry.title}
-                  description={post.entry.description || ""}
-                  href={`/projects/${post.slug}`}
-                />
-              ))}
-              <Card title="All Projects →" description="" href="/projects" />
-            </div>
-            <div className="w-full md:w-48 md:ml-12 space-y-4">
-              <h2 className="text-muted-foreground text-sm mb-4">Learning</h2>
-              {learningPosts.map((post: any, idx: number) => (
-                <Card
-                  key={idx}
-                  title={post.entry.title}
-                  description={post.entry.description || ""}
-                  href={`/learning/${post.slug}`}
-                />
-              ))}
-              <Card title="All Learning →" description="" href="/learning" />
-            </div>
-            <div className="w-full md:w-48 md:ml-12 space-y-4">
-              <h2 className="text-muted-foreground text-sm mb-4">Games</h2>
-              {gamePosts.map((post: any, idx: number) => (
-                <Card
-                  key={idx}
-                  title={post.entry.title}
-                  description={post.entry.description || ""}
-                  href={`/games/${post.slug}`}
-                />
-              ))}
-              <Card title="All Games →" description="" href="/games" />
-            </div>
-          </div>
-          <h2 className="text-foreground mb-6 font-light text-2xl font-serif">
-            Blog
-          </h2>
-          <div className="flex flex-col mb-12">
-            {blogPosts.map((post: any, idx: number) => (
-              <BlogLink
-                key={idx}
-                title={post.entry.title}
-                date={post.entry.createdDate || ""}
-                href={`/blog/${post.slug}`}
-              />
-            ))}
-            <BlogLink title="All Posts →" date="" href="/blog" />
-          </div>
-          <h2 className="text-foreground mb-2 font-light text-2xl font-serif">
-            Now
-          </h2>
-          <SpotifyPresence />
-          <p className="text-foreground leading-7 mt-2">
-            In between hackathon organizing and studying, I&apos;m working on
-            finishing off some of my vinyl discographies. Currently, I&apos;m on
-            the hunt for a copy of Boards of Canada&apos;s &quot;Twosim&quot;
-            and a copy of &quot;The Campfire Headphase&quot;.
-          </p>
-        </FadeIn>
-      </main>
-      <Footer />
+      <div className="flex flex-col space-y-6 mb-12">
+        <WorkCategory
+          title="Projects"
+          posts={projectPosts}
+          allLink="/projects"
+        />
+        <WorkCategory
+          title="Learning"
+          posts={learningPosts}
+          allLink="/learning"
+        />
+        <WorkCategory title="Games" posts={gamePosts} allLink="/games" />
+      </div>
+    </>
+  );
+}
+
+function WorkCategory({
+  title,
+  posts,
+  allLink,
+}: {
+  title: string;
+  posts: any[];
+  allLink: string;
+}) {
+  return (
+    <div className="w-full space-y-4">
+      <h2 className="text-xl text-muted-foreground font-sans mb-4">{title}</h2>
+      {posts.map((post, idx) => (
+        <Card
+          key={idx}
+          title={post.entry.title}
+          description={post.entry.description || ""}
+          href={`/${title.toLowerCase()}/${post.slug}`}
+        />
+      ))}
+      <Card title={`All ${title} →`} description="" href={allLink} />
+    </div>
+  );
+}
+
+async function BlogSection() {
+  const blogPosts = await getHighlightedPosts("blog", 3);
+
+  return (
+    <>
+      <h2 className="text-xl text-muted-foreground font-sans mb-4">Blog</h2>
+      <div className="flex flex-col">
+        {blogPosts.map((post, idx: number) => (
+          <BlogLink
+            key={idx}
+            title={post.entry.title}
+            date={post.entry.createdDate || ""}
+            href={`/blog/${post.slug}`}
+          />
+        ))}
+        <BlogLink title="All Posts →" date="" href="/blog" />
+      </div>
     </>
   );
 }
@@ -158,27 +249,14 @@ const BlogLink = ({
   return (
     <Link
       href={href}
-      className="flex flex-col md:flex-row justify-between md:items-end mb-4"
+      className="flex flex-col 2xl:flex-row justify-between 2xl:items-end mb-4"
     >
-      <h3 className="underline decoration-muted-foreground hover:decoration-foreground group flex flex-row transition-all">
+      <h3 className="underline decoration-muted-foreground hover:decoration-foreground group flex flex-row transition-all leading-7">
         <p className="text-foreground">{title}</p>
       </h3>
-      <p className="text-muted-foreground text-xs md:text-sm italic transition-all">
+      <p className="text-muted-foreground leading-7 transition-all">
         <time dateTime={date}>{formattedDate}</time>
       </p>
     </Link>
   );
 };
-
-async function getHighlightedPosts(collection: any, count: number = 3) {
-  const data = await collection.all();
-
-  const sorted = data.sort((a: any, b: any) => {
-    return (
-      new Date(b.entry.createdDate).getTime() -
-      new Date(a.entry.createdDate).getTime()
-    );
-  });
-
-  return sorted.slice(0, count);
-}

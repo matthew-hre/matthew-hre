@@ -1,17 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { set, useLanyard } from "react-use-lanyard";
 
 import { GoArrowUpRight } from "react-icons/go";
 
 import Image from "next/image";
 import Link from "next/link";
+import { Skeleton } from "./ui/skeleton";
+import { Disc, Disc3 } from "lucide-react";
+import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 
 export default function SpotifyPresence() {
   const lanyard = useLanyard({
     userId: "305065512457469952",
   });
+
+  const [showInfo, setShowInfo] = useState(false);
 
   const { isValidating } = lanyard;
 
@@ -58,54 +63,100 @@ export default function SpotifyPresence() {
   }
 
   if (!displayData) {
-    return (
-      <p>
-        Something went wrong. This is likely due to Matthew not listening to
-        Spotify since the last time NextJS built this page. Yell at him.
-      </p>
-    );
+    return <Skeleton className="w-64 h-4 mt-2"></Skeleton>;
   }
 
   const { song, artist, album, album_art_url, track_id } = displayData;
 
   return (
-    <Link
-      href={`https://open.spotify.com/track/${track_id}`}
-      target="_blank"
-      passHref
+    <a
+      onClick={() => setShowInfo(!showInfo)}
+      className={`transition-all hover:cursor-pointer ${
+        showInfo ? "h-24 pt-4" : "h-4 pt-1 hover:underline"
+      }`}
     >
-      <div className="relative flex z-1 h-32 w-full flex-row items-center hover:border hover:bg-accent hover:border-muted-foreground rounded-md group transition-all">
-        <Image
-          src={album_art_url}
-          alt="Album art"
-          width={0}
-          height={0}
-          className="border border-border grayscale aspect-square w-20 h-20 mr-4 group-hover:ml-6 group-hover:grayscale-0 transition-all"
-          unoptimized
-        />
-        <GoArrowUpRight className="absolute top-4 right-4 text-2xl text-muted-foreground transition-all group-hover:rotate-[-8deg] group-hover:right-2 group-hover:top-2" />
-        <div className="flex flex-col flex-1">
-          <span className="mb-2 flex gap-2">
-            {lanyard?.data?.data?.listening_to_spotify ? (
-              <span className="text-sm text-primary">Now playing</span>
-            ) : (
-              <span className="text-sm text-primary">Last played</span>
-            )}
+      <p className="text-muted-foreground text-md font-inter flex flex-row">
+        {lanyard?.data?.data?.listening_to_spotify ? (
+          <div
+            className={`relative origin-top-left transition-all ease-in-out ${
+              showInfo ? "w-24 h-24" : "w-6 h-6"
+            }`}
+          >
+            <Disc3
+              className={`animate-spin-slow ${showInfo ? "hidden" : ""}`}
+            />
+            <img
+              src={album_art_url}
+              alt="Album art"
+              className={` animate-spin-slow absolute top-0 left-0 w-full h-full rounded-full transition-opacity ${
+                showInfo ? "opacity-100" : "opacity-0"
+              }`}
+            />
+            <div
+              className={`${
+                showInfo ? "opacity-100" : "opacity-0"
+              } w-2 h-2 absolute top-[calc(50%-4px)] left-[calc(50%-4px)] bg-background rounded-full`}
+            ></div>
+          </div>
+        ) : (
+          <div
+            className={`relative origin-top-left transition-all ease-in-out ${
+              showInfo ? "w-24 h-24" : "w-6 h-6"
+            }`}
+          >
+            <Disc
+              className={`ease-in-out origin-top-left ${
+                showInfo ? "scale-[4]" : "scale-100"
+              } transition-transform`}
+            />
+            <img
+              src={album_art_url}
+              alt="Album art"
+              className={`absolute top-0 left-0 w-full h-full rounded-full transition-opacity ${
+                showInfo ? "opacity-100" : "opacity-0"
+              }`}
+            />
+            <div
+              className={`${
+                showInfo ? "opacity-100" : "opacity-0"
+              } w-2 h-2 absolute top-[calc(50%-4px)] left-[calc(50%-4px)] bg-background rounded-full`}
+            ></div>
+          </div>
+        )}
+        <div
+          className={`flex flex-col ml-2 transition-all ${
+            showInfo ? "ml-4 space-y-1 h-24 justify-center" : ""
+          }`}
+        >
+          <span className={`${showInfo ? "block text-xs" : "hidden"}`}>
+            {lanyard?.data?.data?.listening_to_spotify
+              ? "Now Playing"
+              : "Last Played"}
           </span>
-          <span className="text-md mb-2 font-bold leading-none">
+          <span
+            className={`${
+              showInfo
+                ? "text-foreground font-semibold"
+                : "text-muted-foreground"
+            }`}
+          >
             {clampSongTitle(song)}
+            <span className={`${showInfo ? "hidden" : "inline"}`}>
+              {" "}
+              - {artist}
+            </span>
           </span>
-          <span className="line-clamp-1 w-[85%] text-xs text-muted-foreground">
-            <span className="text-secondary-foreground font-semibold">by</span>{" "}
+          <span className={`${showInfo ? "block text-sm" : "hidden"}`}>
+            <span className="font-semibold text-foreground">By </span>
             {artist}
           </span>
-          <span className="line-clamp-1 w-[85%] text-xs text-muted-foreground">
-            <span className="text-secondary-foreground font-semibold">on</span>{" "}
+          <span className={`${showInfo ? "block text-sm" : "hidden"}`}>
+            <span className="font-semibold text-foreground">On </span>
             {album}
           </span>
         </div>
-      </div>
-    </Link>
+      </p>
+    </a>
   );
 }
 

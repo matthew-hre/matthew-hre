@@ -1,0 +1,146 @@
+---
+title: Hack the North 2024
+createdDate: 2024-09-15T21:34:00.000Z
+lastModifiedDate: 2024-09-15T22:53:00.000Z
+tags:
+  - Hackathon
+  - Development Log
+---
+
+## Hack the North 2024
+
+This weekend, I participated in Hack the North 2024, Canada's biggest hackathon. It was an absolutely bonkers experience, and I had a ton of fun. I wanted to write a little bit about my experience, and what I learned.
+
+## Transportation Woes
+
+I'll jump into the fun stuff in a bit here, but I want to take a moment to complain about Flair Airlines. I was wedging my bag into that stupid little bagging sizer and sliced my finger open on the metal. I was bleeding everywhere, and I actually had to go to the bathroom to clean it up after I was checked in. Instead of offering me a bandaid, the check-in lady asked me "Can you clean that off the sizer?". Huh? I then had to **pay** for a bandaid at the airport. At least I got 5th row seating.
+
+## Waterloo's Campus
+
+I've never been to Waterloo's campus before, and it was absolutely beautiful. That engineering building is wickedly impressive, and the campus itself is just so nice. They also sported a huge tent outside the E7 (Engineering) building, which was where the hackathon was held. Such a cool setup.
+
+Myself and a couple buddies I met on the shuttle got ourselves checked in and headed inside to get settled in for a bit. Inside E7 was a whole different story. Every single floor was packed with tables, with what had to be miles of gaff taped wires running across the floor. It was a wild sight.
+
+After a quick dinner (Chicken Alfredo, solid 7.5/10), we began the 1.2km treck to Lazaridis Hall, where the opening ceremonies were held. I regret not starting my Strava for that walk, it would have been a good one. I did, however, install Pokemon Go for the walk. So many pokestops.
+
+## The Hack
+
+We ended up coming up with a sweet idea for our hack: Tabinator. Here's the pitch:
+
+When you're developing, or working on a school project, or even just playing games, you have a ton of tabs open. Everything from Chrome tabs to VSCode instances, to terminals and Spotify. When you're in the moment, this workflow is perfect, everything is where you remember putting it and you can get to it quickly. The problem comes when you have to switch gears and, god forbid, close your tabs. Now your nice workflow is gone, and you have to spend time setting everything back up.
+
+This is where Tabinator comes in. Instead of painfully booting all those tabs and windows back up, Tabinator lets you load back your window layout with a single click. You can save your layout, and load it back up whenever you need it. And we're not just saving your open tabs. We're saving your window size, your window position, and even your scroll position. It's like you never left.
+
+We got some pretty incredible reception from our fellow hackers, as well as the judges themselves. Although we didn't win anything, the real prize was friendship.
+
+I wanna quickly shout out my boys Jeffrey and Bogdan, who I met on the #find-a-team Slack channel. I was so worried about getting a crappy team, and ended up meeting some sweet people.
+
+## The Aftermath
+
+What's next for Tabinator? Let's take a look:
+
+### Window Management Migration
+
+Currently, our window management is handled by either a Swift script, or a Python script that's run by a Powershell script that's run via command line. See my [other blog post](https://matthew-hre.com/projects/Tabinator) for a breakdown of how it works. I'm looking into migrating this whole gongshow to Rust, since it's already in the stack, and it looks like it can handle the window management for us.
+
+### UI/UX Overhaul
+
+Our user experience isn't great. The buttons on the Desktop app don't make a lot of sense, and the functionality is pretty limited. A couple tweaks to the UI will go a long way here.
+
+### Authentication Flow
+
+Currently, as I'm writing this, the JWT token for auth is hardcoded into the Desktop app. I know, I know, before you email me all pissed about it, I set the token to expire after judging. I'm looking at setting up a little handshake process between the Desktop app and the web app to handle the auth a little more securely. It was my first time using Convex, cut me some slack.
+
+### Web App
+
+Actually I think the web app looked pretty dope. The dashboard needs a quick refresh, but other than that, I'm pretty happy with it.
+
+## Theft.
+
+Hack the North is undoubtedly one of the best hackathons in the world, and they do some incredible things at that event. That's why I'm stealing their ideas and using them at my event, [MRUHacks](https://mruhacks.ca)!
+
+### Snack Wagons
+
+Oh yes, you heard me. Snack wagons. Instead of event floaters just popping into rooms and asking if people are doing ok, have them bring **wagons** filled with snacks. Chips, pop, candy, the works. This was undeniably one of my favourite parts of the event, and I'm definitely stealing it.
+
+### Judging
+
+Hack the North had a really unique approach to judging! Instead of science-fair style judging, where you have to stand by your project and explain it to every judge that comes by, they booked you for a 5 minute slot with a small panel of judges. If you signed up for sponsor prizes, you were responsible to go on their calendar link and book a time with them. It was a really smart way of organizing their judging, and I might look into doing something similar in the future.
+
+### The Swag
+
+Hack the North had some of the best swag I've ever seen at a hackathon. Bulleted list time:
+
+- Custom Hack the North 2024 stickers
+- T-shirts
+- Tote bag
+- Hoodie
+- HTN branded chocolate
+- Playing cards
+- Custom mechanical keycaps
+- Mini HTN Lego set
+
+Such creative merch ideas, and I'm definitely going to be looking into some of these for future MRUHacks events.
+
+## tl;dr
+
+Hack the North 2024 was an incredible experience, and I had a ton of fun. I met some great people, and I learned a lot. I'm excited to see where Tabinator goes, and I'm looking forward to implementing some of the ideas I stole from HTN at MRUHacks. Peace!
+
+---
+
+title: Tabintaor
+createdDate: 2024-09-15T21:34:00.000Z
+lastModifiedDate: 2024-09-15T22:53:00.000Z
+tags:
+
+- Hackathon
+- Rust
+- React
+
+---
+
+# Tabinator
+
+I recently participated in Hack the North 2024, and my team and I built a project called Tabinator. Tabinator is a window management tool that lets you save your window layout and load it back up with a single click. It's like you never left.
+
+## The Problem
+
+When you're developing, or working on a school project, or even just playing games, you have a ton of tabs open. Everything from Chrome tabs to VSCode instances, to terminals and Spotify. When you're in the moment, this workflow is perfect, everything is where you remember putting it and you can get to it quickly. The problem comes when you have to switch gears and, god forbid, close your tabs. Now your nice workflow is gone, and you have to spend time setting everything back up.
+
+## The Solution
+
+This is where Tabinator comes in. Instead of painfully booting all those tabs and windows back up, Tabinator lets you load back your window layout with a single click. You can save your layout, and load it back up whenever you need it. And we're not just saving your open tabs. We're saving your window size, your window position, and even your scroll position. It's like you never left.
+
+## The Stack
+
+Tabinator is built with... _deep breath_... Powershell, Python, Swift, Rust, React, Typescript, Tailwind, and Convex. Woof. In order to break down this stack, let's instead break down how we developed this project.
+
+## Scoping the Project
+
+First, we had to narrow down exactly what we wanted our app to do. We started this with our **User Story**. Say I'm a user. What does my day using your program look like? For Tabinator, it was dead easy.
+
+### Initial Use Case
+
+First, I visit the Tabinator website, sign up for an account, and download the app. Now, opening the app logs me in, and I see a blank page. I do some browsing, maybe some coding, whatever. Now, I want to save my layout. I head back to Tabintaor, click the save button, and give it a name. Now, I close all my windows. I open Tabinator, click the load button, and select my layout. Boom, all my windows are back.
+
+### Cross-Platform
+
+This is a real example I had at my last job. I was tasked with doing come .NET 7 to 8 upgrades, and I had a ton of tabs open on my Windows computer for research, as well as a couple VSCode instances open. I had to switch to my Mac to do some iOS work, and I had to close all my tabs. I would have loved to have Tabinator then. In this case, I would have saved my layout on my Windows computer, headed back over to my Mac, hit the "sync" button, and loaded my newly appeared layout. Boom(x2), all my windows are back.
+
+## Breaking it Down
+
+Initially, this sounds like a nightmare to build. But, if we break it down into smaller pieces, it's not so bad. Let's take a look at each of the major components of Tabinator.
+
+- **Auth**: We need to be able to authenticate users.
+- **Web App**: We need a way for users to discover and sign up for Tabinator.
+- **Desktop App**: We need a way for users to interact with Tabinator.
+- **Window Management**: We need a way to save and load window layouts.
+- **Sync**: We need a way to sync layouts across devices.
+
+## The MVP
+
+This whole thing falls apart if we can't interact with windows, so that was our starting point.
+
+### Getting our windows
+
+I'll just focus

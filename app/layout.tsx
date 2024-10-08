@@ -25,6 +25,13 @@ const firaCode = Fira_Code({
 export const metadata: Metadata = {
   title: "Matthew Hrehirchuk",
   description: "The personal portfolio of Matthew Hrehirchuk",
+  icons: [
+    {
+      rel: "icon",
+      type: "image/svg+xml",
+      url: "https://fav.farm/%F0%9F%91%8B",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -35,12 +42,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${ebGaramond.variable} ${firaCode.variable} max-w-screen-md mx-auto pt-8 mt-0 md:pt-24 font-sans min-h-screen`}
+        className={`${inter.variable} ${ebGaramond.variable} ${firaCode.variable} mx-auto mt-0 font-sans min-h-screen`}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
           disableTransitionOnChange
         >
           {children}

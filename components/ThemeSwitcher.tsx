@@ -5,30 +5,16 @@ import { useMemo } from "react";
 import { GoSun, GoMoon } from "react-icons/go";
 
 export default function ThemeSwitcher({ className }: { className?: string }) {
-  const { theme, setTheme, systemTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    // If the user has yet to push the button, the theme is set to "system",
-    // this accounts for that
-    const displayed_theme = /light|dark/.test(theme || "")
-      ? theme
-      : systemTheme;
-
-    if (displayed_theme === "light") {
+    if (theme === "light") {
       setTheme("dark");
     }
-    if (displayed_theme === "dark") {
+    if (theme === "dark") {
       setTheme("light");
     }
   };
-
-  const updatedTheme = useMemo(() => {
-    if (theme === "system") {
-      return systemTheme;
-    } else {
-      return theme;
-    }
-  }, [systemTheme, theme]);
 
   return (
     <button
@@ -38,7 +24,7 @@ export default function ThemeSwitcher({ className }: { className?: string }) {
         (className ? ` ${className}` : "")
       }
     >
-      {updatedTheme === "dark" ? <GoSun /> : <GoMoon />}
+      {theme === "dark" ? <GoSun size={24} /> : <GoMoon size={24} />}
     </button>
   );
 }
