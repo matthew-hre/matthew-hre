@@ -3,13 +3,8 @@
 import { useEffect, useState } from "react";
 import { set, useLanyard } from "react-use-lanyard";
 
-import { GoArrowUpRight } from "react-icons/go";
-
-import Image from "next/image";
-import Link from "next/link";
 import { Skeleton } from "./ui/skeleton";
 import { Disc, Disc3 } from "lucide-react";
-import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 
 export default function SpotifyPresence() {
   const lanyard = useLanyard({

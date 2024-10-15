@@ -1,18 +1,12 @@
 import Link from "next/link";
 import { Metadata } from "next";
 
-import SpotifyPresence from "@/components/SpotifyPresence";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
-
 import { getHighlightedPosts } from "@/lib/posts";
 import Footer from "@/components/Footer";
 
-import {
-  InstagramLogoIcon,
-  LinkedInLogoIcon,
-  EnvelopeClosedIcon,
-  GitHubLogoIcon,
-} from "@radix-ui/react-icons";
+import DiscogsLibrary from "@/components/DiscogsLibrary";
+import HomeLayoutClient from "./HomeLayoutClient";
+import { SocialsSection } from "@/components/SocialsSection";
 
 export const metadata: Metadata = {
   title: "Matthew Hrehirchuk",
@@ -21,113 +15,38 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  return (
-    <div className="min-h-screen flex flex-col items-center">
-      <main className="flex-grow w-full flex max-w-screen-xl flex-col md:flex-row md:space-x-16 2xl:space-x-32 px-8 md:px-20">
-        <div className="w-full md:sticky md:top-0 md:h-screen md:overflow-auto">
-          <div className="pt-12 xl:py-24 space-y-8">
-            <Header />
-            <Introduction />
-            <div className="hidden md:block">
-              <SocialsSection />
-            </div>
-          </div>
-        </div>
-        <aside className="w-full py-12 xl:py-24">
-          <WorkSection />
-          <div className="block md:hidden">
-            <SocialsSection />
-          </div>
-          <Footer />
-        </aside>
-      </main>
-    </div>
-  );
+  return <HomeLayoutClient rightSide={rightSide} altRightSide={altRightSide} />;
 }
 
-function Header() {
-  return (
-    <h1 className="mb-6 w-full flex flex-row items-center justify-between col-span-2">
-      <div className="flex flex-col w-full">
-        <p className="text-foreground font-semibold text-2xl font-inter w-full flex flex-row justify-between">
-          Matthew Hrehirchuk
-          <ThemeSwitcher />
-        </p>
-        <SpotifyPresence />
-      </div>
-    </h1>
-  );
-}
+const altRightSide = (
+  <aside className="w-full py-12 xl:py-24">
+    <h2 className="text-xl text-muted-foreground font-sans mb-1">
+      Record Collection
+    </h2>
+    <p className="leading-7 mb-6">
+      All of the records I own, catalogued on{" "}
+      <Link
+        href="https://www.discogs.com/user/matthew_hre/collection"
+        target="_blank"
+        className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
+      >
+        Discogs
+      </Link>
+      .
+    </p>
+    <DiscogsLibrary />
+  </aside>
+);
 
-function Introduction() {
-  return (
-    <div className="flex flex-col">
-      <p className="text-foreground leading-7 mb-6">
-        I&apos;m a web developer, a graphic designer, and a student at{" "}
-        <Link
-          className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
-          href="https://mtroyal.ca"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Mount Royal University
-        </Link>{" "}
-        in Calgary, Alberta. I make plenty of games, a few helpful tools, and
-        &ndash; at the moment &ndash; lots of studying resources for students
-        like myself.
-      </p>
-      <p className="text-foreground leading-7">
-        I was previously the Executive Director of{" "}
-        <Link
-          className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
-          href="https://mruhacks.ca"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          MRUHacks 2024
-        </Link>
-        , Mount Royal University&apos;s premier hackathon. Nowadays, I&apos;m
-        taking some much needed rest and relaxation, and focusing on my studies,
-        my personal projects, and my record collection.
-      </p>
+const rightSide = (
+  <aside className="w-full py-12 xl:py-24">
+    <WorkSection />
+    <div className="block md:hidden">
+      <SocialsSection />
     </div>
-  );
-}
-
-function SocialsSection() {
-  return (
-    <div className="flex flex-row space-x-6 w-1/2 mx-auto md:mx-0 md:px-0 justify-around md:justify-start pt-2">
-      <Link
-        href="https://instagram.com/matthew_hre"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <InstagramLogoIcon className="text-foreground hover:text-muted-foreground transition-all w-6 h-6" />
-      </Link>
-      <Link
-        href="https://linkedin.com/in/matthew-hre"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <LinkedInLogoIcon className="text-foreground hover:text-muted-foreground transition-all w-6 h-6" />
-      </Link>
-      <Link
-        href="mailto:mhreh594@mtroyal.ca"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <EnvelopeClosedIcon className="text-foreground hover:text-muted-foreground transition-all w-6 h-6" />
-      </Link>
-      <Link
-        href="https://github.com/matthew-hre"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <GitHubLogoIcon className="text-foreground hover:text-muted-foreground transition-all w-6 h-6" />
-      </Link>
-    </div>
-  );
-}
+    <Footer />
+  </aside>
+);
 
 async function WorkSection() {
   const projectPosts = await getHighlightedPosts("projects");
