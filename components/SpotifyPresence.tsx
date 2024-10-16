@@ -74,7 +74,9 @@ export default function SpotifyPresence() {
         {lanyard?.data?.data?.listening_to_spotify ? (
           <div
             className={`relative origin-top-left transition-all ease-in-out ${
-              showInfo ? "w-24 h-24" : "w-6 h-6"
+              showInfo
+                ? "w-24 h-24 min-w-24 min-h-24"
+                : "w-6 h-6 min-w-6 min-h-6"
             }`}
           >
             <Disc3
@@ -96,7 +98,9 @@ export default function SpotifyPresence() {
         ) : (
           <div
             className={`relative origin-top-left transition-all ease-in-out ${
-              showInfo ? "w-24 h-24" : "w-6 h-6"
+              showInfo
+                ? "w-24 h-24 min-w-24 min-h-24"
+                : "w-6 h-6 min-w-6 min-h-6"
             }`}
           >
             <Disc
