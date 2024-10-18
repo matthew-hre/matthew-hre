@@ -58,7 +58,7 @@ export default function SpotifyPresence() {
   }
 
   if (!displayData) {
-    return <Skeleton className="w-64 h-4 mt-2"></Skeleton>;
+    return <Skeleton className="w-64 h-4 mt-2 -mb-2"></Skeleton>;
   }
 
   const { song, artist, album, album_art_url, track_id } = displayData;

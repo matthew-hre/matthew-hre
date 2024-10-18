@@ -5,6 +5,7 @@ import { useState } from "react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import SpotifyPresence from "@/components/SpotifyPresence";
 import { SocialsSection } from "@/components/SocialsSection";
+import FadeIn from "@/components/FadeIn";
 
 export default function HomeLayoutClient({
   rightSide,
@@ -18,7 +19,10 @@ export default function HomeLayoutClient({
   return (
     <div className="min-h-screen flex flex-col items-center">
       <main className="flex-grow w-full flex max-w-screen-xl flex-col md:flex-row md:space-x-16 2xl:space-x-32 px-8 md:px-20">
-        <div className="w-full md:sticky md:top-0 md:h-screen md:overflow-auto">
+        <FadeIn
+          className="w-full md:sticky md:top-0 md:h-screen md:overflow-auto"
+          transitionDuration={500}
+        >
           <div className="pt-12 xl:py-24 space-y-8">
             <Header />
             <Introduction showInfo={showInfo} setShowInfo={setShowInfo} />
@@ -26,12 +30,15 @@ export default function HomeLayoutClient({
               <SocialsSection />
             </div>
           </div>
-        </div>
+        </FadeIn>
+
         <div className={`${showInfo ? "block w-full" : "hidden"}`}>
-          {altRightSide}
+          <FadeIn>{altRightSide}</FadeIn>
         </div>
         <div className={`${showInfo ? "hidden" : "block w-full"}`}>
-          {rightSide}
+          <FadeIn delay={300} transitionDuration={500}>
+            {rightSide}
+          </FadeIn>
         </div>
       </main>
     </div>
