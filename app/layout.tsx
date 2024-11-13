@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import ThemeProvider from "@/components/ThemeProvider";
+import MyTerminal from "@/components/Terminal";
 
 const inter = Inter({
   subsets: ["latin"],

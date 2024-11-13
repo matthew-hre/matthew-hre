@@ -6,6 +6,7 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import SpotifyPresence from "@/components/SpotifyPresence";
 import { SocialsSection } from "@/components/SocialsSection";
 import FadeIn from "@/components/FadeIn";
+import MyTerminal from "@/components/Terminal";
 
 export default function HomeLayoutClient({
   rightSide,
@@ -18,6 +19,15 @@ export default function HomeLayoutClient({
 
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <MyTerminal />
+      <div
+        className="fixed -top-1 right-0 bottom-0 left-0 bg-amber-500/80 z-[1] pointer-events-none"
+        style={{ mixBlendMode: "darken" }}
+      ></div>
+      <div
+        className="fixed -top-1 right-0 bottom-0 left-0 bg-scanlines bg-[100%\ 4px] z-[2] opacity-[0.07] pointer-events-none animate-scanlines"
+        style={{ backgroundSize: "100% 4px" }}
+      ></div>
       <main className="flex-grow w-full flex max-w-screen-xl flex-col md:flex-row md:space-x-16 2xl:space-x-32 px-8 md:px-20">
         <FadeIn
           className="w-full md:sticky md:top-0 md:h-screen md:overflow-auto"

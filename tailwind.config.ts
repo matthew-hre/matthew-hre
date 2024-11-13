@@ -24,6 +24,9 @@ const config = {
         serif: ["var(--font-eb-garamond)", ...fontFamily.serif],
         mono: ["var(--font-fira-code)", ...fontFamily.mono],
       },
+      backgroundImage: {
+        scanlines: "linear-gradient(180deg,#323232 2px,#dcdcdc 0);",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

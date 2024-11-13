@@ -115,3 +115,16 @@
   filter: blur(20px);
   z-index: -1;
 }
+
+.animate-scanlines {
+  animation: scanline 0.5s linear 0s infinite normal none running;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(4px);
+  }
+}
