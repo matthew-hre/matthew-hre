@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { Inter, EB_Garamond, Fira_Code } from "next/font/google";
 import "./globals.css";
+import dynamic from "next/dynamic";
 
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import ThemeProvider from "@/components/ThemeProvider";
-import MyTerminal from "@/components/Terminal";
+import { Suspense } from "react";
+const MyTerminal = dynamic(() => import("@/components/Terminal"), {
+  ssr: false,
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -50,7 +54,9 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          <MyTerminal />
+          <Suspense fallback={<div>loading</div>}>
+            <MyTerminal />
+          </Suspense>
           {children}
           <Analytics />
           <SpeedInsights />

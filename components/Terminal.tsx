@@ -1,147 +1,82 @@
 "use client";
 
+import React, { useRef, useEffect, useState, useMemo, use } from "react";
+import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import { useXTerm } from "react-xtermjs";
-import { useEffect, useRef, useState } from "react";
-import { useTheme } from "next-themes";
+import "@xterm/xterm/css/xterm.css";
 import CRTTheme from "./CRTTheme";
+import { useTheme } from "next-themes";
 
-const initialMessage = `\r                 _   _   _                     _              
-\r _ __ ___   __ _| |_| |_| |__   _____      __ | |__  _ __ ___ 
+const initialMessage = `\r                 _   _   _                     _
+\r _ __ ___   __ _| |_| |_| |__   _____      __ | |__  _ __ ___
 \r| '_ \` _ \\ / _\` | __| __| '_ \\ / _ \\ \\ /\\ / / | '_ \\| '__/ _ \\
 \r| | | | | | (_| | |_| |_| | | |  __/\\ V  V /  | | | | | |  __/
 \r|_| |_| |_|\\__,_|\\__|\\__|_| |_|\\___| \\_/\\_/___|_| |_|_|  \\___|
-\r                                         |_____|              
-\r------------------------------------------------------------------------
+\r                                         |_____|
+\r-------------------------------------------------------------------
 \rtype "help" to see available commands.
-\r------------------------------------------------------------------------
+\r-------------------------------------------------------------------
 `;
 
-export default function MyTerminal() {
+const MyTerminal = () => {
   const { theme, setTheme } = useTheme();
   const [visible, setVisible] = useState(false);
+  const [input, setInput] = useState("");
+  const inputRef = useRef("");
 
-  const { instance, ref } = useXTerm();
-  const fitAddon = new FitAddon();
-  const inputRef = useRef(``); // Using a ref to track input reliably
+  const terminalRef = useRef<HTMLDivElement | null>(null);
+  const [term, setTerm] = useState<Terminal | null>(null);
   const prompt = "$ ";
 
-  // Initialize the terminal with the initial prompt
-  const initializeTerminal = () => {
-    if (instance) {
-      instance.loadAddon(fitAddon);
+  useEffect(() => {
+    const terminal = new Terminal({
+      cursorStyle: "block",
+      cursorBlink: true,
+      theme: {
+        background: theme === "light" ? "#fff" : "#131313",
+        foreground: theme === "light" ? "#131313" : "#fff",
+        cursor: theme === "light" ? "#131313" : "#fff",
+      },
+    });
+    setTerm(terminal);
 
-      const handleResize = () => fitAddon.fit();
-      instance.write(initialMessage + "\r" + prompt);
-      instance.onData(handleInput);
-
-      instance.options = {
-        cursorStyle: "block",
-        cursorBlink: true,
-        theme: {
-          background: theme === "light" ? "#fff" : "#131313",
-          foreground: theme === "light" ? "#131313" : "#fff",
-        },
-      };
-
-      window.addEventListener("resize", handleResize);
-      handleResize();
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }
-  };
-
-  // Handle each key press in the terminal
-  const handleInput = (data: string) => {
-    if (data === "\r") {
-      // Enter key: process the command
-      handleCommand(inputRef.current);
-      inputRef.current = ""; // Clear input after executing
-      instance?.scrollToBottom();
-    } else if (data === "\u007F") {
-      // Backspace key: remove the last character
-      if (inputRef.current.length > 0) {
-        inputRef.current = inputRef.current.slice(0, -1);
-        instance?.write("\b \b"); // Move back, erase character, move back again
+    return () => {
+      if (terminal) {
+        terminal.dispose();
       }
-    } else {
-      // Append character to inputRef and display it
-      inputRef.current += data;
-      instance?.write(data);
-    }
-  };
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const commands: {
-    [key: string]: { description: string; action: (args: string[]) => void };
-  } = {
-    echo: {
-      description: "Echoes the input arguments",
-      action: (args: string[]) => {
-        instance?.writeln(args.join(" "));
-      },
-    },
-    clear: {
-      description: "Clears the terminal screen",
-      action: () => {
-        instance?.clear();
-      },
-    },
-    help: {
-      description: "Displays the list of available commands",
-      action: () => {
-        const commandList = Object.keys(commands)
-          .map((cmd) => `    ${cmd}:\t ${commands[cmd].description}`)
-          .join("\r\n");
-        instance?.writeln(commandList);
-      },
-    },
-    theme: {
-      description: "Changes the theme of the site",
-      action: (args: string[]) => {
-        if (args.length < 1) {
-          instance?.writeln("Usage: theme <subcommand>\n");
-          instance?.writeln("Subcommands:");
-          instance?.writeln("list: list available themes");
-          instance?.writeln("set <theme>: set the theme");
-        } else {
-          switch (args[0]) {
-            case "list":
-              instance?.writeln("Available themes: light, dark, crt-amber");
-              break;
-            case "set":
-              if (args.length < 2) {
-                instance?.writeln("Usage: theme set <theme>");
-              } else {
-                if (["light", "dark", "crt-amber"].includes(args[1])) {
-                  setTheme(args[1]);
-                } else {
-                  instance?.writeln(`Unknown theme: ${args[1]}`);
-                }
-              }
-              break;
-            default:
-              instance?.writeln(`Unknown subcommand: ${args[0]}`);
-              break;
-          }
-        }
-      },
-    },
-    date: {
-      description: "Displays the current date and time",
-      action: () => {
-        instance?.writeln(new Date().toString());
-      },
-    },
-    exit: {
-      description: "Exits the terminal",
-      action: () => {
-        instance?.clear();
-        instance?.blur();
-        setVisible(false);
-      },
-    },
-  };
+  useEffect(() => {
+    if (term) {
+      term.options.theme = {
+        background: theme === "light" ? "#fff" : "#131313",
+        foreground: theme === "light" ? "#131313" : "#fff",
+        cursor: theme === "light" ? "#131313" : "#fff",
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme]);
+
+  useEffect(() => {
+    if (term) {
+      if (terminalRef.current) {
+        term.open(terminalRef.current);
+        const fitAddon = new FitAddon();
+        term.loadAddon(fitAddon);
+        fitAddon.fit();
+        setTerm(term);
+        term.write(initialMessage + "\r" + prompt);
+      }
+      const disposable = term.onData(handleInput);
+
+      return () => {
+        disposable.dispose();
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [term]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -155,36 +90,113 @@ export default function MyTerminal() {
     };
   }, []);
 
-  // Process commands
+  const handleInput = (data: string) => {
+    if (data === "\r") {
+      handleCommand(inputRef.current);
+      setInput("");
+      inputRef.current = "";
+      term?.write("\r\n" + prompt);
+      term?.scrollToBottom();
+    } else if (data === "\u007F") {
+      if (inputRef.current.length > 0) {
+        setInput(inputRef.current.slice(0, -1));
+        inputRef.current = inputRef.current.slice(0, -1);
+        term?.write("\b \b");
+      }
+    } else if (
+      data === "\u001b[A" ||
+      data === "\u001b[B" ||
+      data === "\u001b[C" ||
+      data === "\u001b[D"
+    ) {
+      // do nothing
+    } else {
+      setInput(inputRef.current + data);
+      inputRef.current += data;
+      term?.write(data);
+    }
+  };
+
+  const commands: {
+    [key: string]: { description: string; action: (args: string[]) => void };
+  } = {
+    echo: {
+      description: "Echoes the input arguments",
+      action: (args: string[]) => {
+        term?.writeln(args.join(" "));
+      },
+    },
+    clear: {
+      description: "Clears the terminal screen",
+      action: () => {
+        term?.clear();
+      },
+    },
+    help: {
+      description: "Displays the list of available commands",
+      action: () => {
+        const commandList = Object.keys(commands)
+          .map((cmd) => `    ${cmd}:\t ${commands[cmd].description}`)
+          .join("\r\n");
+        term?.writeln(commandList);
+      },
+    },
+    theme: {
+      description: "Changes the theme of the site",
+      action: (args: string[]) => {
+        if (args.length < 1) {
+          term?.writeln("Usage: theme <subcommand>\n");
+          term?.writeln("Subcommands:");
+          term?.writeln("list: list available themes");
+          term?.writeln("set <theme>: set the theme");
+        } else {
+          switch (args[0]) {
+            case "list":
+              term?.writeln("Available themes: light, dark, crt-amber");
+              break;
+            case "set":
+              if (args.length < 2) {
+                term?.writeln("Usage: theme set <theme>");
+              } else {
+                if (["light", "dark", "crt-amber"].includes(args[1])) {
+                  setTheme(args[1]);
+                } else {
+                  term?.writeln(`Unknown theme: ${args[1]}`);
+                }
+              }
+              break;
+            default:
+              term?.writeln(`Unknown subcommand: ${args[0]}`);
+              break;
+          }
+        }
+      },
+    },
+    date: {
+      description: "Displays the current date and time",
+      action: () => {
+        term?.writeln(new Date().toString());
+      },
+    },
+    exit: {
+      description: "Exits the terminal",
+      action: () => {
+        term?.clear();
+        term?.blur();
+        setVisible(false);
+      },
+    },
+  };
+
   const handleCommand = (cmd: string) => {
-    instance?.write("\r\n"); // Move to a new line for command output
+    term?.write("\r\n");
     const [command, ...args] = cmd.split(" ");
     if (commands[command]) {
       commands[command].action(args);
     } else {
-      instance?.writeln(`Command not found: ${cmd}`);
+      term?.writeln(`Command not found: ${cmd}`);
     }
-    instance?.write(`\r\n${prompt}`); // New prompt on a new line
   };
-
-  // Initialize the terminal on first render
-  useEffect(() => {
-    if (instance) {
-      initializeTerminal();
-    }
-  }, [instance]);
-
-  useEffect(() => {
-    if (instance) {
-      instance.options = {
-        theme: {
-          background: theme === "light" ? "#fff" : "#131313",
-          foreground: theme === "light" ? "#131313" : "#fff",
-          cursor: theme === "light" ? "#131313" : "#fff",
-        },
-      };
-    }
-  }, [instance, theme]);
 
   return (
     <>
@@ -202,8 +214,13 @@ export default function MyTerminal() {
             X
           </p>
         </div>
-        <div ref={ref} className="h-full w-full bg-background" />
+        <div
+          ref={terminalRef}
+          className="h-full w-full bg-background [&_*]:font-mono"
+        />
       </div>
     </>
   );
-}
+};
+
+export default MyTerminal;
