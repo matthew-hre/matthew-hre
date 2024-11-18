@@ -50,6 +50,7 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
         >
+          <MyTerminal />
           {children}
           <Analytics />
           <SpeedInsights />

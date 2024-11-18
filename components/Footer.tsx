@@ -46,6 +46,9 @@ export default async function Footer() {
         </a>
         ]
       </p>
+      <p className="invisible md:visible text-sm w-max mx-auto text-muted-foreground/80">
+        [C] to open the console
+      </p>
     </footer>
   );
 }
