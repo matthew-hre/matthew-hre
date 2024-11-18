@@ -2,17 +2,25 @@
 
 import { useTheme } from "next-themes";
 import { GoSun, GoMoon, GoTerminal } from "react-icons/go";
+import { useEffect, useState } from "react";
 
 export default function ThemeSwitcher({ className }: { className?: string }) {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
-    if (theme === "dark") {
+    if (resolvedTheme === "dark") {
       setTheme("light");
     } else {
       setTheme("dark");
     }
   };
+
+  if (!mounted) return null;
 
   return (
     <button
@@ -22,9 +30,9 @@ export default function ThemeSwitcher({ className }: { className?: string }) {
         (className ? ` ${className}` : "")
       }
     >
-      {theme === "light" ? (
+      {resolvedTheme === "light" ? (
         <GoMoon size={24} />
-      ) : theme === "crt-amber" ? (
+      ) : resolvedTheme?.includes("crt") ? (
         <GoTerminal size={24} />
       ) : (
         <GoSun size={24} />

@@ -59,7 +59,11 @@ export default function ArticlePage({
       </div>
 
       <article className={`${styles.article} flex-1`}>
-        {theme === "dark" ? <DarkTheme /> : <LightTheme />}
+        {theme === "dark" || theme?.includes("crt") ? (
+          <DarkTheme />
+        ) : (
+          <LightTheme />
+        )}
         <MdxContent source={serialized} />
       </article>
     </div>

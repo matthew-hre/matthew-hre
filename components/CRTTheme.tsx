@@ -5,11 +5,19 @@ import { useTheme } from "next-themes";
 export default function CRTTheme() {
   const { theme } = useTheme();
 
-  if (theme === "crt-amber") {
+  if (theme?.includes("crt")) {
+    const color = theme.split("-")[1];
+
     return (
       <>
         <div
-          className="fixed -top-1 right-0 bottom-0 left-0 bg-amber-500/80 z-[60] pointer-events-none"
+          className={`fixed -top-1 right-0 bottom-0 left-0 ${
+            color === "green"
+              ? "bg-[#00FF00]/80"
+              : color === "amber"
+              ? "bg-amber-500/80"
+              : null
+          } z-[60] pointer-events-none`}
           style={{ mixBlendMode: "darken" }}
         ></div>
         <div

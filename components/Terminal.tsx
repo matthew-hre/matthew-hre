@@ -152,18 +152,28 @@ const MyTerminal = () => {
         } else {
           switch (args[0]) {
             case "list":
-              term?.writeln("Available themes: light, dark, crt-amber");
+              term?.writeln(
+                "Available themes: light, dark, crt-amber, crt-green"
+              );
               break;
             case "set":
               if (args.length < 2) {
                 term?.writeln("Usage: theme set <theme>");
               } else {
-                if (["light", "dark", "crt-amber"].includes(args[1])) {
+                if (
+                  ["light", "dark", "crt-amber", "crt-green"].includes(args[1])
+                ) {
                   setTheme(args[1]);
                 } else {
                   term?.writeln(`Unknown theme: ${args[1]}`);
                 }
               }
+              break;
+            case "help":
+              term?.writeln("Usage: theme <subcommand>");
+              term?.writeln("Subcommands:");
+              term?.writeln("list: list available themes");
+              term?.writeln("set <theme>: set the theme");
               break;
             default:
               term?.writeln(`Unknown subcommand: ${args[0]}`);

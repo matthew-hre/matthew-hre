@@ -9,7 +9,10 @@ export default function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   return (
-    <NextThemesProvider {...props} themes={["light", "dark", "crt-amber"]}>
+    <NextThemesProvider
+      {...props}
+      themes={["light", "dark", "crt-amber", "crt-green"]}
+    >
       {children}
     </NextThemesProvider>
   );
