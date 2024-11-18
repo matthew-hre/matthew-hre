@@ -2,11 +2,9 @@
 
 ## A web developer, graphic designer, and student at [Mount Royal University](https://mtroyal.ca)
 
-- 🔭 I’m currently the director of [MRUHacks 2024](https://mruhacks.ca)
+- 🔭 I was previously the director of [MRUHacks 2024](https://mruhacks.ca)
 
 - 👨‍💻 All of my projects are available at [matthew-hre.com](https://www.matthew-hre.com)
-
-- 📝 I regularly write articles on [blog.matthew-hre.com](https://blog.matthew-hre.com)
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
