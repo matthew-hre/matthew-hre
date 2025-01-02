@@ -83,18 +83,14 @@ function Introduction({
         like myself.
       </p>
       <p className="text-foreground leading-7">
-        I was previously the Executive Director of{" "}
+        I&apos;m currently a Senior Data Quality Specialist at{" "}
         <Link
           className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
-          href="https://mruhacks.ca"
+          href="https://cohere.com"
           target="_blank"
           rel="noopener noreferrer"
         >
-          MRUHacks 2024
-        </Link>
-        , Mount Royal University&apos;s premier hackathon. Nowadays, I&apos;m
-        taking some much needed rest and relaxation, and focusing on my studies,
-        my personal projects, and my{" "}
+Cohere</Link>, where I spend my days ranking and auditing data to improve our LLMs. When I&apos;m not wired in, I&apos;m spending my time playing board games, listening to music, and fleshing out my{" "}
         <a
           className={`underline decoration-muted-foreground hover:decoration-foreground hover:cursor-pointer transition-all ${
             showInfo ? "text-muted-foreground" : ""
