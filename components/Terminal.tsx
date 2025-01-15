@@ -6,6 +6,7 @@ import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import CRTTheme from "./CRTTheme";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 
 const initialMessage = `\r                 _   _   _                     _
 \r _ __ ___   __ _| |_| |_| |__   _____      __ | |__  _ __ ___
@@ -23,6 +24,8 @@ const MyTerminal = () => {
   const [visible, setVisible] = useState(false);
   const [input, setInput] = useState("");
   const inputRef = useRef("");
+
+  const pathname = usePathname();
 
   const terminalRef = useRef<HTMLDivElement | null>(null);
   const [term, setTerm] = useState<Terminal | null>(null);
@@ -80,6 +83,11 @@ const MyTerminal = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (pathname.includes("keystatic")) {
+        return;
+        // this was driving me NUTS when writing blog articles
+      }
+
       if (e.key === "c") {
         setVisible((visible) => !visible);
       }
@@ -153,7 +161,7 @@ const MyTerminal = () => {
           switch (args[0]) {
             case "list":
               term?.writeln(
-                "Available themes: light, dark, crt-amber, crt-green"
+                "Available themes: light, dark, crt-amber, crt-green",
               );
               break;
             case "set":

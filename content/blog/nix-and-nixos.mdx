@@ -1,0 +1,139 @@
+---
+title: Nix and NixOS
+createdDate: 2025-14-03T16:29:00.000Z
+lastModifiedDate: 2025-14-03T16:29:00.000Z
+tags:
+  - Development Log
+  - Nix
+  - Linux
+---
+
+Happy January! If you've talked to me at all in the last few month, you'll know that I've switched all my personal systems over to NixOS. My new laptop (AMD Framework 13), my "desktop" (My old 2021 Zephyrus G15), and my home server (Really crappy Dell Optiplex from like 2012) are all now running NixOS, and I couldn't be happier with it. Most recently, I've started using Nix Flakes to manage my development environments. This was mostly fueled by recently working on [Mitchell Hashimoto](https://mitchellh.com/)'s [Ghostty](https://ghostty.org) website, and seeing how he used Nix to manage his development environments. I wanted to really quickly spit out a blog post about what Nix is, why I care, and why you might want to as well.
+
+## What is Nix?
+
+Nix is a package manager written by Eelco Dolstra in 2003. A package manager is a tool that automates the process of installing, upgrading, configuring, and removing software packages. Nix is unique in that it is _purely functional_, meaning that it treats packages as immutable values, and that it has a declarative approach to package management. This means that you can specify exactly what packages you want, and Nix will ensure that you get exactly that, and nothing more. This is in contrast to most package managers, which are imperative, meaning that they specify how to install packages, rather than what packages to install.
+
+## So. NixOS is just a Linux distro that uses Nix?
+
+Bit of a story here, but I finally kicked Windows to the curb. Microsoft announcing that Windows 10 Security Updates would be paid was the final straw for me. I had been using Windows for gaming, development, and general use for years, but I had been flirting with WSL2 for development for a while. I remembered using Ubuntu back in middle school, and thought I'd try jumping back into Linux.
+
+Arch was the first distro I tried, and I had nothing but problems with it. Bluetooth was a nightmare, and I couldn't get my audio to work. Eventually, a `pacman -Syu` nuked my Xorg config, and I moved back over to Windows, begrudgingly.
+
+I eventually stumbled onto NixOS from an incredible video by No Boilerplate, called [NixOS: Everything, Everywhere, All At Once](https://www.youtube.com/watch?v=CwfKlX3rA6E). Immediately, he spoke to my soul. His use case was _my_ use case! Yes, I do hate when my computer breaks after an update! Yes, I do like having every package I need available to me! I was sold.
+
+My initial move to NixOS was really motivated by three big things:
+
+- **Declarative Configuration**: Being able to specify exactly what I want my system to look like is a life saver. Just like a NodeJS package.json, I can specify exactly what packages I want, and Nix will ensure that I get exactly that. This instantly resolved my "conflicting bluetooth drivers" issue, as I could specify exactly what drivers I wanted to use, and see exactly what was conflicting.
+- **Rollbacks**: NixOS has a really neat feature where you can rollback your system to a previous state. This is a life saver when you're trying to install a new driver, and it breaks your system. Just rollback, and you're back to where you were.
+- **Bragging Rights**: I think I've now shown everyone and their mom the [Repology](https://repology.org/repositories/graphs) graph of repository size / freshness. Having every possible package I could ever want available to me is a huge win.
+
+## A NixOS Crash Course
+
+To the three or four people who I accidentally convinced to switch to NixOS, here's a quick crash course on how to get started with NixOS.
+
+NixOS is configured using a file located at `/etc/nixos/configuration.nix`. This file is a declarative configuration file that specifies exactly what packages you want installed, what services you want running, and what your system should look like. Here's an example configuration file:
+
+```nix
+{ config, pkgs, ... }:
+
+{
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    device = "/dev/sda";
+  }
+
+  networking.hostName = "nixos";
+
+  services.openssh.enable = true;
+
+  services.xserver.enable = true;
+  services.xserver.layout = "us";
+
+  environment.systemPackages = with pkgs; [
+    fish
+    git
+    firefox
+  ];
+}
+```
+
+This configuration file specifies that we want to install the `fish`, `git`, and `firefox` packages, enable the `openssh` service, and enable the `xserver` service. We also specify that we want to use the `us` keyboard layout.
+
+It's really that simple. Being able to type out exactly what I have installed on my system, and being able to read the configuration file to see exactly what my system looks like, is huge.
+
+For anyone curious, my Nix config is available on [GitHub](https://github.com/matthew-hre/dotfiles).
+
+## Nix Flakes and Development Environments
+
+I only dipped my toes into developing with Nix recently, and it has blown my mind. My first foray into Nix development was with the [Ghostty](https://ghostty.org) website. I had the opportunity to beta test Ghostty, [Mitchell Hashimoto](https://mitchellh.com/)'s fancy new Zig based terminal emulator, and jumped on the opportunity to contribute some code to the documentation website. When stuff moves into view on the website when you scroll, that was probably me. I don't know why it worked out that way, but I basically just contributed code that scrolled.
+
+Anyways, Mitchell used Nix to manage the development environment for Ghostty, and I was really impressed with how easy it was to get started. I was able to clone the repository, run `nix develop`, and have a fully functional development environment up and running in minutes. I was able to run the website locally, make changes, and see those changes reflected in real time.
+
+Ok, great Matt. I can do that with Docker, or with my locally installed instance of Node. So what?
+
+### Flakes
+
+Nix Flakes is what. Nix Flakes is a "new" feature in Nix that allows you to specify your development environment in a single file, and have Nix manage the rest. This means that you can specify exactly what packages you need, what services you need running, and what your system should look like, and Nix will ensure that you get exactly that. This is in contrast to most package managers, which are imperative, meaning that they specify how to install packages, rather than what packages to install.
+
+I don't have JavaScript installed on my computer anymore. I don't have Node installed on my computer anymore. I don't have Python installed on my computer anymore. Every time I need one of those programs, I have a development environment that I can spin up in seconds, and have a fully functional development environment up and running in minutes. A development environment that is perfectly configured to that project, and that I can throw away when I'm done.
+
+For instance, here's the Nix flake for this website:
+
+```nix
+# flake.nix
+{
+  description = "matthew-hre.com";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/release-24.11";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = {
+    self,
+    flake-utils,
+    nixpkgs,
+    ...
+  }:
+    flake-utils.lib.eachDefaultSystem (
+      system: let
+        pkgs = import nixpkgs {inherit system;};
+      in {
+        devShell = pkgs.callPackage ./nix/devShell.nix {};
+        formatter = pkgs.alejandra;
+      }
+    );
+}
+
+# nix/devShell.nix
+{
+  mkShell,
+  alejandra,
+  nodejs_22,
+}:
+mkShell {
+  name = "matthew-hre.com";
+
+  packages = [
+    nodejs_22
+    alejandra
+  ];
+}
+
+```
+
+Why is this so sick? This little chunk of code specifies that, when I want to develop this project, I need to have NodeJS 22 installed, and I need to have the Alejandra formatter installed. I can run `nix develop` in the root of this project, and have a fully functional development environment installed and running in minutes. I can run `alejandra` to format my code, and `node` to run my code. When I'm done, I can run `exit`, and my development environment is cleaned up and thrown away.
+
+This is a relatively small example of what Nix Flakes can do. When working on a bigger app with multiple services, you can specify exactly what services you need running, and have Nix manage the rest. Think about a larger website. You can run `nix develop` in the root of the project, and have your frontend tooling installed, your database configured, your dependencies installed, and your services running, just like that.
+
+## TL;DR
+
+I really love Nix. As much as the occasional `nixos-rebuild switch` can be a pain, I really love the declarative approach to package management. I love being able to specify exactly what packages I want, and have Nix ensure that I get exactly that. Being able to rollback my system to a previous state is huge, and I love being able to specify exactly what my development environment should look like, universally, on every system. Whenever I say "it works on my machine", I mean it. That is gospel.
+
+I don't see myself developing using anything but Nix for the foreseeable future, and would like to apologize to my professors for the `flake.nix` that will be in every project I submit from now on. I'm sorry, but I'm not going back.
