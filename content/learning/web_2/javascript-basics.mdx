@@ -1,0 +1,390 @@
+---
+title: JavaScript Basics
+description: A really quick overview of JavaScript
+createdDate: 2025-01-14T14:00:00.000Z
+lastModifiedDate: 2025-01-14T14:00:00.000Z
+tags:
+  - JavaScript
+  - Python
+  - Web Development
+---
+
+## Table of Contents
+
+## Overview
+
+JavaScript is the language of the web. In order to give you an idea of what JavaScript is, I'm going to compare it to Python.
+
+> Don't treat this guide as gospel when it comes to best practices. For the most part, this guide is based off [Airbnb's JavaScript Style Guide](https://github.com/airbnb/javascript), which is a fantastic resource for knowing how to write clean, maintainable JavaScript code.
+
+## Types
+
+JavaScript is a dynamically typed language, which means that you don't have to declare the type of a variable when you create it. This is similar to Python, but it's different from statically typed languages like Java or C++.
+
+### Primitive Types
+
+JavaScript has six primitive types:
+
+- `Boolean`
+- `Null`
+- `Undefined`
+- `Number`
+- `String`
+- `Symbol`
+
+#### Booleans
+
+Booleans are either `true` or `false`.
+
+```javascript
+let isTrue = true;
+let isFalse = false;
+```
+
+#### Null
+
+`null` is a special value that represents "nothing" or "empty".
+
+```javascript
+let nothing = null;
+```
+
+#### Undefined
+
+`undefined` is a special value that represents the absence of a value.
+
+```javascript
+let notDefined;
+```
+
+#### Numbers
+
+Numbers in JavaScript are represented as 64-bit floating point numbers.
+
+```javascript
+let number = 42;
+```
+
+#### Strings
+
+Strings in JavaScript are sequences of characters.
+
+```javascript
+let string = "Hello, world!";
+```
+
+## Variables
+
+In JavaScript, you can declare variables using the `let`, `const`, or `var` keywords.
+
+### `const`
+
+`const` is used to declare a variable that cannot be reassigned. When writing JavaScript, you should always use `const` unless you know that the value of the variable is going to change.
+
+```javascript
+const pi = 3.14159; // not changing any time soon
+```
+
+### `let`
+
+`let` is used to declare a variable that can be reassigned.
+
+```javascript
+let x = 42;
+x = 43;
+```
+
+### `var`
+
+`var` is the old way of declaring variables in JavaScript. You should avoid using `var` because it has some weird scoping rules.
+
+```javascript
+var y = 42; // <-- gross, old, lame
+```
+
+### Good Practices
+
+In your code base, you're gonna have plenty of `const`s and `let`s. It's good practice to keep these grouped together by type.
+
+```javascript
+// bad
+let i;
+const items = getItems();
+let dragonball;
+const terminalDotAppSucks = true;
+let len;
+
+// good
+const terminalDotAppSucks = true;
+const items = getItems();
+let dragonball;
+let i;
+let length;
+```
+
+## Objects
+
+Objects in JavaScript are collections of key-value pairs. They're similar to dictionaries in Python. Objects are a fundamental part of JavaScript, and you'll be using them a lot.
+
+```javascript
+const person = {
+  name: "Matthew",
+  age: 20, // as of writing this
+  isCool: true,
+};
+```
+
+You can access the values of an object using dot notation or bracket notation.
+
+```javascript
+console.log(person.name); // Matthew
+console.log(person["age"]); // 20
+```
+
+## Arrays
+
+Arrays in JavaScript are ordered collections of values. They're similar to lists in Python.
+
+```javascript
+const fruits = ["apple", "banana", "cherry"];
+```
+
+You can access the values of an array using bracket notation.
+
+```javascript
+console.log(fruits[0]); // apple
+```
+
+## Functions
+
+There are a few ways to define functions in JavaScript.
+
+### Function Declarations
+
+```javascript
+// meh
+function foo() {
+  // ...
+}
+
+// bad
+const foo = function () {
+  // ...
+};
+
+// good
+// lexical name distinguished from the variable-referenced invocation(s)
+const short = function longUniqueFunctionName() {
+  // ...
+};
+```
+
+Huh? What? Keep reading.
+
+### Hoisting
+
+In JavaScript, function declarations are "hoisted" to the top of the scope in which they're defined. This means that you can call a function before you define it.
+
+```javascript
+foo(); // works
+
+function foo() {
+  console.log("foo");
+}
+```
+
+The reason that first function definition is "meh" is because it's hoisted. Hoisted functions make it easy (too easy) to reference the function before it's defined, which can lead to some confusing code.
+
+### Arrow Functions
+
+Arrow functions are a more concise way to define functions in JavaScript.
+
+```javascript
+const foo = () => {
+  // ...
+};
+```
+
+Arrow functions are great for one-liners.
+
+```javascript
+const add = (a, b) => a + b;
+```
+
+## Destructuring
+
+Destructuring is a way to extract values from objects and arrays.
+
+### Objects
+
+```javascript
+const person = {
+  name: "Matthew",
+  age: 20,
+};
+
+const { name, age } = person;
+
+console.log(name); // Matthew
+console.log(age); // 20
+```
+
+### Arrays
+
+```javascript
+const fruits = ["apple", "banana", "cherry"];
+
+const [first, second, third] = fruits;
+
+console.log(first); // apple
+console.log(second); // banana
+console.log(third); // cherry
+```
+
+## Loops
+
+There are a few ways to loop through arrays in JavaScript.
+
+### `for` Loop
+
+```javascript
+const fruits = ["apple", "banana", "cherry"];
+
+for (let i = 0; i < fruits.length; i++) {
+  // this should look like Java to you
+  console.log(fruits[i]);
+}
+```
+
+### `for...of` Loop
+
+```javascript
+const fruits = ["apple", "banana", "cherry"];
+
+for (const fruit of fruits) {
+  // this should look kinda like Python to you
+  console.log(fruit);
+}
+```
+
+### `forEach` Method
+
+```javascript
+const fruits = ["apple", "banana", "cherry"];
+
+fruits.forEach((fruit) => {
+  console.log(fruit);
+});
+```
+
+That one is a little weird. The `forEach` method is a method on arrays that takes a function as an argument. The function is called for each element in the array. You'll see this a ton in Web III.
+
+## Strings
+
+Strings in JavaScript are sequences of characters, just like Python. Unlike Python, JavaScript strings are immutable, which means that you can't change a string once it's created.
+
+```javascript
+const string = "Hello, world!";
+```
+
+## Comments
+
+In JavaScript, you can write single-line comments using `//` and multi-line comments using `/* */`.
+
+```javascript
+// this is a single-line comment
+
+/*
+  this is a
+  multi-line
+  comment
+*/
+```
+
+### Documentation Comments
+
+You can also write documentation comments using `/** */`. Please, please, do this.
+
+```javascript
+/**
+ * This function adds two numbers together.
+ * @param {number} a - The first number
+ * @param {number} b - The second number
+ * @returns {number} The sum of the two numbers
+ */
+function add(a, b) {
+  return a + b;
+}
+```
+
+## Practical Example
+
+Let's write a Python function that does something fun, and then let's write the equivalent JavaScript function.
+
+### Python
+
+```python
+def first_non_repeating_char(s):
+    """
+    Finds the first non-repeating character in a string.
+    Returns the character if found, otherwise returns None.
+    """
+    char_count = {}
+
+    # Count occurrences of each character
+    for char in s:
+        char_count[char] = char_count.get(char, 0) + 1
+
+    # Find the first non-repeating character
+    for char in s:
+        if char_count[char] == 1:
+            return char
+
+    return None
+
+# Example usage
+result = first_non_repeating_char("sickness")
+print(result)  # Output: 'i'
+```
+
+### JavaScript
+
+```javascript
+/**
+ * Finds the first non-repeating character in a string.
+ * Returns the character if found, otherwise returns null.
+ * @param {string} s - The string to search
+ * @returns {string | null} The first non-repeating character
+ */
+function firstNonRepeatingChar(s) {
+  // Here, we initialize an empty object to store the count of each character
+  const charCount = {};
+
+  // We loop through each character in the string and increment the count in the object.
+  for (const char of s) {
+    // Check if the character is already in the charCount object
+    if (charCount[char]) {
+      // If it is, increment the count
+      charCount[char] += 1;
+    } else {
+      // If it isn't, initialize the count to 1
+      charCount[char] = 1;
+    }
+  }
+
+  // Loop through the string again to find the first non-repeating character
+  for (const char of s) {
+    // If the count of the character is 1, return it
+    if (charCount[char] === 1) {
+      return char;
+    }
+  }
+
+  // If no non-repeating character is found, return null
+  return null;
+}
+```
+
+## Conclusion
+
+Hopefully this gives you a super quick overview of JavaScript. Next up, we'll break down some of the more advanced concepts in JavaScript, like async methods, promises, fetching, and DOM manipulation. You'll also learn what the DOM is.
