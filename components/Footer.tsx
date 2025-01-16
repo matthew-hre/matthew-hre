@@ -11,7 +11,7 @@ export default async function Footer() {
           target="_blank"
           className="underline decoration-muted-foreground hover:decoration-foreground transition-all"
         >
-          Matthew Hrehirchuk © 2024
+          Matthew Hrehirchuk © 2025
         </a>{" "}
         — [
         <a
@@ -24,7 +24,7 @@ export default async function Footer() {
         ]
       </p>
       <p className="text-muted-foreground/80 text-sm hidden md:block text-center">
-        Matthew Hrehirchuk © 2024 —{" "}
+        Matthew Hrehirchuk © 2025 —{" "}
         <a
           href="
           https://creativecommons.org/licenses/by-nc-sa/4.0"
