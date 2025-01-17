@@ -1,18 +1,17 @@
 ---
 title: Nix and NixOS
-createdDate: 2025-14-03T16:29:00.000Z
-lastModifiedDate: 2025-14-03T16:29:00.000Z
+createdDate: 2025-01-15T16:29:00.000Z
+lastModifiedDate: 2025-01-15T16:29:00.000Z
 tags:
   - Development Log
   - Nix
   - Linux
 ---
-
 Happy January! If you've talked to me at all in the last few month, you'll know that I've switched all my personal systems over to NixOS. My new laptop (AMD Framework 13), my "desktop" (My old 2021 Zephyrus G15), and my home server (Really crappy Dell Optiplex from like 2012) are all now running NixOS, and I couldn't be happier with it. Most recently, I've started using Nix Flakes to manage my development environments. This was mostly fueled by recently working on [Mitchell Hashimoto](https://mitchellh.com/)'s [Ghostty](https://ghostty.org) website, and seeing how he used Nix to manage his development environments. I wanted to really quickly spit out a blog post about what Nix is, why I care, and why you might want to as well.
 
 ## What is Nix?
 
-Nix is a package manager written by Eelco Dolstra in 2003. A package manager is a tool that automates the process of installing, upgrading, configuring, and removing software packages. Nix is unique in that it is _purely functional_, meaning that it treats packages as immutable values, and that it has a declarative approach to package management. This means that you can specify exactly what packages you want, and Nix will ensure that you get exactly that, and nothing more. This is in contrast to most package managers, which are imperative, meaning that they specify how to install packages, rather than what packages to install.
+Nix is a package manager written by Eelco Dolstra in 2003. A package manager is a tool that automates the process of installing, upgrading, configuring, and removing software packages. Nix is unique in that it is *purely functional*, meaning that it treats packages as immutable values, and that it has a declarative approach to package management. This means that you can specify exactly what packages you want, and Nix will ensure that you get exactly that, and nothing more. This is in contrast to most package managers, which are imperative, meaning that they specify how to install packages, rather than what packages to install.
 
 ## So. NixOS is just a Linux distro that uses Nix?
 
@@ -20,13 +19,13 @@ Bit of a story here, but I finally kicked Windows to the curb. Microsoft announc
 
 Arch was the first distro I tried, and I had nothing but problems with it. Bluetooth was a nightmare, and I couldn't get my audio to work. Eventually, a `pacman -Syu` nuked my Xorg config, and I moved back over to Windows, begrudgingly.
 
-I eventually stumbled onto NixOS from an incredible video by No Boilerplate, called [NixOS: Everything, Everywhere, All At Once](https://www.youtube.com/watch?v=CwfKlX3rA6E). Immediately, he spoke to my soul. His use case was _my_ use case! Yes, I do hate when my computer breaks after an update! Yes, I do like having every package I need available to me! I was sold.
+I eventually stumbled onto NixOS from an incredible video by No Boilerplate, called [NixOS: Everything, Everywhere, All At Once](https://www.youtube.com/watch?v=CwfKlX3rA6E). Immediately, he spoke to my soul. His use case was *my* use case! Yes, I do hate when my computer breaks after an update! Yes, I do like having every package I need available to me! I was sold.
 
 My initial move to NixOS was really motivated by three big things:
 
-- **Declarative Configuration**: Being able to specify exactly what I want my system to look like is a life saver. Just like a NodeJS package.json, I can specify exactly what packages I want, and Nix will ensure that I get exactly that. This instantly resolved my "conflicting bluetooth drivers" issue, as I could specify exactly what drivers I wanted to use, and see exactly what was conflicting.
-- **Rollbacks**: NixOS has a really neat feature where you can rollback your system to a previous state. This is a life saver when you're trying to install a new driver, and it breaks your system. Just rollback, and you're back to where you were.
-- **Bragging Rights**: I think I've now shown everyone and their mom the [Repology](https://repology.org/repositories/graphs) graph of repository size / freshness. Having every possible package I could ever want available to me is a huge win.
+* **Declarative Configuration**: Being able to specify exactly what I want my system to look like is a life saver. Just like a NodeJS package.json, I can specify exactly what packages I want, and Nix will ensure that I get exactly that. This instantly resolved my "conflicting bluetooth drivers" issue, as I could specify exactly what drivers I wanted to use, and see exactly what was conflicting.
+* **Rollbacks**: NixOS has a really neat feature where you can rollback your system to a previous state. This is a life saver when you're trying to install a new driver, and it breaks your system. Just rollback, and you're back to where you were.
+* **Bragging Rights**: I think I've now shown everyone and their mom the [Repology](https://repology.org/repositories/graphs) graph of repository size / freshness. Having every possible package I could ever want available to me is a huge win.
 
 ## A NixOS Crash Course
 
