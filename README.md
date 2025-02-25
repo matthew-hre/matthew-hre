@@ -10,7 +10,7 @@
 
 - 💻 Currently a Senior Data Quality Specialist at Cohere
 - 📚 Co-author of [Foundations of Python Programmings: Functions First](https://runestone.academy/ns/books/published/foppff/fopp-ff.html)
-- 🤔 10x hackathon participant (1x winner. Terrible ratio, I know)
+- 🤔 11x hackathon participant (1x winner. Terrible ratio, I know)
 - 👨‍💻 All of my projects are available at [matthew-hre.com](https://www.matthew-hre.com)
 - 📫 Reach me at: mhreh594@mtroyal.ca
 
