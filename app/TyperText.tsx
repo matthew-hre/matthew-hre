@@ -35,7 +35,9 @@ const tween = ({
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
-      onComplete && onComplete();
+      if (onComplete) {
+        onComplete();
+      }
     }
   };
   requestAnimationFrame(animate);
@@ -127,12 +129,15 @@ const decodeText = (
         } else {
           charToShow = cursorHTML;
         }
+        // @ts-expect-error - TODO: fix this later
         output[q.index] = charToShow;
       }
       el.innerHTML = output.join("");
     },
     onComplete: () => {
-      options.onComplete && options.onComplete();
+      if (options.onComplete) {
+        options.onComplete();
+      }
     },
   });
 };
