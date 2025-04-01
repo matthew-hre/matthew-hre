@@ -44,7 +44,7 @@ const rightSide = (
     <div className="block md:hidden">
       <SocialsSection />
     </div>
-    <Footer />
+    {/* <Footer /> */}
   </aside>
 );
 
@@ -52,12 +52,12 @@ async function WorkSection() {
   const projectPosts = await getHighlightedPosts("projects");
   const learningPosts = await getHighlightedPosts("learning");
   const gamePosts = await getHighlightedPosts("games");
-  const blogPosts = await getHighlightedPosts("blog");
+  const blogPosts = await getHighlightedPosts("blog", 1);
 
   return (
     <>
       <div className="flex flex-col space-y-6 mb-12">
-        <WorkCategory
+        {/* <WorkCategory
           title="Projects"
           posts={projectPosts}
           allLink="/projects"
@@ -67,7 +67,7 @@ async function WorkSection() {
           posts={learningPosts}
           allLink="/learning"
         />
-        <WorkCategory title="Games" posts={gamePosts} allLink="/games" />
+        <WorkCategory title="Games" posts={gamePosts} allLink="/games" /> */}
         <WorkCategory title="Blog" posts={blogPosts} allLink="/blog" />
       </div>
     </>
@@ -103,11 +103,11 @@ function WorkCategory({
           href={`/${title.toLowerCase()}/${post.slug}`}
         />
       ))}
-      <Card
+      {/* <Card
         title={`All ${title === "Blog" ? "Posts" : title} →`}
         description=""
         href={allLink}
-      />
+      /> */}
     </div>
   );
 }

@@ -19,9 +19,6 @@ export async function getHighlightedPosts(
     case "prog_3":
       collection = reader.collections.prog_3;
       break;
-    case "web_2":
-      collection = reader.collections.web_2;
-      break;
     default:
       collection = reader.collections.blog;
       break;

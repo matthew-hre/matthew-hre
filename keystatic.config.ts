@@ -131,27 +131,6 @@ export default config({
         content: MDXContent,
       },
     }),
-    web_2: collection({
-      label: "Web II",
-      slugField: "title",
-      path: "content/learning/web_2/*",
-      entryLayout: "content",
-      format: { contentField: "content" },
-      schema: {
-        title: fields.slug({ name: { label: "Title" } }),
-        description: fields.text({ label: "Description" }),
-        createdDate: fields.datetime({
-          label: "Created",
-          description: "The date the post was created.",
-        }),
-        lastModifiedDate: fields.datetime({ label: "Last Modified" }),
-        tags: fields.array(fields.text({ label: "Tag" }), {
-          label: "Tag",
-          itemLabel: (props) => props.value,
-        }),
-        content: MDXContent,
-      },
-    }),
     games: collection({
       label: "Games",
       slugField: "title",
