@@ -6,12 +6,17 @@ import { useSnowfall } from "@/lib/snowfall";
 export default function SnowToggle() {
   const { enabled, setEnabled } = useSnowfall();
 
+  // Wrap localStorage access in try-catch to handle cases where DOM storage is disabled
   const handleClick = () => {
     setEnabled(!enabled);
-    if (enabled) {
-      localStorage.setItem("snowfall-enabled", "false");
-    } else {
-      localStorage.setItem("snowfall-enabled", "true");
+    try {
+      if (enabled) {
+        localStorage.setItem("snowfall-enabled", "false");
+      } else {
+        localStorage.setItem("snowfall-enabled", "true");
+      }
+    } catch (error) {
+      console.error("Failed to access localStorage:", error);
     }
   };
 
