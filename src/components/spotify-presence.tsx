@@ -66,7 +66,7 @@ export default function SpotifyPresence() {
   return (
     <a
       onClick={() => setShowInfo(!showInfo)}
-      className={`transition-all hover:cursor-pointer ${
+      className={`w-full transition-all hover:cursor-pointer ${
         showInfo
           ? "h-28 pt-4"
           : "h-6 pt-1 group hover:underline hover:text-emerald-200"

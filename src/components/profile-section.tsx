@@ -13,6 +13,7 @@ import { FaGithub as Github } from "react-icons/fa";
 import { FaInstagram as Instagram } from "react-icons/fa";
 import { FaLinkedin as Linkedin } from "react-icons/fa";
 import Navbar from "@/components/navbar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function ProfileSection() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
@@ -143,7 +144,15 @@ function Header({
         <p className="text-base">
           Currently rebuilding his entire portfolio, including all his projects,
           from scratch. Has a wickedly cool (and slightly too big){" "}
-          <span className="underline">vinyl collection</span>.
+          <Tooltip>
+            <TooltipTrigger>
+              <span className="underline">vinyl collection</span>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p className="text-sm">Coming soon!</p>
+            </TooltipContent>
+          </Tooltip>
+          .
         </p>
         <div className="flex flex-row flex-wrap items-center justify-start gap-5 border-y-[1px] border-gray-600/20 w-full py-3 text-sm font-semibold text-neutral-400/80 sm:justify-between sm:gap-3">
           <div className="flex items-center gap-1">

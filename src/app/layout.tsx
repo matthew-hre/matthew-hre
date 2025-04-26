@@ -3,6 +3,9 @@ import localFont from "next/font/local";
 import { Fira_Code } from "next/font/google";
 import "./globals.css";
 import GrainOverlay from "@/components/grain-overlay";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import SnowfallBackground from "@/components/snowfall-background";
+import { SnowfallProvider } from "@/lib/snowfall";
 
 const satoshi = localFont({
   src: "../Satoshi-Variable.ttf",
@@ -38,8 +41,13 @@ export default function RootLayout({
       <body
         className={`${satoshi.variable} ${firaCode.variable} font-sans antialiased bg-muted`}
       >
-        <GrainOverlay />
-        {children}
+        <SnowfallProvider>
+          <SnowfallBackground />
+          <TooltipProvider>
+            <GrainOverlay />
+            {children}
+          </TooltipProvider>
+        </SnowfallProvider>
       </body>
     </html>
   );
