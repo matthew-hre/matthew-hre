@@ -1,0 +1,12 @@
+html::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: url("/noise.png") repeat;
+  opacity: 0.05; /* tweak for more/less grain */
+  z-index: 9999;
+}
