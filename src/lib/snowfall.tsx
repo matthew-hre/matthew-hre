@@ -31,9 +31,13 @@ export const SnowfallProvider = ({ children }: { children: ReactNode }) => {
     const prefersReduced = mql.matches;
 
     let initial = !prefersReduced;
-    const saved = localStorage.getItem("snowfall-enabled");
-    if (saved !== null) {
-      initial = JSON.parse(saved) && !prefersReduced;
+    try {
+      const saved = localStorage.getItem("snowfall-enabled");
+      if (saved !== null) {
+        initial = JSON.parse(saved) && !prefersReduced;
+      }
+    } catch (error) {
+      console.error("Failed to access localStorage:", error);
     }
 
     setEnabledRaw(initial);
@@ -49,7 +53,11 @@ export const SnowfallProvider = ({ children }: { children: ReactNode }) => {
   // persist whenever enabled flips (client-only)
   useEffect(() => {
     if (!mounted) return;
-    localStorage.setItem("snowfall-enabled", JSON.stringify(enabled));
+    try {
+      localStorage.setItem("snowfall-enabled", JSON.stringify(enabled));
+    } catch (error) {
+      console.error("Failed to access localStorage:", error);
+    }
   }, [enabled, mounted]);
 
   const setEnabled = (on: boolean) => {
