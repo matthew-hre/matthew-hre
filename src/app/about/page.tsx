@@ -5,7 +5,7 @@ export default function About() {
   return (
     <>
       <Navbar isVisible />
-      <main className="mx-auto min-h-screen max-w-[640px] px-4 pt-24 pb-10 sm:pt-40">
+      <main className="mx-auto min-h-screen max-w-[640px] px-4 pt-32 pb-10 sm:pt-40">
         <div className="flex flex-col px-4 gap-4">
           <h2 className="text-xl font-bold mb-4">About me</h2>
           <p className="text-base">{"Hey, I'm Matthew!"}</p>
