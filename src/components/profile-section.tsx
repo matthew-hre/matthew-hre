@@ -14,20 +14,26 @@ import { FaInstagram as Instagram } from "react-icons/fa";
 import { FaLinkedin as Linkedin } from "react-icons/fa";
 import Navbar from "@/components/navbar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { debounce } from "lodash";
 
 export default function ProfileSection() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
+    const observerCallback = debounce(
+      ([entry]: IntersectionObserverEntry[]) => {
         const headerHeight = headerRef.current?.offsetHeight || 0;
-        const threshold = headerHeight - 96; // this just feels right
+        const threshold = headerHeight - 96;
         setIsNavbarVisible(entry.boundingClientRect.top <= -threshold);
       },
-      { rootMargin: "-96px" }
+      50
     );
+
+    const observer = new IntersectionObserver(observerCallback, {
+      rootMargin: "-96px",
+      threshold: [0, 1],
+    });
 
     const currentHeaderRef = headerRef.current;
     if (currentHeaderRef) {
@@ -35,6 +41,7 @@ export default function ProfileSection() {
     }
 
     return () => {
+      observerCallback.cancel();
       if (currentHeaderRef) {
         observer.unobserve(currentHeaderRef);
       }
