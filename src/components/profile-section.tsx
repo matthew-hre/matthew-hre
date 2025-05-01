@@ -17,35 +17,34 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function ProfileSection() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
-  const profilePictureRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsNavbarVisible(!entry.isIntersecting);
+        const headerHeight = headerRef.current?.offsetHeight || 0;
+        const threshold = headerHeight - 96; // this just feels right
+        setIsNavbarVisible(entry.boundingClientRect.top <= -threshold);
       },
-      { rootMargin: "96px 0px 0px 0px" }
+      { rootMargin: "-96px" }
     );
 
-    if (profilePictureRef.current) {
-      observer.observe(profilePictureRef.current);
+    const currentHeaderRef = headerRef.current;
+    if (currentHeaderRef) {
+      observer.observe(currentHeaderRef);
     }
 
     return () => {
-      if (profilePictureRef.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        observer.unobserve(profilePictureRef.current);
+      if (currentHeaderRef) {
+        observer.unobserve(currentHeaderRef);
       }
     };
   }, []);
 
   return (
     <>
-      <main className="mx-auto min-h-screen max-w-[640px] px-4 pt-24 pb-10 sm:pt-40">
-        <Header
-          profilePictureRef={profilePictureRef}
-          isVisible={isNavbarVisible}
-        />
+      <main className="mx-auto min-h-screen max-w-[640px] px-4 pt-8 pb-10 sm:pt-40">
+        <Header headerRef={headerRef} isVisible={isNavbarVisible} />
         <Projects />
       </main>
       <Navbar isVisible={isNavbarVisible} />
@@ -54,14 +53,15 @@ export default function ProfileSection() {
 }
 
 function Header({
-  profilePictureRef,
+  headerRef,
   isVisible,
 }: {
-  profilePictureRef: React.RefObject<HTMLDivElement | null>;
+  headerRef: React.RefObject<HTMLDivElement | null>;
   isVisible: boolean;
 }) {
   return (
     <div
+      ref={headerRef} // Attach ref to the entire header
       className={`flex flex-col items-start text-xl transition duration-300 ${
         isVisible ? "opacity-0" : "opacity-100"
       }`}
@@ -69,10 +69,7 @@ function Header({
       <div className="flex flex-col gap-4 px-4">
         <div className="flex w-full flex-col-reverse items-start justify-between gap-7 pb-5 sm:flex-row sm:gap-0">
           <div className="flex items-center space-x-4">
-            <div
-              ref={profilePictureRef} // Attach ref to the profile picture container
-              className="rounded-full bg-gradient-to-tl from-background/60 to-emerald-400/60 shadow-lg p-[3px] ring-[5px] ring-emerald-700/10"
-            >
+            <div className="rounded-full bg-gradient-to-tl from-background/60 to-emerald-400/60 shadow-lg p-[3px] ring-[5px] ring-emerald-700/10">
               <div className="rounded-full p-px h-24 w-24">
                 <Image
                   className="rounded-full filter"
