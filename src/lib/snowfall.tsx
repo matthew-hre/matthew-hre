@@ -19,6 +19,10 @@ const SnowfallContext = createContext<SnowfallContextProps | undefined>(
 
 const REDUCE_QUERY = "(prefers-reduced-motion: reduce)";
 
+const isMobileDevice = () => {
+  return /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth <= 768;
+};
+
 export const SnowfallProvider = ({ children }: { children: ReactNode }) => {
   const [enabled, setEnabledRaw] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -30,7 +34,7 @@ export const SnowfallProvider = ({ children }: { children: ReactNode }) => {
     const mql = window.matchMedia(REDUCE_QUERY);
     const prefersReduced = mql.matches;
 
-    let initial = !prefersReduced;
+    let initial = !prefersReduced && !isMobileDevice();
     try {
       const saved = localStorage.getItem("snowfall-enabled");
       if (saved !== null) {
