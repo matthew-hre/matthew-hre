@@ -69,9 +69,8 @@ function Header({
   return (
     <div
       ref={headerRef} // Attach ref to the entire header
-      className={`flex flex-col items-start text-xl transition duration-300 ${
-        isVisible ? "opacity-0" : "opacity-100"
-      }`}
+      className={`flex flex-col items-start text-xl transition duration-300 ${isVisible ? "opacity-0" : "opacity-100"
+        }`}
     >
       <div className="flex flex-col gap-4 px-4">
         <div className="flex w-full flex-col-reverse items-start justify-between gap-7 pb-5 sm:flex-row sm:gap-0">
@@ -199,6 +198,25 @@ function Projects() {
     <section className="mt-10 px-4">
       <h2 className="text-xl">{"Things I've made"}</h2>
       <div className="mt-5 grid grid-cols-1 gap-2">
+        <ProjectCard
+          title="matt-init"
+          description="A CLI tool for scaffolding Next.js projects the way I like 'em."
+          githubUrl="https://github.com/matthew-hre/matt-init"
+          projectUrl="https://init.matthew-hre.com"
+          imageFallbackColor="bg-black/60"
+          techStack={[
+            "TypeScript",
+            "React",
+            "Next.js",
+            "Tailwind CSS",
+            "BetterAuth",
+            "Turso",
+            "LibSQL",
+            "Nix",
+            "NPM",
+            "Monorepo",
+          ]}
+        />
         <ProjectCard
           title="Peerfect"
           description="A peer-to-peer life skills exchange platform."
