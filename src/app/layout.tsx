@@ -6,6 +6,8 @@ import GrainOverlay from "@/components/grain-overlay";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import SnowfallBackground from "@/components/snowfall-background";
 import { SnowfallProvider } from "@/lib/snowfall";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const satoshi = localFont({
   src: "../Satoshi-Variable.ttf",
@@ -48,6 +50,8 @@ export default function RootLayout({
             {children}
           </TooltipProvider>
         </SnowfallProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
