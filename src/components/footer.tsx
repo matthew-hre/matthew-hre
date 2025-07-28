@@ -1,7 +1,7 @@
 import { getCommitData } from "@/lib/getCommitData";
 import { GitBranch } from "lucide-react";
 import Link from "next/link";
-import SpotifyPresence from "./spotify-presence";
+import MusicPresence from "./music-presence";
 import SnowToggle from "./snow-toggle";
 
 export default async function Footer() {
@@ -11,7 +11,7 @@ export default async function Footer() {
     <footer className="mt-10 mx-auto max-w-[640px] px-4 pb-16">
       <div className="my-5 border-b border-emerald-100/20"></div>
       <div className="flex flex-col flex-wrap items-center gap-10 py-5 px-4">
-        <SpotifyPresence />
+        <MusicPresence />
         <div className="grid w-full grid-flow-col-dense grid-cols-2 items-start gap-4">
           <div className="flex flex-col items-start gap-4">
             <Link
