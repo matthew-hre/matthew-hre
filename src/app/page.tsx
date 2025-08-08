@@ -1,11 +1,15 @@
-import ProfileSection from "@/components/profile-section";
-import Footer from "@/components/footer";
+import Footer from '@/components/footer'
+import ProfileSection from '@/components/profile-section'
+import { content } from '@/lib/cms'
 
-export default function Home() {
+export default async function Home() {
+  const profile = await content.static.profile.get()
+  const projects = await content.collections.projects.getAll()
+
   return (
     <>
-      <ProfileSection />
+      <ProfileSection profile={profile} projects={projects} />
       <Footer />
     </>
-  );
-}
+  )
+} 

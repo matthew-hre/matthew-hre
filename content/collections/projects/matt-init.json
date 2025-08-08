@@ -1,0 +1,20 @@
+{
+    "name": "matt-init",
+    "slug": "matt-init",
+    "description": "A CLI tool for scaffolding Next.js projects the way I like 'em.",
+    "tags": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Tailwind CSS",
+        "BetterAuth",
+        "Turso",
+        "LibSQL",
+        "Nix",
+        "NPM",
+        "Monorepo"
+    ],
+    "url": "https://init.matthew-hre.com",
+    "github": "https://github.com/matthew-hre/matt-init",
+    "fallbackColor": "bg-black/60"
+}

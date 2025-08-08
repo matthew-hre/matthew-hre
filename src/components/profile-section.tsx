@@ -16,9 +16,20 @@ import Navbar from "@/components/navbar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { debounce } from "lodash";
 
-export default function ProfileSection() {
+import type { Profile, Project } from '@/types/cms'
+
+export default function ProfileSection({
+  profile,
+  projects,
+}: {
+  profile: Profile
+  projects: Project[]
+}) {
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
+
+  console.log('Profile:', profile);
+  console.log('Projects:', projects);
 
   useEffect(() => {
     const observerCallback = debounce(
@@ -52,7 +63,7 @@ export default function ProfileSection() {
     <>
       <main className="mx-auto min-h-screen max-w-[640px] px-4 pt-8 pb-10 sm:pt-40">
         <Header headerRef={headerRef} isVisible={isNavbarVisible} />
-        <Projects />
+        <Projects projects={projects} />
       </main>
       <Navbar isVisible={isNavbarVisible} />
     </>
@@ -193,10 +204,23 @@ function Header({
   );
 }
 
-function Projects() {
+function Projects({ projects }: { projects: Project[] }) {
   return (
     <section className="mt-10 px-4">
       <h2 className="text-xl">{"Things I've made"}</h2>
+      <div className="mt-5 grid grid-cols-1 gap-2">
+        {projects.map((project: Project) => (
+          <ProjectCard
+            key={project.slug}
+            title={project.name}
+            description={project.description}
+            githubUrl={project.github}
+            projectUrl={project.url}
+            imageFallbackColor={project.fallbackColor}
+            techStack={project.tags}
+          />
+        ))}
+      </div>
       <div className="mt-5 grid grid-cols-1 gap-2">
         <ProjectCard
           title="matt-init"
