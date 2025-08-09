@@ -1,6 +1,5 @@
 {
     "name": "Hunchifier",
-    "slug": "hunchifier",
     "description": "A full-stack app for managing software project ideas.",
     "tags": [
         "TypeScript",

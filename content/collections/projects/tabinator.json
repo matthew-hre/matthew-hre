@@ -1,6 +1,5 @@
 {
     "name": "Tabinator",
-    "slug": "tabinator",
     "description": "A cross-platform desktop tab management utility.",
     "tags": [
         "TypeScript",

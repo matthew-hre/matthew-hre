@@ -32,7 +32,6 @@ export default defineCMSConfig({
             dir: 'projects',
             schema: {
                 name: 'string',
-                slug: 'string',
                 description: 'string',
                 tags: 'string[]',
                 url: 'string?',

@@ -1,6 +1,5 @@
 {
     "name": "Shelf'd",
-    "slug": "shelfd",
     "description": "An interactive bookshelf app to track your reading.",
     "tags": [
         "TypeScript",

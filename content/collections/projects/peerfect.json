@@ -1,6 +1,5 @@
 {
     "name": "Peerfect",
-    "slug": "Peerfect",
     "description": "A peer-to-peer life skills exchange platform.",
     "tags": [
         "TypeScript",

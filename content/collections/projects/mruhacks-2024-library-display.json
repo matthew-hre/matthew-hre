@@ -1,6 +1,5 @@
 {
     "name": "MRUHacks 2024 Library Display",
-    "slug": "mruhacks-2024-library-display",
     "description": "An interactive photo display for MRUHacks 2024.",
     "tags": [
         "TypeScript",

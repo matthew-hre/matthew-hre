@@ -28,9 +28,6 @@ export default function ProfileSection({
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
-  console.log('Profile:', profile);
-  console.log('Projects:', projects);
-
   useEffect(() => {
     const observerCallback = debounce(
       ([entry]: IntersectionObserverEntry[]) => {
@@ -228,7 +225,7 @@ function Projects({ projects }: { projects: Project[] }) {
       <div className="mt-5 grid grid-cols-1 gap-2">
         {sortedProjects.map((project: Project) => (
           <ProjectCard
-            key={project.slug}
+            key={project._slug}
             title={project.name}
             description={project.description}
             githubUrl={project.github}
