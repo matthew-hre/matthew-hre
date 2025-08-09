@@ -12,6 +12,17 @@ export default defineCMSConfig({
             schema: {
                 name: 'string',
                 username: 'string',
+                work: {
+                    title: 'string',
+                    location: 'string',
+                    locationUrl: 'string?'
+                },
+                location: 'string',
+                education: {
+                    school: 'string',
+                    schoolUrl: 'string?',
+                }
+
             },
         },
     },
@@ -27,6 +38,7 @@ export default defineCMSConfig({
                 url: 'string?',
                 github: 'string?',
                 fallbackColor: 'string?',
+                order: 'number',
             },
         },
     },

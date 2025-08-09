@@ -1,0 +1,13 @@
+{
+    "name": "Bait and Switch",
+    "slug": "bait-and-switch",
+    "description": "A game about using bugs as a form of ammunition.",
+    "tags": [
+        "GameMaker",
+        "GML",
+        "Aseprite"
+    ],
+    "url": "https://whycardboard.itch.io/bait-and-switch",
+    "fallbackColor": "bg-[#f5555d]/70",
+    "order": 5
+}

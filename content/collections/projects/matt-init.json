@@ -16,5 +16,6 @@
     ],
     "url": "https://init.matthew-hre.com",
     "github": "https://github.com/matthew-hre/matt-init",
-    "fallbackColor": "bg-black/60"
+    "fallbackColor": "bg-black/60",
+    "order": 0
 }

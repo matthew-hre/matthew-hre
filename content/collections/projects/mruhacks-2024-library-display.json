@@ -1,0 +1,15 @@
+{
+    "name": "MRUHacks 2024 Library Display",
+    "slug": "mruhacks-2024-library-display",
+    "description": "An interactive photo display for MRUHacks 2024.",
+    "tags": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Tailwind CSS",
+        "Google Drive"
+    ],
+    "github": "https://github.com/matthew-hre/mruhackslibrarydisplay",
+    "fallbackColor": "bg-cyan-400/70",
+    "order": 6
+}

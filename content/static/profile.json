@@ -1,4 +1,14 @@
 {
     "name": "Matthew Hrehirchuk",
-    "username": "@whycardboard"
+    "username": "@matthew_hre",
+    "work": {
+        "title": "Senior Data Quality Specialist",
+        "location": "Cohere",
+        "locationUrl": "https://cohere.com"
+    },
+    "location": "Calgary, AB",
+    "education": {
+        "school": "Mount Royal University",
+        "schoolUrl": "https://mtroyal.ca"
+    }
 }

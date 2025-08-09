@@ -1,0 +1,16 @@
+{
+    "name": "Hunchifier",
+    "slug": "hunchifier",
+    "description": "A full-stack app for managing software project ideas.",
+    "tags": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Tailwind CSS",
+        "Supabase",
+        "PostgreSQL"
+    ],
+    "github": "https://github.com/matthew-hre/hunchifier",
+    "fallbackColor": "bg-gray-100/30",
+    "order": 4
+}

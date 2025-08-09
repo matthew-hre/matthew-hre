@@ -62,7 +62,7 @@ export default function ProfileSection({
   return (
     <>
       <main className="mx-auto min-h-screen max-w-[640px] px-4 pt-8 pb-10 sm:pt-40">
-        <Header headerRef={headerRef} isVisible={isNavbarVisible} />
+        <Header headerRef={headerRef} isVisible={isNavbarVisible} profile={profile} />
         <Projects projects={projects} />
       </main>
       <Navbar isVisible={isNavbarVisible} />
@@ -73,9 +73,11 @@ export default function ProfileSection({
 function Header({
   headerRef,
   isVisible,
+  profile
 }: {
   headerRef: React.RefObject<HTMLDivElement | null>;
   isVisible: boolean;
+  profile: Profile;
 }) {
   return (
     <div
@@ -99,9 +101,9 @@ function Header({
               </div>
             </div>
             <h1 className="flex flex-col gap-1">
-              <span className="text-3xl font-bold">Matthew Hrehirchuk</span>
+              <span className="text-3xl font-bold">{profile.name}</span>
               <span className="font-mono text-base font-medium">
-                @matthew_hre
+                {profile.username}
               </span>
             </h1>
           </div>
@@ -172,31 +174,44 @@ function Header({
           <div className="flex items-center gap-1">
             <Briefcase className="h-4 w-4" />
             <span>
-              Senior Data Quality Specialist @{" "}
-              <a
-                href="https://cohere.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-400/80 hover:text-emerald-200 underline transition-all duration-300 ease-out"
-              >
-                Cohere
-              </a>
+              {profile.work.title} @{" "}
+              {
+                profile.work.locationUrl ? (
+
+                  <a
+                    href={profile.work.locationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-neutral-400/80 hover:text-emerald-200 underline transition-all duration-300 ease-out"
+                  >
+                    {profile.work.location}
+                  </a>
+                ) : (
+                  <span>{profile.work.location}</span>
+                )
+              }
             </span>
           </div>
           <div className="flex items-center gap-1">
             <MapPin className="h-4 w-4" />
-            <span>Calgary, AB</span>
+            <span>{profile.location}</span>
           </div>
           <div className="flex items-center gap-1">
             <GraduationCap className="h-4 w-4" />
-            <a
-              href="https://www.mtroyal.ca"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neutral-400/80 hover:text-emerald-200 underline transition-all duration-300 ease-out"
-            >
-              Mount Royal University
-            </a>
+            {
+              profile.education.schoolUrl ? (
+                <a
+                  href={profile.education.schoolUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neutral-400/80 hover:text-emerald-200 underline transition-all duration-300 ease-out"
+                >
+                  {profile.education.school}
+                </a>
+              ) : (
+                <span>{profile.education.school}</span>
+              )
+            }
           </div>
         </div>
       </div>
@@ -205,11 +220,13 @@ function Header({
 }
 
 function Projects({ projects }: { projects: Project[] }) {
+  const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
+
   return (
     <section className="mt-10 px-4">
       <h2 className="text-xl">{"Things I've made"}</h2>
       <div className="mt-5 grid grid-cols-1 gap-2">
-        {projects.map((project: Project) => (
+        {sortedProjects.map((project: Project) => (
           <ProjectCard
             key={project.slug}
             title={project.name}
@@ -220,108 +237,6 @@ function Projects({ projects }: { projects: Project[] }) {
             techStack={project.tags}
           />
         ))}
-      </div>
-      <div className="mt-5 grid grid-cols-1 gap-2">
-        <ProjectCard
-          title="matt-init"
-          description="A CLI tool for scaffolding Next.js projects the way I like 'em."
-          githubUrl="https://github.com/matthew-hre/matt-init"
-          projectUrl="https://init.matthew-hre.com"
-          imageFallbackColor="bg-black/60"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "BetterAuth",
-            "Turso",
-            "LibSQL",
-            "Nix",
-            "NPM",
-            "Monorepo",
-          ]}
-        />
-        <ProjectCard
-          title="Peerfect"
-          description="A peer-to-peer life skills exchange platform."
-          githubUrl="https://github.com/burtonjong/peerfect"
-          imageFallbackColor="bg-blue-600/60"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Supabase",
-            "WebSockets",
-            "PostgreSQL",
-            "Nix",
-          ]}
-        />
-        <ProjectCard
-          title="Shelf'd"
-          description="An interactive bookshelf app to track your reading."
-          githubUrl="https://github.com/matthew-hre/nwHacks2025"
-          imageFallbackColor="bg-red-600/60"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Supabase",
-            "PostgreSQL",
-            "Nix",
-          ]}
-        />
-        <ProjectCard
-          title="Tabinator"
-          description="A cross-platform desktop tab management utility."
-          githubUrl="https://github.com/matthew-hre/HackTheNorth2024"
-          imageFallbackColor="bg-purple-600/60"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Tauri",
-            "Rust",
-            "PowerShell",
-            "Swift",
-            "ConvexDB",
-          ]}
-        />
-        <ProjectCard
-          title="Hunchifier"
-          description="A full-stack app for managing software project ideas."
-          githubUrl="https://github.com/matthew-hre/hunchifier"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Supabase",
-            "PostgreSQL",
-          ]}
-        />
-        <ProjectCard
-          title="Bait and Switch"
-          description="A game about using bugs as a form of ammunition."
-          projectUrl="https://whycardboard.itch.io/bait-and-switch"
-          imageFallbackColor="bg-[#f5555d]/70"
-          techStack={["GameMaker", "GML", "Aseprite"]}
-        />
-        <ProjectCard
-          title="MRUHacks 2024 Library Display"
-          description="An interactive photo display for MRUHacks 2024."
-          githubUrl="https://github.com/matthew-hre/mruhackslibrarydisplay"
-          imageFallbackColor="bg-cyan-400/70"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Google Drive",
-          ]}
-        />
       </div>
     </section>
   );

@@ -1,0 +1,19 @@
+{
+    "name": "Tabinator",
+    "slug": "tabinator",
+    "description": "A cross-platform desktop tab management utility.",
+    "tags": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Tailwind CSS",
+        "Tauri",
+        "Rust",
+        "PowerShell",
+        "Swift",
+        "ConvexDB"
+    ],
+    "github": "https://github.com/matthew-hre/HackTheNorth2024",
+    "fallbackColor": "bg-purple-600/60",
+    "order": 3
+}

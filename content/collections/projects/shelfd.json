@@ -1,0 +1,17 @@
+{
+    "name": "Shelf'd",
+    "slug": "shelfd",
+    "description": "An interactive bookshelf app to track your reading.",
+    "tags": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Tailwind CSS",
+        "Supabase",
+        "PostgreSQL",
+        "Nix"
+    ],
+    "github": "https://github.com/matthew-hre/nwHacks2025",
+    "fallbackColor": "bg-red-600/60",
+    "order": 2
+}
