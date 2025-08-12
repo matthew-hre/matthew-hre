@@ -79,94 +79,70 @@ export default function MusicPresence() {
 
   return (
     <a
-      onClick={() => setShowInfo(!showInfo)}
-      className={`transition-all hover:cursor-pointer mr-auto ${showInfo
-        ? "h-28 pt-4"
-        : "h-6 pt-1 group hover:underline hover:text-emerald-200"
-        }`}
+      onClick={() => setShowInfo((s) => !s)}
+      aria-expanded={showInfo}
+      className={`group mr-auto cursor-pointer transition-[height,padding]
+              ${showInfo ? "h-28 pt-4" : "h-6 pt-1 hover:underline hover:text-emerald-200"}`}
     >
-      <div className="text-muted-foreground text-md font-inter flex flex-row">
-        {isNowPlaying ? (
-          <div
-            className={`relative origin-top-left transition-all ease-in-out ${showInfo
-              ? "w-24 h-24 min-w-24 min-h-24"
-              : "w-6 h-6 min-w-6 min-h-6"
-              }`}
-          >
-            <Disc3
-              className={`animate-spin-slow group-hover:text-emerald-200 transition-all duration-300 ease-out ${showInfo ? "hidden" : ""
-                }`}
-            />
-            {albumArtUrl && (
-              /*eslint-disable-next-line @next/next/no-img-element*/
-              <img
-                src={albumArtUrl}
-                alt="Album art"
-                className={`animate-spin-slow absolute top-0 left-0 w-full h-full rounded-full transition-opacity ${showInfo ? "opacity-100" : "opacity-0"
-                  }`}
-              />
-            )}
-            <div
-              className={`${showInfo ? "opacity-100" : "opacity-0"
-                } w-2 h-2 absolute top-[calc(50%-4px)] left-[calc(50%-4px)] bg-background rounded-full`}
-            ></div>
-          </div>
-        ) : (
-          <div
-            className={`relative origin-top-left transition-all ease-in-out ${showInfo
-              ? "w-24 h-24 min-w-24 min-h-24"
-              : "w-6 h-6 min-w-6 min-h-6"
-              }`}
-          >
-            <Disc
-              className={`ease-in-out origin-top-left group-hover:text-emerald-200 transition-all duration-300 ${showInfo ? "scale-[4]" : "scale-100"
-                } transition-transform`}
-            />
-            {albumArtUrl && (
-              /*eslint-disable-next-line @next/next/no-img-element*/
-              <img
-                src={albumArtUrl}
-                alt="Album art"
-                className={`absolute top-0 left-0 w-full h-full rounded-full transition-opacity ${showInfo ? "opacity-100" : "opacity-0"
-                  }`}
-              />
-            )}
-            <div
-              className={`${showInfo ? "opacity-100" : "opacity-0"
-                } w-2 h-2 absolute top-[calc(50%-4px)] left-[calc(50%-4px)] bg-background rounded-full`}
-            ></div>
-          </div>
-        )}
+      <div className="text-muted-foreground text-md font-inter flex flex-row items-start">
         <div
-          className={`flex flex-col ml-2 transition-all ${showInfo ? "ml-4 space-y-1 h-24 justify-center" : ""
-            }`}
+          className={`relative origin-top-left aspect-square transition-[width,height,transform] ease-out
+                  ${showInfo ? "w-24 h-24" : "w-6 h-6"}`}
         >
+          <span
+            className={`absolute inset-0 grid place-items-center [backface-visibility:hidden]
+                    transition-opacity duration-300
+                    ${albumArtUrl && showInfo ? "opacity-0" : "opacity-100"}`}
+            aria-hidden
+          >
+            <span className={`${isNowPlaying ? "animate-spin-slow" : ""} will-change-transform`}>
+              {isNowPlaying ? <Disc3 className="w-full h-full" /> : <Disc className="w-full h-full" />}
+            </span>
+          </span>
+
+          {albumArtUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={albumArtUrl}
+              alt="Album art"
+              draggable={false}
+              className={`absolute inset-0 w-full h-full rounded-full object-cover
+                      transition-opacity duration-300 ease-out
+                      ${showInfo ? "opacity-100" : "opacity-0"}
+                      ${isNowPlaying ? "animate-spin-slow" : ""}`}
+            />
+          )}
+
+          <span
+            className={`absolute top-1/2 left-1/2 -mt-1 -ml-1 w-2 h-2 rounded-full bg-background
+                    transition-opacity duration-300
+                    ${showInfo ? "opacity-100" : "opacity-0"}`}
+            aria-hidden
+          />
+        </div>
+
+        <div className={`flex flex-col ml-2 transition-all ${showInfo ? "ml-4 space-y-1 h-24 justify-center" : ""}`}>
           <span className={`${showInfo ? "block text-xs" : "hidden"}`}>
             {isNowPlaying ? "Now Playing" : "Last Played"}
           </span>
           <span
             className={`${showInfo
               ? "text-foreground font-semibold"
-              : "text-muted-foreground group-hover:text-emerald-200 transition-all duration-300 ease-out"
-              }`}
+              : "text-muted-foreground group-hover:text-emerald-200 transition-colors duration-300 ease-out"}`}
           >
             {clampSongTitle(song)}
-            <span className={`${showInfo ? "hidden" : "inline"}`}>
-              {" "}
-              - {artist}
-            </span>
+            <span className={`${showInfo ? "hidden" : "inline"}`}> — {artist}</span>
           </span>
           <span className={`${showInfo ? "block text-sm" : "hidden"}`}>
-            <span className="font-semibold text-inherit">By </span>
-            {artist}
+            <span className="font-semibold">By </span>{artist}
           </span>
           <span className={`${showInfo ? "block text-sm" : "hidden"}`}>
-            <span className="font-semibold text-inherit">On </span>
-            {album}
+            <span className="font-semibold">On </span>{album}
           </span>
         </div>
       </div>
     </a>
+
   );
 }
 
