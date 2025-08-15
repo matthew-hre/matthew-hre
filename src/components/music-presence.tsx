@@ -82,7 +82,7 @@ export default function MusicPresence() {
       onClick={() => setShowInfo((s) => !s)}
       aria-expanded={showInfo}
       className={`group mr-auto cursor-pointer transition-[height,padding]
-              ${showInfo ? "h-28 pt-4" : "h-6 pt-1 hover:underline hover:text-emerald-200"}`}
+              ${showInfo ? "h-28 pt-4" : "h-6 pt-1 hover:underline hover:text-gray-200"}`}
     >
       <div className="text-muted-foreground text-md font-inter flex flex-row items-start">
         <div
@@ -128,7 +128,7 @@ export default function MusicPresence() {
           <span
             className={`${showInfo
               ? "text-foreground font-semibold"
-              : "text-muted-foreground group-hover:text-emerald-200 transition-colors duration-300 ease-out"}`}
+              : "text-muted-foreground group-hover:text-gray-200 transition-colors duration-300 ease-out"}`}
           >
             {clampSongTitle(song)}
             <span className={`${showInfo ? "hidden" : "inline"}`}> — {artist}</span>
