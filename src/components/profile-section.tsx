@@ -15,6 +15,7 @@ import { FaLinkedin as Linkedin } from "react-icons/fa";
 import Navbar from "@/components/navbar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { debounce } from "lodash";
+import Link from "./link";
 
 export default function ProfileSection() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
@@ -95,49 +96,33 @@ function Header({
             </h1>
           </div>
           <div className="flex items-center space-x-4 self-end text-sm font-bold sm:-mt-16 sm:self-auto">
-            <a
-              className="group flex w-fit items-center gap-2 text-sm"
+            <Link
               href="/about"
+              size="sm"
+              icon={<FileText className="bg-gray-100/30 text-gray-100 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />}
             >
-              <FileText className="bg-gray-100/30 text-gray-100 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />
-
               <span className="transition-all text-gray-100 duration-300 ease-out group-hover:text-gray-200">
                 About
               </span>
-            </a>
-            <a
-              className="group flex w-fit items-center gap-2 text-sm"
-              href="https://github.com/matthew-hre"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            </Link>
+            <Link href="https://github.com/matthew-hre" variant="icon" size="sm">
               <Github
                 size={32}
                 className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
-            </a>
-            <a
-              className="group flex w-fit items-center gap-2 text-sm"
-              href="https://linkedin.com/in/matthew-hre/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            </Link>
+            <Link href="https://linkedin.com/in/matthew-hre/" variant="icon" size="sm">
               <Linkedin
                 size={32}
                 className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
-            </a>
-            <a
-              className="group flex w-fit items-center gap-2 text-sm"
-              href="https://instagram.com/matthew_hre/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            </Link>
+            <Link href="https://instagram.com/matthew_hre/" variant="icon" size="sm">
               <Instagram
                 size={32}
                 className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
-            </a>
+            </Link>
           </div>
         </div>
         <p className="text-base">
@@ -325,11 +310,11 @@ function ProjectCard({
   return (
     <div className="relative rounded-lg border-[1px] border-none bg-white/5 p-4 transition-all duration-500 ease-out hover:bg-white/10">
       <div className="flex flex-col space-y-3">
-        <a
-          className="group flex w-fit items-center gap-2 text-lg font-semibold"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
           href={projectUrl}
+          variant="project"
+          size="lg"
+          className="group flex w-fit items-center gap-2"
         >
           {imageUrl ? (
             <div className="relative h-8 w-8">
@@ -349,17 +334,16 @@ function ProjectCard({
           {projectUrl && (
             <SquareArrowOutUpRight className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />
           )}
-        </a>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group absolute top-4 right-4 rounded-lg px-2 py-1"
+        </Link>
+        <Link
           href={githubUrl}
+          variant="icon"
+          className="group absolute top-4 right-4 rounded-lg px-2 py-1"
         >
           {githubUrl && (
             <Github className="fill-gray-100/30 transition-all duration-300 ease-out group-hover:fill-white w-6 h-6" />
           )}
-        </a>
+        </Link>
       </div>
       <p className="text-base">{description}</p>
       <div className="flex flex-wrap items-center">

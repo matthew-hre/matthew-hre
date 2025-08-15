@@ -1,7 +1,7 @@
 import { getCommitData } from "@/lib/getCommitData";
 import { GitBranch } from "lucide-react";
-import Link from "next/link";
 import MusicPresence from "./music-presence";
+import Link from "./link";
 
 export default async function Footer() {
   const commitData = await getCommitData();
@@ -13,75 +13,42 @@ export default async function Footer() {
         <MusicPresence />
         <div className="grid w-full grid-flow-col-dense grid-cols-2 items-start gap-4">
           <div className="flex flex-col items-start gap-4">
-            <Link
-              className="group flex w-fit items-center gap-2 text-base hover:underline transition-all duration-300 ease-out hover:text-gray-200"
-              href="/"
-            >
+            <Link href="/">
               Home
             </Link>
-            <Link
-              className="group flex w-fit items-center gap-2 text-base hover:underline transition-all duration-300 ease-out hover:text-gray-200"
-              href="/about"
-            >
+            <Link href="/about">
               About
             </Link>
           </div>
           <div className="flex flex-col items-start gap-4">
-            <a
-              className="group flex w-fit items-center gap-2 text-base hover:underline transition-all duration-300 ease-out hover:text-gray-200"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://github.com/matthew-hre"
-            >
+            <Link href="https://github.com/matthew-hre">
               GitHub
-            </a>
-            <a
-              className="group flex w-fit items-center gap-2 text-base hover:underline transition-all duration-300 ease-out hover:text-gray-200"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.linkedin.com/in/matthew-hre/"
-            >
+            </Link>
+            <Link href="https://www.linkedin.com/in/matthew-hre/">
               LinkedIn
-            </a>
-            <a
-              className="group flex w-fit items-center gap-2 text-base hover:underline transition-all duration-300 ease-out hover:text-gray-200"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.instagram.com/matthew_hre/"
-            >
+            </Link>
+            <Link href="https://www.instagram.com/matthew_hre/">
               Instagram
-            </a>
-            <a
-              className="group flex w-fit items-center gap-2 text-base hover:underline transition-all duration-300 ease-out hover:text-gray-200"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="mailto:mhreh594@mtroyal.ca"
-            >
+            </Link>
+            <Link href="mailto:mhreh594@mtroyal.ca">
               Email
-            </a>
+            </Link>
           </div>
           <div className="flex flex-col items-start gap-4">
-            <a
-              className="group flex w-fit items-center gap-2 text-base"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
               href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+              variant="muted"
             >
-              <span className="text-muted-foreground group-hover:underline transition-all duration-300 ease-out group-hover:text-gray-200">
-                CC BY-SA 4.0
-              </span>
-            </a>
-            <a
-              className="group flex w-fit items-center gap-2 text-base"
-              target="_blank"
-              rel="noopener noreferrer"
+              CC BY-SA 4.0
+            </Link>
+            <Link
               href={`https://github.com/matthew-hre/matthew-hre/commit/${commitData?.sha}`}
+              variant="muted"
+              mono
+              icon={<GitBranch className="h-4 w-4 text-muted-foreground group-hover:text-gray-200 transition-all duration-300 ease-out" />}
             >
-              <GitBranch className="h-4 w-4 text-muted-foreground group-hover:text-gray-200 transition-all duration-300 ease-out" />
-              <span className="font-mono text-muted-foreground group-hover:underline transition-all duration-300 ease-out group-hover:text-gray-200">
-                {commitData?.sha.slice(0, 7)}
-              </span>
-            </a>
+              {commitData?.sha.slice(0, 7)}
+            </Link>
           </div>
         </div>
       </div>
