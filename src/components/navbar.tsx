@@ -1,9 +1,9 @@
-import Link from "next/link";
 import Image from "next/image";
 import { FileText } from "lucide-react";
 import { FaInstagram as Instagram } from "react-icons/fa";
 import { FaGithub as Github } from "react-icons/fa";
 import { FaLinkedin as Linkedin } from "react-icons/fa";
+import Link from "./link";
 
 export default function Navbar({ isVisible }: { isVisible: boolean }) {
   return (
@@ -33,56 +33,36 @@ export default function Navbar({ isVisible }: { isVisible: boolean }) {
             </Link>
           </div>
           <div className="flex items-center space-x-2 text-base font-semibold leading-none text-gray-100/90 sm:space-x-5">
-            <a
-              className="group flex w-fit items-center gap-2 text-sm"
+            <Link
               href="/about"
+              size="sm"
+              icon={<FileText className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />}
             >
-              <FileText className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />
-
               <span className="transition-all duration-300 ease-out group-hover:text-gray-200">
                 About
               </span>
-            </a>
-            <SocialLink href="https://github.com/matthew-hre">
+            </Link>
+            <Link href="https://github.com/matthew-hre" variant="icon">
               <Github
                 size={32}
                 className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
-            </SocialLink>
-            <SocialLink href="https://linkedin.com/in/matthew-hre/">
+            </Link>
+            <Link href="https://linkedin.com/in/matthew-hre/" variant="icon">
               <Linkedin
                 size={32}
                 className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
-            </SocialLink>
-            <SocialLink href="https://instagram.com/matthew_hre/">
+            </Link>
+            <Link href="https://instagram.com/matthew_hre/" variant="icon">
               <Instagram
                 size={32}
                 className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
-            </SocialLink>
+            </Link>
           </div>
         </div>
       </div>
     </nav>
-  );
-}
-
-function SocialLink({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <a
-      className="group flex w-fit items-center gap-2 text-base transition-all duration-300 ease-out hover:text-gray-200"
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {children}
-    </a>
   );
 }

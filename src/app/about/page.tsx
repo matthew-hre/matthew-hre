@@ -1,5 +1,6 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import Link from "@/components/link";
 
 export default function About() {
   return (
@@ -40,25 +41,21 @@ export default function About() {
           <ul className="list-disc list-inside space-y-2 ml-2">
             <li>
               {"Ted Chaing's "}
-              <a
-                className="text-base underline hover:text-gray-200 hover:underline transition-all duration-300 ease-out"
+              <Link
                 href="https://www.goodreads.com/book/show/18050243-stories-of-your-life-and-others"
-                target="_blank"
-                rel="noopener noreferrer"
+                variant="inline"
               >
                 Stories of Your Life and Others
-              </a>
+              </Link>
               , an incredible collection of stories.
             </li>
             <li>
-              <a
-                className="text-base underline hover:text-gray-200 hover:underline transition-all duration-300 ease-out"
+              <Link
                 href="https://store.steampowered.com/app/1569580/Blue_Prince/"
-                target="_blank"
-                rel="noopener noreferrer"
+                variant="inline"
               >
                 Blue Prince
-              </a>
+              </Link>
               {
                 ", one of the most interesting puzzle games I've played in a while."
               }
