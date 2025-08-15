@@ -2,7 +2,6 @@ import { getCommitData } from "@/lib/getCommitData";
 import { GitBranch } from "lucide-react";
 import Link from "next/link";
 import MusicPresence from "./music-presence";
-import SnowToggle from "./snow-toggle";
 
 export default async function Footer() {
   const commitData = await getCommitData();
@@ -62,7 +61,6 @@ export default async function Footer() {
             </a>
           </div>
           <div className="flex flex-col items-start gap-4">
-            <SnowToggle />
             <a
               className="group flex w-fit items-center gap-2 text-base"
               target="_blank"

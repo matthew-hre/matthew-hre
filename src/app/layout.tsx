@@ -4,8 +4,6 @@ import { Fira_Code } from "next/font/google";
 import "./globals.css";
 import GrainOverlay from "@/components/grain-overlay";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import SnowfallBackground from "@/components/snowfall-background";
-import { SnowfallProvider } from "@/lib/snowfall";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -43,13 +41,10 @@ export default function RootLayout({
       <body
         className={`${satoshi.variable} ${firaCode.variable} font-sans antialiased bg-muted`}
       >
-        <SnowfallProvider>
-          <SnowfallBackground />
-          <TooltipProvider>
-            <GrainOverlay />
-            {children}
-          </TooltipProvider>
-        </SnowfallProvider>
+        <TooltipProvider>
+          <GrainOverlay />
+          {children}
+        </TooltipProvider>
         <Analytics />
         <SpeedInsights />
       </body>
