@@ -19,7 +19,7 @@ export default function About() {
               "I'm currently a Senior Data Quality Specialist at Cohere, where I spend my days ranking and auditing data to improve our LLMs. When I'm not wired in, I'm spending my time playing board games, listening to music, and fleshing out my record collection."
             }
           </p>
-          <div className="my-5 border-b border-emerald-100/20"></div>
+          <div className="my-5 border-b border-gray-100/20"></div>
           <p>
             {
               "I've had some really cool opportunities to work with some amazing people in some pretty incredible roles. I was previously the co-founder and Executive Director of MRUHacks 2024, a 150+ attendee hackathon at Mount Royal University, sponsored by big names like GitHub and StackOverflow."
@@ -30,7 +30,7 @@ export default function About() {
               "I've also done my fair share of hackathon attending, managing to snag a win at CalgaryHacks 2023, as well as plenty of – what I think are – really cool submissions at events like HackUTD, Hack the North, and NWHacks."
             }
           </p>
-          <div className="my-5 border-b border-emerald-100/20"></div>
+          <div className="my-5 border-b border-gray-100/20"></div>
           <h2 className="text-xl font-bold mb-4 mt-8">{"Now?"}</h2>
           <p className="text-base">
             {
@@ -41,7 +41,7 @@ export default function About() {
             <li>
               {"Ted Chaing's "}
               <a
-                className="text-base underline hover:text-emerald-200 hover:underline transition-all duration-300 ease-out"
+                className="text-base underline hover:text-gray-200 hover:underline transition-all duration-300 ease-out"
                 href="https://www.goodreads.com/book/show/18050243-stories-of-your-life-and-others"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -52,7 +52,7 @@ export default function About() {
             </li>
             <li>
               <a
-                className="text-base underline hover:text-emerald-200 hover:underline transition-all duration-300 ease-out"
+                className="text-base underline hover:text-gray-200 hover:underline transition-all duration-300 ease-out"
                 href="https://store.steampowered.com/app/1569580/Blue_Prince/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -65,7 +65,7 @@ export default function About() {
             </li>
             <li>Always, always, collecting more records.</li>
           </ul>
-          <div className="my-5 border-b border-emerald-100/20"></div>
+          <div className="my-5 border-b border-gray-100/20"></div>
           <h2 className="text-xl font-bold mb-4 mt-8">
             {'What\'s "Maintenance Mode"?'}
           </h2>

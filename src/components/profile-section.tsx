@@ -99,9 +99,9 @@ function Header({
               className="group flex w-fit items-center gap-2 text-sm"
               href="/about"
             >
-              <FileText className="bg-gray-100/30 text-emerald-100 p-1 shadow-md rounded-md group-hover:scale-[1.2] group-hover:shadow-emerald-500/40 group-active:translate-y-[2px] transition-all duration-300 ease-out" />
+              <FileText className="bg-gray-100/30 text-gray-100 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />
 
-              <span className="transition-all text-emerald-100 duration-300 ease-out group-hover:text-emerald-200">
+              <span className="transition-all text-gray-100 duration-300 ease-out group-hover:text-gray-200">
                 About
               </span>
             </a>
@@ -113,7 +113,7 @@ function Header({
             >
               <Github
                 size={32}
-                className="bg-gray-100/30 p-1 text-emerald-100 shadow-md rounded-md group-hover:scale-[1.2] group-hover:shadow-emerald-500/40 group-active:translate-y-[2px] transition-all duration-300 ease-out"
+                className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </a>
             <a
@@ -124,7 +124,7 @@ function Header({
             >
               <Linkedin
                 size={32}
-                className="bg-gray-100/30 p-1 text-emerald-100 shadow-md rounded-md group-hover:scale-[1.2] group-hover:shadow-emerald-500/40 group-active:translate-y-[2px] transition-all duration-300 ease-out"
+                className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </a>
             <a
@@ -135,7 +135,7 @@ function Header({
             >
               <Instagram
                 size={32}
-                className="bg-gray-100/30 p-1 text-emerald-100 shadow-md rounded-md group-hover:scale-[1.2] group-hover:shadow-emerald-500/40 group-active:translate-y-[2px] transition-all duration-300 ease-out"
+                className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </a>
           </div>
@@ -166,7 +166,7 @@ function Header({
                 href="https://cohere.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-400/80 hover:text-emerald-200 underline transition-all duration-300 ease-out"
+                className="text-neutral-400/80 hover:text-gray-200 underline transition-all duration-300 ease-out"
               >
                 Cohere
               </a>
@@ -182,7 +182,7 @@ function Header({
               href="https://www.mtroyal.ca"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-400/80 hover:text-emerald-200 underline transition-all duration-300 ease-out"
+              className="text-neutral-400/80 hover:text-gray-200 underline transition-all duration-300 ease-out"
             >
               Mount Royal University
             </a>
@@ -347,7 +347,7 @@ function ProjectCard({
           )}
           <span>{title}</span>
           {projectUrl && (
-            <SquareArrowOutUpRight className="bg-emerald-100/30 p-1 shadow-md rounded-md group-hover:scale-[1.2] group-hover:shadow-emerald-500/40 group-active:translate-y-[2px] transition-all duration-300 ease-out" />
+            <SquareArrowOutUpRight className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />
           )}
         </a>
         <a
@@ -357,7 +357,7 @@ function ProjectCard({
           href={githubUrl}
         >
           {githubUrl && (
-            <Github className="fill-emerald-100/30 transition-all duration-300 ease-out group-hover:scale-[1.2] group-hover:fill-white w-6 h-6" />
+            <Github className="fill-gray-100/30 transition-all duration-300 ease-out group-hover:fill-white w-6 h-6" />
           )}
         </a>
       </div>
