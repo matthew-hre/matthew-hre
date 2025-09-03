@@ -13,12 +13,13 @@ import { FaGithub as Github } from "react-icons/fa";
 import { FaInstagram as Instagram } from "react-icons/fa";
 import { FaLinkedin as Linkedin } from "react-icons/fa";
 import Navbar from "@/components/navbar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { debounce } from "lodash";
 import Link from "./link";
+import DiscogsLibrary from "./discogs-library";
 
 export default function ProfileSection() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
+  const [vinylOpen, setVinylOpen] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,8 +53,13 @@ export default function ProfileSection() {
   return (
     <>
       <main className="mx-auto min-h-screen max-w-[640px] px-4 pt-8 pb-10 sm:pt-40">
-        <Header headerRef={headerRef} isVisible={isNavbarVisible} />
-        <Projects />
+        <Header
+          headerRef={headerRef}
+          isVisible={isNavbarVisible}
+          isVinylOpen={vinylOpen}
+          onToggleVinyl={() => setVinylOpen((s) => !s)}
+        />
+        <Projects vinylOpen={vinylOpen} />
       </main>
       <Navbar isVisible={isNavbarVisible} />
     </>
@@ -63,9 +69,13 @@ export default function ProfileSection() {
 function Header({
   headerRef,
   isVisible,
+  isVinylOpen,
+  onToggleVinyl,
 }: {
   headerRef: React.RefObject<HTMLDivElement | null>;
   isVisible: boolean;
+  isVinylOpen: boolean;
+  onToggleVinyl: () => void;
 }) {
   return (
     <div
@@ -132,14 +142,13 @@ function Header({
         <p className="text-base">
           Currently rebuilding his entire portfolio, including all his projects,
           from scratch. Has a wickedly cool (and slightly too big){" "}
-          <Tooltip>
-            <TooltipTrigger>
-              <span className="underline">vinyl collection</span>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              <p className="text-sm">Coming soon!</p>
-            </TooltipContent>
-          </Tooltip>
+          <button
+            onClick={onToggleVinyl}
+            className={`underline cursor-pointer ${isVinylOpen ? "font-bold" : ""}`}
+            aria-pressed={isVinylOpen}
+          >
+            vinyl collection
+          </button>
           .
         </p>
         <div className="flex flex-row flex-wrap items-center justify-start gap-5 border-y-[1px] border-gray-600/20 w-full py-3 text-sm font-semibold text-neutral-400/80 sm:justify-between sm:gap-3">
@@ -178,111 +187,117 @@ function Header({
   );
 }
 
-function Projects() {
+function Projects({ vinylOpen = false }: { vinylOpen?: boolean }) {
   return (
     <section className="mt-10 px-4">
-      <h2 className="text-xl">{"Things I've made"}</h2>
+      <h2 className="text-xl">{vinylOpen ? "Vinyl Collection" : "Things I've made"}</h2>
       <div className="mt-5 grid grid-cols-1 gap-2">
-        <ProjectCard
-          title="matt-init"
-          description="A CLI tool for scaffolding Next.js projects the way I like 'em."
-          githubUrl="https://github.com/matthew-hre/matt-init"
-          projectUrl="https://init.matthew-hre.com"
-          imageFallbackColor="bg-black/60"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "BetterAuth",
-            "Turso",
-            "LibSQL",
-            "Nix",
-            "NPM",
-            "Monorepo",
-          ]}
-        />
-        <ProjectCard
-          title="Peerfect"
-          description="A peer-to-peer life skills exchange platform."
-          githubUrl="https://github.com/burtonjong/peerfect"
-          imageFallbackColor="bg-blue-600/60"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Supabase",
-            "WebSockets",
-            "PostgreSQL",
-            "Nix",
-          ]}
-        />
-        <ProjectCard
-          title="Shelf'd"
-          description="An interactive bookshelf app to track your reading."
-          githubUrl="https://github.com/matthew-hre/nwHacks2025"
-          imageFallbackColor="bg-red-600/60"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Supabase",
-            "PostgreSQL",
-            "Nix",
-          ]}
-        />
-        <ProjectCard
-          title="Tabinator"
-          description="A cross-platform desktop tab management utility."
-          githubUrl="https://github.com/matthew-hre/HackTheNorth2024"
-          imageFallbackColor="bg-purple-600/60"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Tauri",
-            "Rust",
-            "PowerShell",
-            "Swift",
-            "ConvexDB",
-          ]}
-        />
-        <ProjectCard
-          title="Hunchifier"
-          description="A full-stack app for managing software project ideas."
-          githubUrl="https://github.com/matthew-hre/hunchifier"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Supabase",
-            "PostgreSQL",
-          ]}
-        />
-        <ProjectCard
-          title="Bait and Switch"
-          description="A game about using bugs as a form of ammunition."
-          projectUrl="https://whycardboard.itch.io/bait-and-switch"
-          imageFallbackColor="bg-[#f5555d]/70"
-          techStack={["GameMaker", "GML", "Aseprite"]}
-        />
-        <ProjectCard
-          title="MRUHacks 2024 Library Display"
-          description="An interactive photo display for MRUHacks 2024."
-          githubUrl="https://github.com/matthew-hre/mruhackslibrarydisplay"
-          imageFallbackColor="bg-cyan-400/70"
-          techStack={[
-            "TypeScript",
-            "React",
-            "Next.js",
-            "Tailwind CSS",
-            "Google Drive",
-          ]}
-        />
+        {vinylOpen ? (
+          <DiscogsLibrary />
+        ) : (
+          <>
+            <ProjectCard
+              title="matt-init"
+              description="A CLI tool for scaffolding Next.js projects the way I like 'em."
+              githubUrl="https://github.com/matthew-hre/matt-init"
+              projectUrl="https://init.matthew-hre.com"
+              imageFallbackColor="bg-black/60"
+              techStack={[
+                "TypeScript",
+                "React",
+                "Next.js",
+                "Tailwind CSS",
+                "BetterAuth",
+                "Turso",
+                "LibSQL",
+                "Nix",
+                "NPM",
+                "Monorepo",
+              ]}
+            />
+            <ProjectCard
+              title="Peerfect"
+              description="A peer-to-peer life skills exchange platform."
+              githubUrl="https://github.com/burtonjong/peerfect"
+              imageFallbackColor="bg-blue-600/60"
+              techStack={[
+                "TypeScript",
+                "React",
+                "Next.js",
+                "Tailwind CSS",
+                "Supabase",
+                "WebSockets",
+                "PostgreSQL",
+                "Nix",
+              ]}
+            />
+            <ProjectCard
+              title="Shelf'd"
+              description="An interactive bookshelf app to track your reading."
+              githubUrl="https://github.com/matthew-hre/nwHacks2025"
+              imageFallbackColor="bg-red-600/60"
+              techStack={[
+                "TypeScript",
+                "React",
+                "Next.js",
+                "Tailwind CSS",
+                "Supabase",
+                "PostgreSQL",
+                "Nix",
+              ]}
+            />
+            <ProjectCard
+              title="Tabinator"
+              description="A cross-platform desktop tab management utility."
+              githubUrl="https://github.com/matthew-hre/HackTheNorth2024"
+              imageFallbackColor="bg-purple-600/60"
+              techStack={[
+                "TypeScript",
+                "React",
+                "Next.js",
+                "Tailwind CSS",
+                "Tauri",
+                "Rust",
+                "PowerShell",
+                "Swift",
+                "ConvexDB",
+              ]}
+            />
+            <ProjectCard
+              title="Hunchifier"
+              description="A full-stack app for managing software project ideas."
+              githubUrl="https://github.com/matthew-hre/hunchifier"
+              techStack={[
+                "TypeScript",
+                "React",
+                "Next.js",
+                "Tailwind CSS",
+                "Supabase",
+                "PostgreSQL",
+              ]}
+            />
+            <ProjectCard
+              title="Bait and Switch"
+              description="A game about using bugs as a form of ammunition."
+              projectUrl="https://whycardboard.itch.io/bait-and-switch"
+              imageFallbackColor="bg-[#f5555d]/70"
+              techStack={["GameMaker", "GML", "Aseprite"]}
+            />
+            <ProjectCard
+              title="MRUHacks 2024 Library Display"
+              description="An interactive photo display for MRUHacks 2024."
+              githubUrl="https://github.com/matthew-hre/mruhackslibrarydisplay"
+              imageFallbackColor="bg-cyan-400/70"
+              techStack={[
+                "TypeScript",
+                "React",
+                "Next.js",
+                "Tailwind CSS",
+                "Google Drive",
+              ]}
+            />
+          </>
+        )}
       </div>
     </section>
   );
