@@ -1,13 +1,16 @@
 {
   mkShell,
   alejandra,
-  nodejs_22,
+  nodejs,
+  pnpm,
 }:
 mkShell {
   name = "matthew-hre.com";
 
   packages = [
-    nodejs_22
+    nodejs
+    pnpm
+
     alejandra
   ];
 }
