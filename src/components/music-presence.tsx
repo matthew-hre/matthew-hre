@@ -81,7 +81,7 @@ export default function MusicPresence() {
     <a
       onClick={() => setShowInfo((s) => !s)}
       aria-expanded={showInfo}
-      className={`group mr-auto cursor-pointer transition-[height,padding]
+      className={`group mr-auto cursor-pointer transition-[height,padding] text-base
               ${showInfo ? "h-28 pt-4" : "h-6 pt-1 hover:underline hover:text-gray-200"}`}
     >
       <div className="text-muted-foreground text-md font-inter flex flex-row items-start">

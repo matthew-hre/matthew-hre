@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { FileText } from "lucide-react";
 import { FaInstagram as Instagram } from "react-icons/fa";
 import { FaGithub as Github } from "react-icons/fa";
 import { FaLinkedin as Linkedin } from "react-icons/fa";
@@ -33,15 +32,6 @@ export default function Navbar({ isVisible }: { isVisible: boolean }) {
             </Link>
           </div>
           <div className="flex items-center space-x-2 text-base font-semibold leading-none text-gray-100/90 sm:space-x-5">
-            <Link
-              href="/about"
-              size="sm"
-              icon={<FileText className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />}
-            >
-              <span className="transition-all duration-300 ease-out group-hover:text-gray-200">
-                About
-              </span>
-            </Link>
             <Link href="https://github.com/matthew-hre" variant="icon">
               <Github
                 size={32}

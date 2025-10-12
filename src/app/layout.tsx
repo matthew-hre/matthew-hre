@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import { Fira_Code } from "next/font/google";
 import "./globals.css";
 import GrainOverlay from "@/components/grain-overlay";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -41,10 +40,8 @@ export default function RootLayout({
       <body
         className={`${satoshi.variable} ${firaCode.variable} font-sans antialiased bg-muted`}
       >
-        <TooltipProvider>
-          <GrainOverlay />
-          {children}
-        </TooltipProvider>
+        <GrainOverlay />
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>

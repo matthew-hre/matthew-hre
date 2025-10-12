@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import {
   Briefcase,
-  FileText,
   GraduationCap,
   MapPin,
   SquareArrowOutUpRight,
@@ -19,7 +18,8 @@ import DiscogsLibrary from "./discogs-library";
 
 export default function ProfileSection() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
-  const [vinylOpen, setVinylOpen] = useState(false);
+  type SectionState = "Projects" | "Writing" | "Vinyl";
+  const [section, setSection] = useState<SectionState>("Projects");
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,10 +56,11 @@ export default function ProfileSection() {
         <Header
           headerRef={headerRef}
           isVisible={isNavbarVisible}
-          isVinylOpen={vinylOpen}
-          onToggleVinyl={() => setVinylOpen((s) => !s)}
         />
-        <Projects vinylOpen={vinylOpen} />
+        <Projects
+          state={section}
+          onChange={(next) => setSection(next)}
+        />
       </main>
       <Navbar isVisible={isNavbarVisible} />
     </>
@@ -69,13 +70,9 @@ export default function ProfileSection() {
 function Header({
   headerRef,
   isVisible,
-  isVinylOpen,
-  onToggleVinyl,
 }: {
   headerRef: React.RefObject<HTMLDivElement | null>;
   isVisible: boolean;
-  isVinylOpen: boolean;
-  onToggleVinyl: () => void;
 }) {
   return (
     <div
@@ -99,22 +96,13 @@ function Header({
               </div>
             </div>
             <h1 className="flex flex-col gap-1">
-              <span className="text-3xl font-bold">Matthew Hrehirchuk</span>
+              <span className="text-3xl font-bold w-1/2">Matthew Hrehirchuk</span>
               <span className="font-mono text-base font-medium">
                 @matthew_hre
               </span>
             </h1>
           </div>
           <div className="flex items-center space-x-4 self-end text-sm font-bold sm:-mt-16 sm:self-auto">
-            <Link
-              href="/about"
-              size="sm"
-              icon={<FileText className="bg-gray-100/30 text-gray-100 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />}
-            >
-              <span className="transition-all text-gray-100 duration-300 ease-out group-hover:text-gray-200">
-                About
-              </span>
-            </Link>
             <Link href="https://github.com/matthew-hre" variant="icon" size="sm">
               <Github
                 size={32}
@@ -138,18 +126,6 @@ function Header({
         <p className="text-base">
           A web developer, graphic designer, and student. Makes plenty of games,
           a few helpful tools, and – at the moment – lots of studying resources.
-        </p>
-        <p className="text-base">
-          Currently rebuilding his entire portfolio, including all his projects,
-          from scratch. Has a wickedly cool (and slightly too big){" "}
-          <button
-            onClick={onToggleVinyl}
-            className={`underline cursor-pointer ${isVinylOpen ? "font-bold" : ""}`}
-            aria-pressed={isVinylOpen}
-          >
-            vinyl collection
-          </button>
-          .
         </p>
         <div className="flex flex-row flex-wrap items-center justify-start gap-5 border-y-[1px] border-gray-600/20 w-full py-3 text-sm font-semibold text-neutral-400/80 sm:justify-between sm:gap-3">
           <div className="flex items-center gap-1">
@@ -187,13 +163,53 @@ function Header({
   );
 }
 
-function Projects({ vinylOpen = false }: { vinylOpen?: boolean }) {
+function Projects({
+  state = "Projects",
+  onChange,
+}: {
+  state?: "Projects" | "Vinyl" | "Writing";
+  onChange?: (next: "Projects" | "Vinyl" | "Writing") => void;
+}) {
   return (
     <section className="mt-10 px-4">
-      <h2 className="text-xl">{vinylOpen ? "Vinyl Collection" : "Things I've made"}</h2>
+      <div className="flex items-center gap-2">
+        <h2 className="sr-only">Section</h2>
+        <div role="tablist" aria-label="Content sections" className="inline-flex w-full gap-1 rounded-lg bg-white/5 p-1 text-lg font-semibold">
+          {(["Projects", "Vinyl", "Writing"] as const).map((key) => {
+            const selected = state === key;
+            const isDisabled = key === "Writing";
+            return (
+              <button
+                key={key}
+                role="tab"
+                aria-selected={selected && !isDisabled}
+                aria-disabled={isDisabled || undefined}
+                disabled={isDisabled || undefined}
+                tabIndex={isDisabled ? -1 : 0}
+                onClick={!isDisabled ? () => onChange?.(key) : undefined}
+                className={
+                  `rounded-md px-4 py-1 flex-1 transition-colors duration-200 focus:outline-none ` +
+                  (isDisabled
+                    ? "cursor-not-allowed text-neutral-500/70"
+                    : selected
+                      ? "bg-white/20 text-white"
+                      : "text-neutral-300 hover:bg-white/10")
+                }
+                title={isDisabled ? "Writing coming soon" : undefined}
+              >
+                {key}
+              </button>
+            );
+          })}
+        </div>
+      </div>
       <div className="mt-5 grid grid-cols-1 gap-2">
-        {vinylOpen ? (
+        {state === "Vinyl" ? (
           <DiscogsLibrary />
+        ) : state === "Writing" ? (
+          <p className="text-base">
+            Not yet!
+          </p>
         ) : (
           <>
             <ProjectCard
