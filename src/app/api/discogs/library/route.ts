@@ -6,8 +6,8 @@ const cache = new Map<string, DiscogResponse>();
 let lastRequestTime = 0;
 const minRequestInterval = 3000;
 
-async function getLibraryWithRetry(page = 1, retries = 3) {
-    const cacheKey = `discogs:library:${page}`;
+async function getLibraryWithRetry(page = 1, sort = 'artist', sortOrder = 'asc', retries = 3) {
+    const cacheKey = `discogs:library:${page}:${sort}:${sortOrder}`;
 
     if (cache.has(cacheKey)) {
         return cache.get(cacheKey) as DiscogResponse;
@@ -24,7 +24,7 @@ async function getLibraryWithRetry(page = 1, retries = 3) {
             lastRequestTime = Date.now();
 
             const response = await fetch(
-                `https://api.discogs.com/users/matthew_hre/collection/folders/0/releases?token=${process.env.DISCOGS_PERSONAL_ACCESS_TOKEN}&per_page=20&sort=artist&page=${page}`,
+                `https://api.discogs.com/users/matthew_hre/collection/folders/0/releases?token=${process.env.DISCOGS_PERSONAL_ACCESS_TOKEN}&per_page=20&sort=${sort}&sort_order=${sortOrder}&page=${page}`,
                 {
                     headers: {
                         'User-Agent': 'matthew-hre/1.0 +https://matthew-hre.com',
@@ -68,8 +68,10 @@ export async function GET(request: Request) {
         const url = new URL(request.url);
         const pageParam = url.searchParams.get('page') || '1';
         const page = Number(pageParam) || 1;
+        const sort = url.searchParams.get('sort') || 'artist';
+        const sortOrder = url.searchParams.get('sort_order') || 'asc';
 
-        const data = await getLibraryWithRetry(page);
+        const data = await getLibraryWithRetry(page, sort, sortOrder);
 
         return NextResponse.json(data);
     } catch (err: unknown) {

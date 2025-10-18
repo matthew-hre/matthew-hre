@@ -6,11 +6,30 @@ import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import type { DiscogResponse, Release } from "@/types/discog";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function fetchLibraryPage(page = 1, signal?: AbortSignal): Promise<DiscogResponse> {
-    const res = await fetch(`/api/discogs/library?page=${page}`, { signal });
+type SortOption = 'title-asc' | 'title-desc' | 'artist-asc' | 'artist-desc' | 'added';
+
+async function fetchLibraryPage(page = 1, sortOption: SortOption = 'added', signal?: AbortSignal): Promise<DiscogResponse> {
+    // Map our sort options to Discogs API parameters
+    const sortMapping: Record<SortOption, { sort: string; sort_order: string }> = {
+        'title-asc': { sort: 'title', sort_order: 'asc' },
+        'title-desc': { sort: 'title', sort_order: 'desc' },
+        'artist-asc': { sort: 'artist', sort_order: 'asc' },
+        'artist-desc': { sort: 'artist', sort_order: 'desc' },
+        'added': { sort: 'added', sort_order: 'desc' },
+    };
+
+    const { sort, sort_order } = sortMapping[sortOption];
+    const res = await fetch(`/api/discogs/library?page=${page}&sort=${sort}&sort_order=${sort_order}`, { signal });
     if (!res.ok) throw new Error(`Failed to fetch discogs page ${page}`);
     return res.json();
 }
@@ -51,6 +70,7 @@ export default function DiscogsLibrary() {
     const [isFetching, setIsFetching] = useState(false);
     const [error, setError] = useState("");
     const [hasMore, setHasMore] = useState(true);
+    const [sortOption, setSortOption] = useState<SortOption>('added');
     const currentPage = useRef(0);
     const totalPages = useRef<number | null>(null);
     const lastRequestTime = useRef<number>(0);
@@ -61,9 +81,12 @@ export default function DiscogsLibrary() {
     const MIN_SPINNER_MS = 1000;
 
     const loadPage = useCallback(
-        async (page: number) => {
+        async (page: number, sort?: SortOption) => {
             if (isFetching) return;
             setError("");
+
+            // Use the provided sort option or fall back to current state
+            const currentSort = sort ?? sortOption;
 
             const now = Date.now();
             const sinceLast = now - lastRequestTime.current;
@@ -85,7 +108,7 @@ export default function DiscogsLibrary() {
             lastRequestTime.current = spinnerStart;
 
             try {
-                const data = await fetchLibraryPage(page, controller.signal);
+                const data = await fetchLibraryPage(page, currentSort, controller.signal);
                 const nextReleases = (data.releases as unknown as Release[]) || [];
                 setReleases((prev) => {
                     const existing = new Set(prev.map((r) => String(r.id)));
@@ -109,7 +132,7 @@ export default function DiscogsLibrary() {
                 setIsFetching(false);
             }
         },
-        [isFetching]
+        [isFetching, sortOption]
     );
 
     useEffect(() => {
@@ -136,6 +159,17 @@ export default function DiscogsLibrary() {
         }
     }, [inView, hasMore, isFetching, loadMore]);
 
+    const handleSortChange = useCallback((value: SortOption) => {
+        setSortOption(value);
+        // Reset the collection and reload from page 1 with the new sort option
+        setReleases([]);
+        setHasMore(true);
+        currentPage.current = 0;
+        totalPages.current = null;
+        // Pass the new sort option directly to avoid stale closure
+        loadPage(1, value);
+    }, [loadPage]);
+
 
     if (releases.length === 0 && !error) {
         return (
@@ -157,6 +191,22 @@ export default function DiscogsLibrary() {
 
     return (
         <div className="space-y-4">
+            {/* Filtering Section */}
+            <div className="flex pb-2">
+                <Select value={sortOption} onValueChange={handleSortChange}>
+                    <SelectTrigger id="sort-select" className="w-[200px]">
+                        <SelectValue placeholder="Sort by..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="title-asc">Title (A-Z)</SelectItem>
+                        <SelectItem value="title-desc">Title (Z-A)</SelectItem>
+                        <SelectItem value="artist-asc">Artist (A-Z)</SelectItem>
+                        <SelectItem value="artist-desc">Artist (Z-A)</SelectItem>
+                        <SelectItem value="added">Recently Added</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-8">
                 {releases.map((r) => (
                     <MemoReleaseCard key={r.id} release={r} />
