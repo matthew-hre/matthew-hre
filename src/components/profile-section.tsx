@@ -12,7 +12,6 @@ import { FaGithub as Github } from "react-icons/fa";
 import { FaInstagram as Instagram } from "react-icons/fa";
 import { FaLinkedin as Linkedin } from "react-icons/fa";
 import Navbar from "@/components/navbar";
-import { debounce } from "lodash";
 import Link from "./link";
 import DiscogsLibrary from "./discogs-library";
 
@@ -23,19 +22,17 @@ export default function ProfileSection() {
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const observerCallback = debounce(
-      ([entry]: IntersectionObserverEntry[]) => {
-        const headerHeight = headerRef.current?.offsetHeight || 0;
-        const threshold = headerHeight - 96;
-        setIsNavbarVisible(entry.boundingClientRect.top <= -threshold);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Show navbar when header is about to leave the viewport
+        setIsNavbarVisible(!entry.isIntersecting);
       },
-      50
+      {
+        // Trigger earlier by expanding the "viewport" - navbar appears when header reaches ~200px from top
+        rootMargin: "-128px 0px 0px 0px",
+        threshold: 0,
+      }
     );
-
-    const observer = new IntersectionObserver(observerCallback, {
-      rootMargin: "-96px",
-      threshold: [0, 1],
-    });
 
     const currentHeaderRef = headerRef.current;
     if (currentHeaderRef) {
@@ -43,7 +40,6 @@ export default function ProfileSection() {
     }
 
     return () => {
-      observerCallback.cancel();
       if (currentHeaderRef) {
         observer.unobserve(currentHeaderRef);
       }
@@ -76,8 +72,8 @@ function Header({
 }) {
   return (
     <div
-      ref={headerRef} // Attach ref to the entire header
-      className={`flex flex-col items-start text-xl transition duration-300 ${isVisible ? "opacity-0" : "opacity-100"
+      ref={headerRef}
+      className={`flex flex-col items-start text-xl transition-opacity duration-200 ease-in-out ${isVisible ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
     >
       <div className="flex flex-col gap-4 px-4">
@@ -171,7 +167,7 @@ function Projects({
   onChange?: (next: "Projects" | "Vinyl" | "Writing") => void;
 }) {
   return (
-    <section className="mt-10 px-4">
+    <section className="mt-6 px-4">
       <div className="flex items-center gap-2">
         <h2 className="sr-only">Section</h2>
         <div role="tablist" aria-label="Content sections" className="inline-flex w-full gap-1 rounded-lg bg-white/5 p-1 text-lg font-semibold">

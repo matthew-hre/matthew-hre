@@ -8,7 +8,9 @@ export default function Navbar({ isVisible }: { isVisible: boolean }) {
   return (
     <nav className="pointer-events-none fixed top-6 z-30 grid w-full grid-cols-[1fr_min(640px,100%)_1fr] px-4">
       <div
-        className={`pointer-events-auto col-start-2 col-end-3 -mx-px rounded-2xl bg-gray-800/95 px-4 py-2.5 backdrop-blur will-change-transform [@supports(backdrop-filter:blur(0px))]:bg-white/[5%] transition duration-300 ${isVisible ? "scale-100 opacity-100" : "scale-0 opacity-0"
+        className={`pointer-events-auto col-start-2 col-end-3 -mx-px rounded-2xl bg-gray-800/95 px-4 py-2.5 backdrop-blur will-change-transform [@supports(backdrop-filter:blur(0px))]:bg-white/[5%] transition-all duration-200 ease-in-out ${isVisible
+          ? "translate-y-0 opacity-100"
+          : "-translate-y-4 opacity-0 pointer-events-none"
           }`}
       >
         <div className="flex items-center justify-between">
