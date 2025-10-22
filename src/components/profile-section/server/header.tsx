@@ -4,9 +4,7 @@ import {
   GraduationCap,
   MapPin,
 } from "lucide-react";
-import { FaGithub as Github } from "react-icons/fa";
-import { FaInstagram as Instagram } from "react-icons/fa";
-import { FaLinkedin as Linkedin } from "react-icons/fa";
+import { Github, Linkedin, Instagram } from "@/components/icons";
 import Link from "@/components/link";
 
 export default function Header() {
@@ -38,19 +36,16 @@ export default function Header() {
           <div className="flex items-center space-x-4 self-end text-sm font-bold sm:-mt-16 sm:self-auto">
             <Link href="https://github.com/matthew-hre" variant="icon" size="sm">
               <Github
-                size={32}
                 className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </Link>
             <Link href="https://linkedin.com/in/matthew-hre/" variant="icon" size="sm">
               <Linkedin
-                size={32}
                 className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </Link>
             <Link href="https://instagram.com/matthew_hre/" variant="icon" size="sm">
               <Instagram
-                size={32}
                 className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </Link>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { SquareArrowOutUpRight } from "lucide-react";
-import { FaGithub as Github } from "react-icons/fa";
+import { Github } from "@/components/icons";
 import Link from "@/components/link";
 
 interface ProjectCardProps {
@@ -56,7 +56,7 @@ export default function ProjectCard({
           className="group absolute top-4 right-4 rounded-lg px-2 py-1"
         >
           {githubUrl && (
-            <Github className="fill-gray-100/30 transition-all duration-300 ease-out group-hover:fill-white w-6 h-6" />
+            <Github className="text-gray-100/30 transition-all duration-300 ease-out group-hover:text-white w-6 h-6" />
           )}
         </Link>
       </div>

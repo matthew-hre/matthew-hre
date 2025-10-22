@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { FaInstagram as Instagram } from "react-icons/fa";
-import { FaGithub as Github } from "react-icons/fa";
-import { FaLinkedin as Linkedin } from "react-icons/fa";
+import { Github, Linkedin, Instagram } from "@/components/icons";
 import Link from "./link";
 
 export default function Navbar({ isVisible }: { isVisible: boolean }) {
@@ -36,19 +34,16 @@ export default function Navbar({ isVisible }: { isVisible: boolean }) {
           <div className="flex items-center space-x-2 text-base font-semibold leading-none text-gray-100/90 sm:space-x-5">
             <Link href="https://github.com/matthew-hre" variant="icon">
               <Github
-                size={32}
                 className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </Link>
             <Link href="https://linkedin.com/in/matthew-hre/" variant="icon">
               <Linkedin
-                size={32}
                 className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </Link>
             <Link href="https://instagram.com/matthew_hre/" variant="icon">
               <Instagram
-                size={32}
                 className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
               />
             </Link>
