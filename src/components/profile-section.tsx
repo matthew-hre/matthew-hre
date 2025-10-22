@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import {
   Briefcase,
   GraduationCap,
@@ -13,13 +14,25 @@ import { FaInstagram as Instagram } from "react-icons/fa";
 import { FaLinkedin as Linkedin } from "react-icons/fa";
 import Navbar from "@/components/navbar";
 import Link from "./link";
-import DiscogsLibrary from "./discogs-library";
+import DiscogsLibrarySkeleton from "./discogs-library-skeleton";
+
+const DiscogsLibrary = dynamic(() => import("./discogs-library"), {
+  ssr: false,
+  loading: () => <DiscogsLibrarySkeleton />,
+});
 
 export default function ProfileSection() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
   type SectionState = "Projects" | "Writing" | "Vinyl";
   const [section, setSection] = useState<SectionState>("Projects");
+  const [hasViewedVinyl, setHasViewedVinyl] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (section === "Vinyl" && !hasViewedVinyl) {
+      setHasViewedVinyl(true);
+    }
+  }, [section, hasViewedVinyl]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -56,6 +69,7 @@ export default function ProfileSection() {
         <Projects
           state={section}
           onChange={(next) => setSection(next)}
+          hasViewedVinyl={hasViewedVinyl}
         />
       </main>
       <Navbar isVisible={isNavbarVisible} />
@@ -162,9 +176,11 @@ function Header({
 function Projects({
   state = "Projects",
   onChange,
+  hasViewedVinyl = false,
 }: {
   state?: "Projects" | "Vinyl" | "Writing";
   onChange?: (next: "Projects" | "Vinyl" | "Writing") => void;
+  hasViewedVinyl?: boolean;
 }) {
   return (
     <section className="mt-6 px-4">
@@ -200,10 +216,12 @@ function Projects({
         </div>
       </div>
       <div className="mt-5 grid grid-cols-1 gap-2">
-        {/* Keep DiscogsLibrary mounted but hidden to preserve state */}
-        <div className={state === "Vinyl" ? "block" : "hidden"}>
-          <DiscogsLibrary />
-        </div>
+        {/* lazyload DiscogsLibrary on first Vinyl tab view, then keep mounted to preserve state */}
+        {hasViewedVinyl && (
+          <div className={state === "Vinyl" ? "block" : "hidden"}>
+            <DiscogsLibrary />
+          </div>
+        )}
         <div className={state === "Writing" ? "block" : "hidden"}>
           <p className="text-base">
             Not yet!

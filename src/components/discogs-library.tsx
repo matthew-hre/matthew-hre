@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import type { DiscogResponse, Release } from "@/types/discog";
-import { Skeleton } from "@/components/ui/skeleton";
+import DiscogsLibrarySkeleton from "./discogs-library-skeleton";
 import {
     Select,
     SelectContent,
@@ -172,21 +172,7 @@ export default function DiscogsLibrary() {
 
 
     if (releases.length === 0 && !error) {
-        return (
-            <div className="space-y-4">
-                <div className="grid grid-cols-2 xl:grid-cols-3 gap-8">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                        <div key={i} className="flex flex-col h-full">
-                            <Skeleton className="w-full aspect-square" />
-                            <div className="flex flex-col mt-4 flex-1">
-                                <Skeleton className="h-4 w-3/4 mb-2" />
-                                <Skeleton className="h-3 w-1/2" />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
+        return <DiscogsLibrarySkeleton />;
     }
 
     return (
