@@ -63,11 +63,11 @@ export default function MusicPresence() {
   }, []);
 
   if (isLoading) {
-    return <Skeleton className="w-64 h-4 mt-2 -mb-2"></Skeleton>;
+    return <Skeleton className="w-64 h-6 mt-2 -mb-2"></Skeleton>;
   }
 
   if (!trackData) {
-    return <Skeleton className="w-64 h-4 mt-2 -mb-2"></Skeleton>;
+    return <Skeleton className="w-64 h-6 mt-2 -mb-2"></Skeleton>;
   }
 
   const song = trackData.name;
