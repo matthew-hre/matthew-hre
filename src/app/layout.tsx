@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import BackToTop from "@/components/back-to-top";
 
 const rethinkSans = Rethink_Sans({
+  subsets: ["latin"],
   variable: "--font-rethink-sans",
   display: "swap",
 });
