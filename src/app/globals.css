@@ -41,7 +41,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: var(--font-satoshi);
+  --font-sans: var(--font-rethink-sans);
   --font-mono: var(--font-fira-code);
   --animate-spin-slow: spin 3s linear infinite;
 }

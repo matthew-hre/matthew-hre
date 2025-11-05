@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { Fira_Code } from "next/font/google";
+import { Fira_Code, Rethink_Sans } from "next/font/google";
 import "./globals.css";
 import GrainOverlay from "@/components/grain-overlay";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import BackToTop from "@/components/back-to-top";
 
-const satoshi = localFont({
-  src: "../Satoshi-Variable.ttf",
-  variable: "--font-satoshi",
+const rethinkSans = Rethink_Sans({
+  variable: "--font-rethink-sans",
   display: "swap",
 });
 
@@ -39,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${satoshi.variable} ${firaCode.variable} font-sans antialiased bg-muted`}
+        className={`${rethinkSans.variable} ${firaCode.variable} font-sans antialiased bg-muted`}
       >
         <GrainOverlay />
         {children}
