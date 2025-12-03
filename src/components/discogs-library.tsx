@@ -109,7 +109,7 @@ export default function DiscogsLibrary() {
 
             try {
                 const data = await fetchLibraryPage(page, currentSort, controller.signal);
-                const nextReleases = (data.releases as unknown as Release[]) || [];
+                const nextReleases = data.releases || [];
                 setReleases((prev) => {
                     const existing = new Set(prev.map((r) => String(r.id)));
                     const filtered = nextReleases.filter((r) => !existing.has(String(r.id)));

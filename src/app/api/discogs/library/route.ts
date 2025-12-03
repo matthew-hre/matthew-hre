@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { DiscogResponse } from '@/types/discog';
+import { validateDiscogsResponse } from '@/lib/validators/discogs';
 
 const pendingRequests = new Map<string, Promise<DiscogResponse>>();
 
@@ -47,10 +48,7 @@ async function getLibraryWithRetry(page = 1, sort = 'artist', sortOrder = 'asc',
 
                 const data = await response.json();
 
-                const result: DiscogResponse = {
-                    releases: data.releases,
-                    pagination: data.pagination,
-                };
+                const result = validateDiscogsResponse(data);
 
                 return result;
             } catch (error) {

@@ -1,59 +1,41 @@
-export interface DiscogResponse {
-    pagination: Pagination;
-    releases: DiscogRecord[];
-}
-
-interface Pagination {
-    page: number;
-    pages: number;
-    per_page: number;
-    items: number;
-    urls: string[] | null;
-}
-
-interface DiscogRecord {
+/**
+ * Raw Discogs API record structure
+ * The validator accepts this structure but only extracts the fields
+ * defined in the Release interface
+ */
+export interface DiscogRecord {
     id: number;
     instance_id: number;
     date_added: string;
-    rating: 0;
+    rating: number;
     basic_information: BasicInformation;
+    folder_id: number;
+    notes: Array<{ field_id: number; value: string }>;
 }
 
 interface BasicInformation {
-    cover_image: string;
     id: number;
+    master_id?: number;
+    master_url?: string;
+    cover_image: string;
     thumb: string;
     year: number;
     title: string;
     genres: string[];
     styles: string[];
     artists: Artist[];
-    master_url: string;
+    labels?: Array<{ name: string; catno: string }>;
+    formats: Array<{ name: string; qty: string; descriptions: string[] }>;
     resource_url: string;
-    formats: Formats[];
-}
-
-interface Formats {
-    descriptions: string[];
-    name: string;
-    qty: string;
-    text: string;
 }
 
 export interface Artist {
-    anv: string;
-    id: string;
     name: string;
-    resource_url: string;
-    role: string;
-    tracks: string;
+    anv?: string;
+    id?: string | number;
+    resource_url?: string;
+    role?: string;
+    tracks?: string;
 }
 
-export interface Release {
-    id: number | string;
-    basic_information: {
-        cover_image: string;
-        title: string;
-        artists: { name: string }[];
-    };
-};
+export type { DiscogResponse, Release } from '@/lib/validators/discogs';

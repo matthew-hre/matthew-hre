@@ -19,7 +19,8 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-intersection-observer": "^9.16.0",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
