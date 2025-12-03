@@ -13,7 +13,7 @@ export default function Header() {
       <div className="flex flex-col gap-4 px-4">
         <div className="flex w-full flex-col-reverse items-start justify-between gap-7 pb-5 sm:flex-row sm:gap-0">
           <div className="flex items-center space-x-4">
-            <div className="rounded-full bg-gradient-to-tl from-background/60 to-emerald-400/60 shadow-lg p-[3px] ring-[5px] ring-emerald-700/10">
+            <div className="rounded-full bg-gradient-to-tl from-background/60 to-gray-400/60 shadow-lg p-[3px] ring-[5px] ring-gray-700/30">
               <div className="rounded-full p-px h-24 w-24">
                 <Image
                   className="rounded-full filter"
