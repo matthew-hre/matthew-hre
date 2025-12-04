@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import VinylPanel from "./vinyl-panel";
 import FadeInOnView from "@/components/anim/fade-in-on-view";
 import StaggerChildren from "@/components/anim/stagger-children";
+import { cn } from "@/lib/utils";
 
 type Section = "Projects" | "Vinyl" | "Writing";
 
@@ -57,10 +58,9 @@ export default function ProfileClient({
     <>
       <main className="mx-auto max-w-[640px] px-4 pt-8 pb-10 sm:pt-40">
         <div
-          className={`transition-opacity duration-200 ease-in-out ${isNavbarVisible
-            ? "opacity-0 pointer-events-none"
-            : "opacity-100"
-            }`}
+          className={cn("transition-opacity duration-200 ease-in-out",
+            isNavbarVisible ? "opacity-0 pointer-events-none" : "opacity-100"
+          )}
         >
           <FadeInOnView delay={0}>
             {header}

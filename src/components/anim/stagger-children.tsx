@@ -15,11 +15,15 @@ export default function StaggerChildren({
   step = 50,
   wrapClassName = "",
 }: PropsWithChildren<Props>) {
-  const arr = Children.toArray(children) as ReactNode[];
+  const arr = Children.toArray(children).map((child) => ({
+    key: crypto.randomUUID(),
+    child,
+  }));
+
   return (
     <>
-      {arr.map((child, i) => (
-        <FadeInOnView key={i} delay={baseDelay + i * step} className={wrapClassName}>
+      {arr.map(({ key, child }, i) => (
+        <FadeInOnView key={key} delay={baseDelay + i * step} className={wrapClassName}>
           {child}
         </FadeInOnView>
       ))}
