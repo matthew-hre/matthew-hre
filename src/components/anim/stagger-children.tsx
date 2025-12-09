@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, PropsWithChildren, ReactNode } from "react";
+import { Children, PropsWithChildren } from "react";
 import FadeInOnView from "./fade-in-on-view";
 
 type Props = {
