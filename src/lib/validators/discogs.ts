@@ -16,7 +16,7 @@ const BasicInformationSchema = z.object({
   // these exist, we don't use 'em
   id: z.number().optional(),
   master_id: z.number().optional(),
-  master_url: z.string().optional(),
+  master_url: z.string().nullable().optional(),
   thumb: z.string().optional(),
   year: z.number().optional(),
   genres: z.array(z.string()).optional(),
