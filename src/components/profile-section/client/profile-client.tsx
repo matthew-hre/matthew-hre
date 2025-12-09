@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Navbar from "@/components/navbar";
 import VinylPanel from "./vinyl-panel";
 import FadeInOnView from "@/components/anim/fade-in-on-view";
@@ -20,10 +21,20 @@ export default function ProfileClient({
   projects,
   writing,
 }: ProfileClientProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [section, setSection] = useState<Section>("Projects");
   const [hasViewedVinyl, setHasViewedVinyl] = useState(false);
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Initialize section from URL params
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam === "vinyl" || tabParam === "writing") {
+      setSection(tabParam === "vinyl" ? "Vinyl" : "Writing");
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (section === "Vinyl" && !hasViewedVinyl) {
@@ -78,31 +89,36 @@ export default function ProfileClient({
                 className="inline-flex w-full gap-1 rounded-lg bg-white/5 p-1 text-lg font-semibold"
               >
                 {(["Projects", "Vinyl", "Writing"] as const).map((key) => {
-                  const selected = section === key;
-                  const isDisabled = key === "Writing";
-                  return (
-                    <button
-                      key={key}
-                      role="tab"
-                      aria-selected={selected && !isDisabled}
-                      aria-disabled={isDisabled || undefined}
-                      disabled={isDisabled || undefined}
-                      tabIndex={isDisabled ? -1 : 0}
-                      onClick={!isDisabled ? () => setSection(key) : undefined}
-                      className={
-                        `rounded-md px-4 py-1 flex-1 transition-colors duration-200 focus:outline-none ` +
-                        (isDisabled
-                          ? "cursor-not-allowed text-neutral-500/70"
-                          : selected
-                            ? "bg-white/20 text-white"
-                            : "text-neutral-300 hover:bg-white/10")
-                      }
-                      title={isDisabled ? "Writing coming soon" : undefined}
-                    >
-                      {key}
-                    </button>
-                  );
-                })}
+                   const selected = section === key;
+                   const handleClick = () => {
+                     setSection(key);
+                     const tabValue = key === "Vinyl" ? "vinyl" : key === "Writing" ? "writing" : "projects";
+                     const params = new URLSearchParams(searchParams);
+                     if (tabValue === "projects") {
+                       params.delete("tab");
+                     } else {
+                       params.set("tab", tabValue);
+                     }
+                     router.push(`?${params.toString()}`);
+                   };
+                   return (
+                     <button
+                       key={key}
+                       role="tab"
+                       aria-selected={selected}
+                       tabIndex={0}
+                       onClick={handleClick}
+                       className={
+                         `rounded-md px-4 py-1 flex-1 transition-colors duration-200 focus:outline-none ` +
+                         (selected
+                           ? "bg-white/20 text-white"
+                           : "text-neutral-300 hover:bg-white/10")
+                       }
+                     >
+                       {key}
+                     </button>
+                   );
+                 })}
               </div>
             </FadeInOnView>
           </div>
@@ -113,8 +129,10 @@ export default function ProfileClient({
                 <VinylPanel />
               </div>
             )}
-            <div className={section === "Writing" ? "block" : "hidden"}>
-              {writing}
+            <div className={section === "Writing" ? "block space-y-2" : "hidden"}>
+              <StaggerChildren baseDelay={200} step={70}>
+                {writing}
+              </StaggerChildren>
             </div>
             <div className={section === "Projects" ? "block space-y-2" : "hidden"}>
               <StaggerChildren baseDelay={200} step={70}>

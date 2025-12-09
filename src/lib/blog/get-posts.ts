@@ -7,7 +7,7 @@ import { PostMetadata, PostMetadataSchema } from "./types";
 const POSTS_DIRECTORY = path.join(process.cwd(), "src/content/posts");
 
 export async function getAllPostMetadata(): Promise<PostMetadata[]> {
-  const files = await globby("**/*.md", {
+  const files = await globby("**/*.mdx", {
     cwd: POSTS_DIRECTORY,
   });
 
@@ -16,7 +16,7 @@ export async function getAllPostMetadata(): Promise<PostMetadata[]> {
       const content = await readFile(path.join(POSTS_DIRECTORY, file), "utf8");
       const { data } = matter(content);
 
-      const slug = file.replace(/\.md$/, "");
+      const slug = file.replace(/\.mdx$/, "");
 
       // Validate frontmatter against schema
       try {

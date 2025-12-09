@@ -1,0 +1,90 @@
+---
+title: "Welcome to My Blog"
+description: "An introduction to my blog and what to expect from the writing section."
+dateCreated: "2025-01-01T00:00:00Z"
+dateModified: "2025-01-05T12:30:00Z"
+tags: ["welcome", "blog"]
+links:
+  - label: "View on GitHub"
+    url: "https://github.com/matthew-hre"
+---
+
+# Welcome to My Blog
+
+This is the first blog post on my website! It demonstrates the features available in the blog system.
+
+## Features
+
+The blog supports all standard markdown features, plus a few extras:
+
+- **Syntax highlighting** for code blocks
+- **GitHub-flavored markdown** (tables, strikethrough, task lists)
+- **Automatic table of contents** generation
+- **Image optimization** via Next.js Image component
+- **Responsive typography** with Tailwind CSS
+
+## Code Blocks
+
+Syntax highlighting works out of the box with support for many languages:
+
+```typescript
+export function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+
+const greeting = greet("World");
+console.log(greeting); // Output: Hello, World!
+```
+
+```javascript
+const data = {
+  title: "Blog Post",
+  date: new Date(),
+  published: true,
+};
+```
+
+## Tables
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Markdown | ✓ | Full support |
+| Syntax Highlighting | ✓ | Via Shiki |
+| Images | ✓ | Optimized |
+| Table of Contents | ✓ | Auto-generated |
+| External Links | ✓ | In frontmatter |
+| Tags | ✓ | Filterable |
+
+## Lists
+
+### Unordered List
+
+- First item
+- Second item
+- Third item with more detail
+  - Nested item
+  - Another nested item
+
+### Ordered List
+
+1. First step
+2. Second step
+3. Third step
+
+## Blockquotes
+
+> This is a blockquote. You can use it to highlight important information or citations.
+>
+> — Someone important
+
+## And More
+
+You can use all standard markdown features:
+
+- ~~Strikethrough~~ text
+- **Bold** text
+- *Italic* text
+- [Links](https://example.com)
+- Inline `code` snippets
+
+The blog system is built on Next.js with MDX, remark, and rehype plugins for maximum flexibility.
