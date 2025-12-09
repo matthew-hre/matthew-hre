@@ -1,64 +1,21 @@
 import { NextResponse } from 'next/server';
 import type { DiscogResponse } from '@/types/discog';
-import { validateDiscogsResponse } from '@/lib/validators/discogs';
+import { getLibraryPage, type SortOption, type SortOrder } from '@/lib/discogs';
 
 const pendingRequests = new Map<string, Promise<DiscogResponse>>();
 
-let lastRequestTime = 0;
-const minRequestInterval = 3000;
-
-async function getLibraryWithRetry(page = 1, sort = 'artist', sortOrder = 'asc', retries = 3) {
+async function getLibraryWithDedup(
+    page: number = 1,
+    sort: SortOption = 'artist',
+    sortOrder: SortOrder = 'asc'
+): Promise<DiscogResponse> {
     const cacheKey = `discogs:library:${page}:${sort}:${sortOrder}`;
 
     if (pendingRequests.has(cacheKey)) {
         return pendingRequests.get(cacheKey) as Promise<DiscogResponse>;
     }
 
-    const promise = (async () => {
-        for (let i = 0; i < retries; i++) {
-            try {
-                const now = Date.now();
-                if (now - lastRequestTime < minRequestInterval) {
-                    await new Promise((resolve) =>
-                        setTimeout(resolve, minRequestInterval - (now - lastRequestTime))
-                    );
-                }
-                lastRequestTime = Date.now();
-
-                const response = await fetch(
-                    `https://api.discogs.com/users/matthew_hre/collection/folders/0/releases?token=${process.env.DISCOGS_PERSONAL_ACCESS_TOKEN}&per_page=20&sort=${sort}&sort_order=${sortOrder}&page=${page}`,
-                    {
-                        headers: {
-                            'User-Agent': 'matthew-hre/1.0 +https://matthew-hre.com',
-                        },
-                    }
-                );
-
-                if (response.status === 429) {
-                    const retryAfter = response.headers.get('Retry-After');
-                    await new Promise((resolve) =>
-                        setTimeout(resolve, parseInt(retryAfter || '60') * 1000)
-                    );
-                    continue;
-                }
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch Discogs library. Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                const result = validateDiscogsResponse(data);
-
-                return result;
-            } catch (error) {
-                if (i === retries - 1) throw error;
-            }
-        }
-
-        throw new Error('Failed to fetch after all retries');
-    })();
-
+    const promise = getLibraryPage(page, sort, sortOrder);
     pendingRequests.set(cacheKey, promise);
     promise.finally(() => pendingRequests.delete(cacheKey));
 
@@ -70,10 +27,10 @@ export async function GET(request: Request) {
         const url = new URL(request.url);
         const pageParam = url.searchParams.get('page') || '1';
         const page = Number(pageParam) || 1;
-        const sort = url.searchParams.get('sort') || 'artist';
-        const sortOrder = url.searchParams.get('sort_order') || 'asc';
+        const sort = (url.searchParams.get('sort') || 'artist') as SortOption;
+        const sortOrder = (url.searchParams.get('sort_order') || 'asc') as SortOrder;
 
-        const data = await getLibraryWithRetry(page, sort, sortOrder);
+        const data = await getLibraryWithDedup(page, sort, sortOrder);
 
         const response = NextResponse.json(data);
         response.headers.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400');

@@ -29,6 +29,7 @@ async function fetchLibraryPage(page = 1, sortOption: SortOption = 'added', sign
     };
 
     const { sort, sort_order } = sortMapping[sortOption];
+    // First page is pre-rendered and cached via ISR, subsequent pages fetched on-demand
     const res = await fetch(`/api/discogs/library?page=${page}&sort=${sort}&sort_order=${sort_order}`, { signal });
     if (!res.ok) throw new Error(`Failed to fetch discogs page ${page}`);
     return res.json();
