@@ -2,6 +2,7 @@ import Image from "next/image";
 import { SquareArrowOutUpRight } from "lucide-react";
 import { Github } from "@/components/icons";
 import Link from "@/components/link";
+import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
   title: string;
@@ -23,7 +24,7 @@ export default function ProjectCard({
   techStack,
 }: ProjectCardProps) {
   return (
-    <div className="relative rounded-lg border-[1px] border-none bg-white/5 p-4 transition-all duration-500 ease-out hover:bg-white/10">
+    <div className="relative rounded-lg border border-none bg-white/5 p-4 transition-all duration-500 ease-out hover:bg-white/10">
       <div className="flex flex-col space-y-3">
         <Link
           href={projectUrl}
@@ -43,7 +44,7 @@ export default function ProjectCard({
               />
             </div>
           ) : (
-            <div className={`h-8 w-8 rounded-lg ${imageFallbackColor}`} />
+            <div className={cn("h-8 w-8 rounded-lg", imageFallbackColor)} />
           )}
           <span>{title}</span>
           {projectUrl && (
@@ -65,7 +66,7 @@ export default function ProjectCard({
         {techStack.map((tech, index) => (
           <span
             key={index}
-            className="mr-2 mt-2 inline-block rounded-md border-[1px] border-zinc-700 px-2 py-1 font-mono text-xs font-semibold"
+            className="mr-2 mt-2 inline-block rounded-md border border-zinc-700 px-2 py-1 font-mono text-xs font-semibold"
           >
             {tech}
           </span>

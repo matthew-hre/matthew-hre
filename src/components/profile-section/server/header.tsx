@@ -13,7 +13,7 @@ export default function Header() {
       <div className="flex flex-col gap-4 px-4">
         <div className="flex w-full flex-col-reverse items-start justify-between gap-7 pb-5 sm:flex-row sm:gap-0">
           <div className="flex items-center space-x-4">
-            <div className="rounded-full bg-gradient-to-tl from-background/60 to-gray-400/60 shadow-lg p-[3px] ring-[5px] ring-gray-700/30">
+            <div className="rounded-full bg-linear-to-tl from-background/60 to-gray-400/60 shadow-lg p-[3px] ring-[5px] ring-gray-700/30">
               <div className="rounded-full p-px h-24 w-24">
                 <Image
                   className="rounded-full filter"
@@ -55,7 +55,7 @@ export default function Header() {
           A web developer, graphic designer, and student. Makes plenty of games,
           a few helpful tools, and – at the moment – lots of studying resources.
         </p>
-        <div className="flex flex-row flex-wrap items-center justify-start gap-5 border-y-[1px] border-gray-600/20 w-full py-3 text-sm font-semibold text-neutral-400/80 sm:justify-between sm:gap-3">
+        <div className="flex flex-row flex-wrap items-center justify-start gap-5 border-y border-gray-600/20 w-full py-3 text-sm font-semibold text-neutral-400/80 sm:justify-between sm:gap-3">
           <div className="flex items-center gap-1">
             <Briefcase className="h-4 w-4" />
             <span>
