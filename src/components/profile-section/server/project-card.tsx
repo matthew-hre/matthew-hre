@@ -20,11 +20,11 @@ export default function ProjectCard({
   projectUrl,
   githubUrl,
   imageUrl,
-  imageFallbackColor = "bg-gray-100/30",
+  imageFallbackColor = "bg-icon-button",
   techStack,
 }: ProjectCardProps) {
   return (
-    <div className="relative rounded-lg border border-none bg-white/5 p-4 transition-all duration-500 ease-out hover:bg-white/10">
+    <div className="relative rounded-lg border border-none bg-card p-4 transition-all duration-500 ease-out hover:bg-card-hover">
       <div className="flex flex-col space-y-3">
         <Link
           href={projectUrl}
@@ -48,7 +48,7 @@ export default function ProjectCard({
           )}
           <span>{title}</span>
           {projectUrl && (
-            <SquareArrowOutUpRight className="bg-gray-100/30 p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40" />
+            <SquareArrowOutUpRight className="icon-button" />
           )}
         </Link>
         <Link
@@ -57,7 +57,7 @@ export default function ProjectCard({
           className="group absolute top-4 right-4 rounded-lg px-2 py-1"
         >
           {githubUrl && (
-            <Github className="text-gray-100/30 transition-all duration-300 ease-out group-hover:text-white w-6 h-6" />
+            <Github className="text-icon-muted transition-default group-hover:text-foreground w-6 h-6" />
           )}
         </Link>
       </div>
@@ -66,7 +66,7 @@ export default function ProjectCard({
         {techStack.map((tech, index) => (
           <span
             key={index}
-            className="mr-2 mt-2 inline-block rounded-md border border-zinc-700 px-2 py-1 font-mono text-xs font-semibold"
+            className="mr-2 mt-2 inline-block rounded-md border px-2 py-1 font-mono text-xs font-semibold"
           >
             {tech}
           </span>

@@ -48,7 +48,7 @@ export default async function DiscogsLibraryPage({ params, searchParams }: PageP
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     error = message;
-    return <div className="text-red-500">Error loading library: {error}</div>;
+    return <div className="text-destructive">Error loading library: {error}</div>;
   }
 
   return (
