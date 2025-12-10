@@ -75,7 +75,7 @@ export default function ProfileClient({
               <div
                 role="tablist"
                 aria-label="Content sections"
-                className="inline-flex w-full gap-1 rounded-lg bg-white/5 p-1 text-lg font-semibold"
+                className="inline-flex w-full gap-1 rounded-lg bg-card p-1 text-lg font-semibold"
               >
                 {(["Projects", "Vinyl", "Writing"] as const).map((key) => {
                   const selected = section === key;
@@ -92,10 +92,10 @@ export default function ProfileClient({
                       className={
                         `rounded-md px-4 py-1 flex-1 transition-colors duration-200 focus:outline-none ` +
                         (isDisabled
-                          ? "cursor-not-allowed text-neutral-500/70"
+                          ? "cursor-not-allowed text-muted-foreground/80"
                           : selected
-                            ? "bg-white/20 text-white"
-                            : "text-neutral-300 hover:bg-white/10")
+                            ? "bg-card-active text-foreground"
+                            : "text-muted-foreground hover:bg-card-hover")
                       }
                       title={isDisabled ? "Writing coming soon" : undefined}
                     >

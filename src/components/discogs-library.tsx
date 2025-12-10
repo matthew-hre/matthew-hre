@@ -199,7 +199,7 @@ export default function DiscogsLibrary() {
                     <MemoReleaseCard key={r.id} release={r} />
                 ))}
             </div>
-            {error && <div className="text-red-500 text-center">{error}</div>}
+            {error && <div className="text-destructive text-center">{error}</div>}
             {hasMore && (
                 <div ref={ref} className="col-span-full flex justify-center p-4 h-20">
                     {isFetching && <Loader2 className="animate-spin" />}

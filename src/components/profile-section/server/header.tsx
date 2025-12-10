@@ -13,7 +13,7 @@ export default function Header() {
       <div className="flex flex-col gap-4 px-4">
         <div className="flex w-full flex-col-reverse items-start justify-between gap-7 pb-5 sm:flex-row sm:gap-0">
           <div className="flex items-center space-x-4">
-            <div className="rounded-full bg-linear-to-tl from-background/60 to-gray-400/60 shadow-lg p-[3px] ring-[5px] ring-gray-700/30">
+            <div className="rounded-full bg-linear-to-tl from-background/60 to-gradient-accent shadow-lg p-[3px] ring-[5px] ring-avatar-ring">
               <div className="rounded-full p-px h-24 w-24">
                 <Image
                   className="rounded-full filter"
@@ -35,19 +35,13 @@ export default function Header() {
           </div>
           <div className="flex items-center space-x-4 self-end text-sm font-bold sm:-mt-16 sm:self-auto">
             <Link href="https://github.com/matthew-hre" variant="icon" size="sm">
-              <Github
-                className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
-              />
+              <Github className="icon-button text-foreground" />
             </Link>
             <Link href="https://linkedin.com/in/matthew-hre/" variant="icon" size="sm">
-              <Linkedin
-                className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
-              />
+              <Linkedin className="icon-button text-foreground" />
             </Link>
             <Link href="https://instagram.com/matthew_hre/" variant="icon" size="sm">
-              <Instagram
-                className="bg-gray-100/30 p-1 text-gray-100 rounded-md transition-all duration-300 ease-out group-hover:bg-gray-100/40"
-              />
+              <Instagram className="icon-button text-foreground" />
             </Link>
           </div>
         </div>
@@ -55,7 +49,7 @@ export default function Header() {
           A web developer, graphic designer, and student. Makes plenty of games,
           a few helpful tools, and – at the moment – lots of studying resources.
         </p>
-        <div className="flex flex-row flex-wrap items-center justify-start gap-5 border-y border-gray-600/20 w-full py-3 text-sm font-semibold text-neutral-400/80 sm:justify-between sm:gap-3">
+        <div className="flex flex-row flex-wrap items-center justify-start gap-5 border-y border-border/50 w-full py-3 text-sm font-semibold text-muted-foreground sm:justify-between sm:gap-3">
           <div className="flex items-center gap-1">
             <Briefcase className="h-4 w-4" />
             <span>
@@ -64,7 +58,7 @@ export default function Header() {
                 href="https://cohere.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-400/80 hover:text-gray-200 underline transition-all duration-300 ease-out"
+                className="link-inline"
               >
                 Cohere
               </a>
@@ -80,7 +74,7 @@ export default function Header() {
               href="https://www.mtroyal.ca"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-400/80 hover:text-gray-200 underline transition-all duration-300 ease-out"
+              className="link-inline"
             >
               Mount Royal University
             </a>
