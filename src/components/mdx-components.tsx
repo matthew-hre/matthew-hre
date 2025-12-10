@@ -4,30 +4,41 @@ import Link from "next/link";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    h1: ({ children }) => (
-      <h1 className="text-4xl font-bold mt-8 mb-4">{children}</h1>
+    h1: ({ id, children }) => (
+      <h1 id={id} className="text-4xl font-bold mt-8 mb-4 scroll-m-24">{children}</h1>
     ),
-    h2: ({ children }) => (
-      <h2 className="text-3xl font-bold mt-6 mb-3">{children}</h2>
+    h2: ({ id, children }) => (
+      <h2 id={id} className="text-3xl font-bold mt-6 mb-3 scroll-m-24">{children}</h2>
     ),
-    h3: ({ children }) => (
-      <h3 className="text-2xl font-bold mt-4 mb-2">{children}</h3>
+    h3: ({ id, children }) => (
+      <h3 id={id} className="text-2xl font-bold mt-4 mb-2 scroll-m-24">{children}</h3>
     ),
     p: ({ children }) => (
       <p className="text-base leading-7 mb-4">{children}</p>
     ),
-    a: ({ href, children }) => (
-      <Link href={href || "#"} className="text-blue-600 hover:underline">
-        {children}
-      </Link>
-    ),
+    a: ({ id, href, children, ...props }) => {
+      const isExternal = href?.startsWith('http://') || href?.startsWith('https://')
+
+      return (
+        <a
+          id={id}
+          href={href || "#"}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+          className="text-primary hover:text-primary/80 underline transition-default"
+          {...props}
+        >
+          {children}
+        </a>
+      )
+    },
     code: ({ children }) => (
-      <code className="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">
+      <code className="bg-popover px-1.5 py-0.5 rounded text-sm font-mono text-foreground">
         {children}
       </code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-gray-900 text-white p-4 rounded-lg overflow-x-auto mb-4">
+      <pre className="bg-popover text-popover-foreground p-4 rounded-lg overflow-x-auto mb-4">
         {children}
       </pre>
     ),
@@ -40,15 +51,26 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       />
     ),
     ul: ({ children }) => (
-      <ul className="list-disc list-inside mb-4 space-y-1">{children}</ul>
+      <ul className="list-disc list-outside ml-6 mt-1 space-y-1">{children}</ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal list-inside mb-4 space-y-1">{children}</ol>
+      <ol className="list-decimal list-outside ml-6 mt-1 space-y-1">{children}</ol>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-gray-300 pl-4 italic my-4">
+      <blockquote className="relative rounded-lg border border-border bg-card p-4 mb-4">
         {children}
       </blockquote>
+    ),
+    table: ({ children }) => (
+      <table className="w-full table-auto border-collapse mb-4">
+        {children}
+      </table>
+    ),
+    th: ({ children }) => (
+      <th className="border border-border bg-card px-4 py-2 text-left">{children}</th>
+    ),
+    td: ({ children }) => (
+      <td className="border border-border px-4 py-2">{children}</td>
     ),
     ...components,
   };

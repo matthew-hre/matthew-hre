@@ -1,90 +1,63 @@
 ---
-title: "Welcome to My Blog"
-description: "An introduction to my blog and what to expect from the writing section."
-dateCreated: "2025-01-01T00:00:00Z"
-dateModified: "2025-01-05T12:30:00Z"
-tags: ["welcome", "blog"]
-links:
-  - label: "View on GitHub"
-    url: "https://github.com/matthew-hre"
+title: "Bare Minimum Blogging"
+description: "Getting back into blogging, and a retrospective on my previous sites."
+dateCreated: "2025-12-09T20:00:00Z"
+tags: ["personal", "development"]
 ---
 
-# Welcome to My Blog
+## Back to Blogging
 
-This is the first blog post on my website! It demonstrates the features available in the blog system.
+Hey! Long time no see. For those of you not caught up, I used to have a bunch of written content on my website --[^1] studying resources, post-mortems, and blogs. I started writing a lot of this content back in 2022-2023, when I first spun up my website and wanted to put things on here to put things on here.
 
-## Features
+As I got older[^2], I started to look back on some of these posts and felt they didn't quite represent where I wanted to be. Some felt a bit childish, meaningless, or just... dated. So, I threw my website in "maintenance mode,"
+did a redesign, and moved on for a bit.
 
-The blog supports all standard markdown features, plus a few extras:
+Recently, however, as you may have assumed by now based on the fact that you're reading a blog post, I'm getting back into it! I'm hoping this can be a bit of a catalyst for me to work on more projects, do some more creative writing, and have a place to reflect on some previous experiences (see Footnote #2).
 
-- **Syntax highlighting** for code blocks
-- **GitHub-flavored markdown** (tables, strikethrough, task lists)
-- **Automatic table of contents** generation
-- **Image optimization** via Next.js Image component
-- **Responsive typography** with Tailwind CSS
+I'm currently on the fence about bringing my old blog posts onto the new system. Some of them are still relevant, but others feel a little out of place. I may end up cherry-picking a couple here-and-there, but I'm going to focus on some new stuff for now. Stuff like how I technically approached my blog this time around!
 
-## Code Blocks
+## V1: Hardcoded
 
-Syntax highlighting works out of the box with support for many languages:
+Waaay back, probably around 2021-2022ish, when I started working on this personal site, I hardcoded all my content in raw HTML. The whole website, actually, was raw HTML! I still think that thing has a lot of character (even if it does scream "I watched Mr. Robot once"), and it was really fun to throw together.
 
-```typescript
-export function greet(name: string): string {
-  return `Hello, ${name}!`;
-}
+Maintining it was a shitshow though. I had to manually write out the style for all my posts -- style that was usually different enough from other posts where each page looked a *little* wrong -- and I had to manually rig in the navigation between posts. I'm getting a headache just thinking about it.
 
-const greeting = greet("World");
-console.log(greeting); // Output: Hello, World!
-```
+Hence, V2 and V3.
 
-```javascript
-const data = {
-  title: "Blog Post",
-  date: new Date(),
-  published: true,
-};
-```
+## V2, V3
 
-## Tables
+> These old versions are available, by the way! They are in no way polished, updated, or probably even functional, but they do exist! Check [the branches on this site's GitHub repo](https://github.com/matthew-hre/matthew-hre/branches) if you want to poke around.
 
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Markdown | ✓ | Full support |
-| Syntax Highlighting | ✓ | Via Shiki |
-| Images | ✓ | Optimized |
-| Table of Contents | ✓ | Auto-generated |
-| External Links | ✓ | In frontmatter |
-| Tags | ✓ | Filterable |
+V2 (or, at least, what I labelled as V2 -- I recall a React remake of my V1 somewhere, but can't for the life of me track it down) was a full-fledged NextJS app, running [Keystatic](https://keystatic.com/) as a CMS. Keystatic is actually a really sick project. I remember trying to set up Sanity and Payload before I found Keystatic, and just banging my head against the wall. Blogging doesn't need that much power, and Keystatic gave me *just enough* to get by. Actually, a little too much.
 
-## Lists
+Keystatic gives you a full-fledged backend for your content -- a nice little GUI, organized collections for all your content, and even "singletons" for one-off pages like "About Me" or "Home." It had its fair share of issues, though. "Saving" content was actually firing off a commit to the GitHub repo, meaning every time I needed to make a change, I had to wait for the commit to finish, the site to rebuild, and then the content to go live. This also meant I had to remember to `git fetch` every time I went to edit my site, which, if you know me, never happens regularly.
 
-### Unordered List
+V3 was a visual refresh, but I think it deserves an acknowledgement here, as it's the site version I ran the longest. It's not much different from V2, it's mostly a visual overhaul. However, this is where the honeymoon period with Keystatic started to end. The way the Keystatic reader (their internal tool to render Markdown/MDX) rendered out content was starting to get on my nerves. I couldn't get my Table of Contents' to work properly, and there was a lot of CSS fuckery to get anything looking right.
 
-- First item
-- Second item
-- Third item with more detail
-  - Nested item
-  - Another nested item
+This was a big step in my blogging journey, but Keystatic had started to get in the way of my enjoyment of writing content.
 
-### Ordered List
+### V4
 
-1. First step
-2. Second step
-3. Third step
+"Matthew? This is a subheading of the previous section! What about V4?" V4 is the visual overhaul that never happened. It was really just me messing around in my Web II class while I was bored out of my mind. The only reason it's called V4 was because this was around the time I started shoving the old versions of my site onto branches instead of colocating them all in one folder.
 
-## Blockquotes
+## V5: The New Hotness
 
-> This is a blockquote. You can use it to highlight important information or citations.
->
-> — Someone important
+I had big aspirations for V5, big aspirations! Initially, I wanted to **build** my own CMS, from scratch, mimicking the parts of Keystatic I loved. There's a half-baked branch of this in the repo somewhere, and a *really* stale NPM package kicking around, but that's really all there is to show of this. No wonder more people don't write their own CMSs -- this sucked.
 
-## And More
+I did still have an itch to blog, and I wanted to get back into it with as little friction as possible. So, I said to myself "Hey, I've been daily driving Linux for a few years now. I'm a programmer. I can use a terminal. Why don't I just write my posts in raw Markdown?" And now we're here.
 
-You can use all standard markdown features:
+Yes, this is all an excuse for me to learn [Helix](https://helix-editor.com/). Sorry guys, the jig is up.
 
-- ~~Strikethrough~~ text
-- **Bold** text
-- *Italic* text
-- [Links](https://example.com)
-- Inline `code` snippets
+In all seriousness, though, I've hit a really happy medium with my setup. My posts are written in raw MDX[^3], decorated with some frontmatter, and statically rendered out with NextJS. I was looking at moving over to [Astro](https://astro.build/) for a bit, but the juice just ain't worth the squeeze. Something nice I threw into this setup is schema validation on my metadata, so my sites have to follow certain rules (date, title, description, etc) before the site is even built. Look at me, I use types!
 
-The blog system is built on Next.js with MDX, remark, and rehype plugins for maximum flexibility.
+## Onwards
+
+Well, the infrastructure is in place! Now it's time to write some content. In all honesty, this whole post was just an excuse to make sure my Markdown rendering was working correctly.
+
+Quick closing note: For those of you looking for my Programming III notes, tough luck! Those probably aren't coming back anytime soon. I've had a conversation or two with the department about making a little textbook or resource for future students, but nothing concrete has come of it yet. Feel free to email / message me and poke me to get that back on the docket.
+
+[^1]: Yes, this is two hyphens. I was using the em-dash before LLMs even dropped, and have since seen nothing but scrutiny for using it. Unfortunatly, ditching it is not going to happen, as a) I love using them, and b) it's probably impossible to stop at this point, as my working for Cohere has [Sapir-Whorf](<https://en.wikipedia.org/wiki/Linguistic_relativity>)'d myself to write more like an LLM. Take comfort that the double hyphen is an indicator that I typed this with my fleshy human fingers, not generated it with an AI.
+
+[^2]: I've lived a thousand lives in the past few years. I've seen things.
+
+[^3]: This is so overkill for my purposes. The only reason it's implemented is actually muscle-memory from when I was writing the docs for [matt-init](https://init.matthew-hre.com), which also used MDX. A good chunk of this system was actually ripped from there, so shoutout me from a few months ago.

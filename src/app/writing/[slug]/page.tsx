@@ -2,10 +2,8 @@ import { Metadata } from "next";
 import {
   getPostSlugs,
   getPostBySlug,
-  getAllPostMetadata,
 } from "@/lib/blog/get-posts";
 import { notFound } from "next/navigation";
-import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
 interface PageProps {
@@ -43,7 +41,6 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
-  // Dynamic import of MDX content
   let Post;
   try {
     const module = await import(`@/content/posts/${slug}.mdx`);
@@ -52,19 +49,13 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
-  const allPosts = await getAllPostMetadata();
-  const currentIndex = allPosts.findIndex((p) => p.slug === slug);
-  const previousPost = allPosts[currentIndex + 1] || null;
-  const nextPost = allPosts[currentIndex - 1] || null;
-
   return (
     <>
-      <Navbar isVisible={true} />
       <main className="pt-20">
-        <article className="mx-auto max-w-[640px] px-4 py-12">
+        <article className="mx-auto max-w-[640px] px-4 pt-12">
           <header className="mb-8">
             <h1 className="text-4xl font-bold mb-4">{metadata.title}</h1>
-            <div className="text-gray-400 text-sm space-y-1 mb-4">
+            <div className="text-muted-foreground text-sm space-y-1 mb-4">
               <p>
                 Published{" "}
                 {new Date(metadata.dateCreated).toLocaleDateString("en-US", {
@@ -72,24 +63,25 @@ export default async function BlogPostPage({ params }: PageProps) {
                   month: "long",
                   day: "numeric",
                 })}
+
+                {metadata.dateModified && (
+                  <span>
+                    , updated{" "}
+                    {new Date(metadata.dateModified).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
+                )}
               </p>
-              {metadata.dateModified && (
-                <p>
-                  Updated{" "}
-                  {new Date(metadata.dateModified).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
-              )}
             </div>
             {metadata.tags && (
               <div className="mt-4 flex gap-2 flex-wrap mb-4">
                 {metadata.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs bg-gray-700/50 px-2 py-1 rounded text-gray-200"
+                    className="text-xs bg-card px-2 py-1 rounded text-foreground"
                   >
                     {tag}
                   </span>
@@ -104,7 +96,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                    className="text-sm text-primary hover:text-primary/80 transition-default"
                   >
                     {link.label}
                   </a>
@@ -116,31 +108,6 @@ export default async function BlogPostPage({ params }: PageProps) {
           <div className="prose prose-invert max-w-none mb-12">
             <Post />
           </div>
-
-          <nav className="border-t border-gray-600/20 pt-8 space-y-4">
-            {previousPost && (
-              <div>
-                <p className="text-gray-400 text-sm mb-1">Previous</p>
-                <a
-                  href={`/writing/${previousPost.slug}`}
-                  className="text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  {previousPost.title}
-                </a>
-              </div>
-            )}
-            {nextPost && (
-              <div>
-                <p className="text-gray-400 text-sm mb-1">Next</p>
-                <a
-                  href={`/writing/${nextPost.slug}`}
-                  className="text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  {nextPost.title}
-                </a>
-              </div>
-            )}
-          </nav>
         </article>
       </main>
       <Footer />

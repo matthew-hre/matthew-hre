@@ -90,7 +90,6 @@ export default function ProfileClient({
               >
                 {(["Projects", "Vinyl", "Writing"] as const).map((key) => {
                   const selected = section === key;
-                  const isDisabled = key === "Writing";
                   const handleClick = () => {
                     setSection(key);
                     const tabValue = key === "Vinyl" ? "vinyl" : key === "Writing" ? "writing" : "projects";
@@ -106,20 +105,13 @@ export default function ProfileClient({
                     <button
                       key={key}
                       role="tab"
-                      aria-selected={selected && !isDisabled}
-                      aria-disabled={isDisabled || undefined}
-                      disabled={isDisabled || undefined}
-                      tabIndex={isDisabled ? -1 : 0}
-                      onClick={!isDisabled ? handleClick : undefined}
+                      onClick={handleClick}
                       className={
                         `rounded-md px-4 py-1 flex-1 transition-colors duration-200 focus:outline-none ` +
-                        (isDisabled
-                          ? "cursor-not-allowed text-muted-foreground/80"
-                          : selected
-                            ? "bg-card-active text-foreground"
-                            : "text-muted-foreground hover:bg-card-hover")
+                        (selected
+                          ? "bg-card-active text-foreground"
+                          : "text-muted-foreground hover:bg-card-hover")
                       }
-                      title={isDisabled ? "Writing coming soon" : undefined}
                     >
                       {key}
                     </button>

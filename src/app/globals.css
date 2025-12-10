@@ -96,4 +96,31 @@
   .link-inline {
     @apply text-muted-foreground hover:text-primary underline transition-all duration-300 ease-out;
   }
+
+  #table-of-contents + ul,
+  #table-of-contents + ul * ul {
+    list-style-type: none !important;
+    list-style-position: inside !important;
+  }
+
+  #table-of-contents + ul {
+    margin-left: 0 !important;
+  }
+
+  #footnote-label {
+    border-top: 1px solid var(--border) !important;
+    margin: 1rem !important;
+    margin-top: 2rem !important;
+    
+    font-size: 0 !important;
+  }
+
+  blockquote p {
+    margin-bottom: 0 !important;
+  }
+
+  .footnotes p, .footnotes li {
+    font-size: var(--text-sm) !important;
+    color: var(--muted-foreground) !important;
+  }
 }
