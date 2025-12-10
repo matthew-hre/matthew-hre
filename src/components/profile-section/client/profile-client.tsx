@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Navbar from "@/components/navbar";
 import VinylPanel from "./vinyl-panel";
 import FadeInOnView from "@/components/anim/fade-in-on-view";
@@ -20,10 +21,20 @@ export default function ProfileClient({
   projects,
   writing,
 }: ProfileClientProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [section, setSection] = useState<Section>("Projects");
   const [hasViewedVinyl, setHasViewedVinyl] = useState(false);
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Initialize section from URL params
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam === "vinyl" || tabParam === "writing") {
+      setSection(tabParam === "vinyl" ? "Vinyl" : "Writing");
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (section === "Vinyl" && !hasViewedVinyl) {
@@ -79,25 +90,28 @@ export default function ProfileClient({
               >
                 {(["Projects", "Vinyl", "Writing"] as const).map((key) => {
                   const selected = section === key;
-                  const isDisabled = key === "Writing";
+                  const handleClick = () => {
+                    setSection(key);
+                    const tabValue = key === "Vinyl" ? "vinyl" : key === "Writing" ? "writing" : "projects";
+                    const params = new URLSearchParams(searchParams);
+                    if (tabValue === "projects") {
+                      params.delete("tab");
+                    } else {
+                      params.set("tab", tabValue);
+                    }
+                    router.push(`?${params.toString()}`);
+                  };
                   return (
                     <button
                       key={key}
                       role="tab"
-                      aria-selected={selected && !isDisabled}
-                      aria-disabled={isDisabled || undefined}
-                      disabled={isDisabled || undefined}
-                      tabIndex={isDisabled ? -1 : 0}
-                      onClick={!isDisabled ? () => setSection(key) : undefined}
+                      onClick={handleClick}
                       className={
                         `rounded-md px-4 py-1 flex-1 transition-colors duration-200 focus:outline-none ` +
-                        (isDisabled
-                          ? "cursor-not-allowed text-muted-foreground/80"
-                          : selected
-                            ? "bg-card-active text-foreground"
-                            : "text-muted-foreground hover:bg-card-hover")
+                        (selected
+                          ? "bg-card-active text-foreground"
+                          : "text-muted-foreground hover:bg-card-hover")
                       }
-                      title={isDisabled ? "Writing coming soon" : undefined}
                     >
                       {key}
                     </button>
@@ -113,8 +127,10 @@ export default function ProfileClient({
                 <VinylPanel />
               </div>
             )}
-            <div className={section === "Writing" ? "block" : "hidden"}>
-              {writing}
+            <div className={section === "Writing" ? "block space-y-2" : "hidden"}>
+              <StaggerChildren baseDelay={200} step={70}>
+                {writing}
+              </StaggerChildren>
             </div>
             <div className={section === "Projects" ? "block space-y-2" : "hidden"}>
               <StaggerChildren baseDelay={200} step={70}>
