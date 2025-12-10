@@ -86,39 +86,45 @@ export default function ProfileClient({
               <div
                 role="tablist"
                 aria-label="Content sections"
-                className="inline-flex w-full gap-1 rounded-lg bg-white/5 p-1 text-lg font-semibold"
+                className="inline-flex w-full gap-1 rounded-lg bg-card p-1 text-lg font-semibold"
               >
                 {(["Projects", "Vinyl", "Writing"] as const).map((key) => {
-                   const selected = section === key;
-                   const handleClick = () => {
-                     setSection(key);
-                     const tabValue = key === "Vinyl" ? "vinyl" : key === "Writing" ? "writing" : "projects";
-                     const params = new URLSearchParams(searchParams);
-                     if (tabValue === "projects") {
-                       params.delete("tab");
-                     } else {
-                       params.set("tab", tabValue);
-                     }
-                     router.push(`?${params.toString()}`);
-                   };
-                   return (
-                     <button
-                       key={key}
-                       role="tab"
-                       aria-selected={selected}
-                       tabIndex={0}
-                       onClick={handleClick}
-                       className={
-                         `rounded-md px-4 py-1 flex-1 transition-colors duration-200 focus:outline-none ` +
-                         (selected
-                           ? "bg-white/20 text-white"
-                           : "text-neutral-300 hover:bg-white/10")
-                       }
-                     >
-                       {key}
-                     </button>
-                   );
-                 })}
+                  const selected = section === key;
+                  const isDisabled = key === "Writing";
+                  const handleClick = () => {
+                    setSection(key);
+                    const tabValue = key === "Vinyl" ? "vinyl" : key === "Writing" ? "writing" : "projects";
+                    const params = new URLSearchParams(searchParams);
+                    if (tabValue === "projects") {
+                      params.delete("tab");
+                    } else {
+                      params.set("tab", tabValue);
+                    }
+                    router.push(`?${params.toString()}`);
+                  };
+                  return (
+                    <button
+                      key={key}
+                      role="tab"
+                      aria-selected={selected && !isDisabled}
+                      aria-disabled={isDisabled || undefined}
+                      disabled={isDisabled || undefined}
+                      tabIndex={isDisabled ? -1 : 0}
+                      onClick={!isDisabled ? handleClick : undefined}
+                      className={
+                        `rounded-md px-4 py-1 flex-1 transition-colors duration-200 focus:outline-none ` +
+                        (isDisabled
+                          ? "cursor-not-allowed text-muted-foreground/80"
+                          : selected
+                            ? "bg-card-active text-foreground"
+                            : "text-muted-foreground hover:bg-card-hover")
+                      }
+                      title={isDisabled ? "Writing coming soon" : undefined}
+                    >
+                      {key}
+                    </button>
+                  );
+                })}
               </div>
             </FadeInOnView>
           </div>

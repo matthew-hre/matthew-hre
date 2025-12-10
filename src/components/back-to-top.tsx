@@ -24,7 +24,7 @@ export default function BackToTop() {
         <button
             onClick={scrollToTop}
             className={clsx(
-                "fixed bottom-4 right-4 md:bottom-8 md:right-8 w-10 h-10 flex items-center justify-center rounded-md bg-white/5 text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50 transition-all duration-300 backdrop-blur-md",
+                "fixed bottom-4 right-4 md:bottom-8 md:right-8 w-10 h-10 flex items-center justify-center rounded-md bg-card text-foreground hover:bg-card-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-card-active transition-all duration-300 backdrop-blur-md",
                 show
                     ? "translate-y-0 opacity-100 pointer-events-auto"
                     : "translate-y-16 opacity-0 pointer-events-none"

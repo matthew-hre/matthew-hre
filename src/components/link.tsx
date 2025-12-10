@@ -23,7 +23,7 @@ export default function Link({
   icon,
   mono = false,
 }: CustomLinkProps) {
-  const baseClasses = "group flex w-fit items-center gap-2 transition-all duration-300 ease-out";
+  const baseClasses = "group flex w-fit items-center gap-2 transition-default";
 
   const sizeClasses = {
     sm: "text-sm",
@@ -32,11 +32,11 @@ export default function Link({
   };
 
   const variantClasses = {
-    default: "hover:underline hover:text-gray-200",
-    muted: "text-muted-foreground group-hover:underline group-hover:text-gray-200",
-    icon: "hover:text-gray-200",
+    default: "hover:underline hover:text-primary",
+    muted: "text-muted-foreground group-hover:underline group-hover:text-primary",
+    icon: "hover:text-primary",
     project: "font-semibold",
-    inline: "text-muted-foreground hover:underline hover:text-gray-200 inline-block",
+    inline: "text-muted-foreground hover:underline hover:text-primary inline-block",
   };
 
   const combinedClasses = cn(
@@ -52,7 +52,7 @@ export default function Link({
       {icon && icon}
       {variant === "muted" ? (
         <span className={cn(
-          "text-muted-foreground group-hover:underline transition-all duration-300 ease-out group-hover:text-gray-200",
+          "text-muted-foreground group-hover:underline transition-default group-hover:text-primary",
           mono && "font-mono"
         )}>
           {children}

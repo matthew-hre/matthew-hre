@@ -13,7 +13,7 @@ export default function NotFound() {
               "If you're looking for some content that used to be here, sorry! The website is getting completely reworked, and some things are still being moved over. Feel free to check out the "
             }
             <a
-              className="text-base underline hover:text-gray-200 hover:underline transition-all duration-300 ease-out"
+              className="text-base underline hover:text-primary transition-default"
               href="https://github.com/matthew-hre/matthew-hre/tree/v3"
               target="_blank"
               rel="noopener noreferrer"

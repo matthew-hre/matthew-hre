@@ -19,7 +19,6 @@ export default function StaggerChildren({
 
   return (
     <>
-
       {arr.map((child, i) => (
         <FadeInOnView key={i} delay={baseDelay + i * step} className={wrapClassName}>
           {child}

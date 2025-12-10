@@ -8,7 +8,7 @@ export default function ProjectsList() {
         description="A CLI tool for scaffolding Next.js projects the way I like 'em."
         githubUrl="https://github.com/matthew-hre/matt-init"
         projectUrl="https://init.matthew-hre.com"
-        imageFallbackColor="bg-black/60"
+        imageFallbackColor="bg-background/60"
         techStack={[
           "TypeScript",
           "React",
