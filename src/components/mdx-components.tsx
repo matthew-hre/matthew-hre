@@ -20,7 +20,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       const isExternal = href?.startsWith('http://') || href?.startsWith('https://')
 
       return (
-        <a
+        <Link
           id={id}
           href={href || "#"}
           target={isExternal ? '_blank' : undefined}
@@ -29,7 +29,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           {...props}
         >
           {children}
-        </a>
+        </Link>
       )
     },
     code: ({ children }) => (
@@ -44,6 +44,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     img: (props) => (
       <Image
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {...(props as any)}
         alt={props.alt || ""}
         className="rounded-lg my-4"

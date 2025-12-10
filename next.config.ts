@@ -58,6 +58,7 @@ export default (async (): Promise<NextConfig> => {
           rehypePrettyCode,
           {
             theme: "github-dark",
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onVisitLine(node: any) {
               if (node.children.length === 0) {
                 node.children = [{ type: "text", value: " " }];

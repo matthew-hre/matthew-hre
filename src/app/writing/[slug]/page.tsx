@@ -43,8 +43,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   let Post;
   try {
-    const module = await import(`@/content/posts/${slug}.mdx`);
-    Post = module.default;
+    const mod = await import(`@/content/posts/${slug}.mdx`);
+    Post = mod.default;
   } catch {
     notFound();
   }
