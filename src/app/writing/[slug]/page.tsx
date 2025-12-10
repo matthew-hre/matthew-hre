@@ -96,7 +96,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-primary hover:text-primary/80 transition-default"
+                    className="text-sm link-inline"
                   >
                     {link.label}
                   </a>

@@ -123,4 +123,8 @@
     font-size: var(--text-sm) !important;
     color: var(--muted-foreground) !important;
   }
+
+  ul + p {
+    margin-top: 1rem !important;
+  }
 }
