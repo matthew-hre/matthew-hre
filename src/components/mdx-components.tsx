@@ -43,13 +43,20 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </pre>
     ),
     img: (props) => (
-      <Image
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        {...(props as any)}
-        alt={props.alt || ""}
-        className="rounded-lg my-4"
-        sizes="(max-width: 768px) 100vw, 768px"
-      />
+      <>
+        <Image
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          {...(props as any)}
+          alt={props.alt || ""}
+          className="rounded-lg my-4 mx-8"
+          sizes="(max-width: 768px) 100vw, 768px"
+          width={768}
+          height={0}
+        />
+        <span className="text-sm text-center block mx-auto text-muted-foreground mb-4">
+          {props.title}
+        </span>
+      </>
     ),
     ul: ({ children }) => (
       <ul className="list-disc list-outside ml-6 mt-1 space-y-1">{children}</ul>
