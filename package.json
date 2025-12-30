@@ -20,7 +20,7 @@
     "globby": "^16.0.0",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.503.0",
-    "next": "^15.5.7",
+    "next": "15.5.9",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-intersection-observer": "^9.16.0",
