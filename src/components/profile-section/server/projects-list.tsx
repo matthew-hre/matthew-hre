@@ -4,6 +4,26 @@ export default function ProjectsList() {
   return (
     <>
       <ProjectCard
+        title="BobrChat"
+        description="A multi-model, Bring Your Own Key AI chat application."
+        githubUrl="https://github.com/matthew-hre/bobrchat-issues"
+        projectUrl="https://bobrchat.com"
+        imageFallbackColor="bg-[#77bc32]"
+        techStack={[
+          "TypeScript",
+          "React",
+          "Next.js",
+          "React Query",
+          "Zustand",
+          "BetterAuth",
+          "PostgreSQL",
+          "NeonDB",
+          "Nix",
+          "AI-SDK",
+          "Vercel",
+        ]}
+      />
+      <ProjectCard
         title="matt-init"
         description="A CLI tool for scaffolding Next.js projects the way I like 'em."
         githubUrl="https://github.com/matthew-hre/matt-init"
