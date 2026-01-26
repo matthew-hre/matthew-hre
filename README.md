@@ -8,4 +8,6 @@ Also a Student @ [Mount Royal University](https://mtroyal.ca);<br>
 - 11x hackathon participant (1x winner. Terrible ratio, I know)<br>
 - Check me out more @ [matthew-hre.com](https://www.matthew-hre.com)<br>
 
-Email me @ mhreh594(at)mtroyal(dot)ca
+Email me @ me(at)matthew-hre(dot)com
+
+![GitHub Stats Graph](https://git-stats.alahdal.ca/api?username=matthew-hre&theme=github_dark&rank_icon=percentile)
