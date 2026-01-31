@@ -6,7 +6,7 @@ export default function ProjectsList() {
       <ProjectCard
         title="BobrChat"
         description="A multi-model, Bring Your Own Key AI chat application."
-        githubUrl="https://github.com/matthew-hre/bobrchat-issues"
+        githubUrl="https://github.com/matthew-hre/bobrchat/"
         projectUrl="https://bobrchat.com"
         imageFallbackColor="bg-[#77bc32]"
         techStack={[
@@ -21,6 +21,7 @@ export default function ProjectsList() {
           "Nix",
           "AI-SDK",
           "Vercel",
+          "Cloudflare",
         ]}
       />
       <ProjectCard
