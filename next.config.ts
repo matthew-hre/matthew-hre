@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
@@ -38,46 +39,33 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default (async (): Promise<NextConfig> => {
-  const createMDX = (await import("@next/mdx")).default;
-  const remarkGfm = (await import("remark-gfm")).default;
-  const remarkFrontmatter = (await import("remark-frontmatter")).default;
-  const remarkToc = (await import("remark-toc")).default;
-  const rehypePrettyCode = (await import("rehype-pretty-code")).default;
-  const rehypeSlug = (await import("rehype-slug")).default;
-  const rehypeAutolinkHeadings = (await import("rehype-autolink-headings"))
-    .default;
-
-  const withMDX = createMDX({
-    extension: /\.mdx?$/,
-    options: {
-      remarkPlugins: [remarkGfm, remarkFrontmatter, [remarkToc, { tight: true }]],
-      rehypePlugins: [
-        rehypeSlug,
-        [
-          rehypePrettyCode,
-          {
-            theme: "github-dark",
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onVisitLine(node: any) {
-              if (node.children.length === 0) {
-                node.children = [{ type: "text", value: " " }];
-              }
-            },
-          },
-        ],
-        [
-          rehypeAutolinkHeadings,
-          {
-            properties: {
-              className: ["anchor"],
-              ariaLabel: "Link to section",
-            },
-          },
-        ],
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [
+      "remark-gfm",
+      "remark-frontmatter",
+      ["remark-toc", { tight: true }],
+    ],
+    rehypePlugins: [
+      "rehype-slug",
+      [
+        "rehype-pretty-code",
+        {
+          theme: "github-dark",
+        },
       ],
-    },
-  });
+      [
+        "rehype-autolink-headings",
+        {
+          properties: {
+            className: ["anchor"],
+            ariaLabel: "Link to section",
+          },
+        },
+      ],
+    ],
+  },
+});
 
-  return withMDX(nextConfig);
-})();
+export default withMDX(nextConfig);
