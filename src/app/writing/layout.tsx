@@ -1,18 +1,15 @@
 "use client";
 
-import Navbar from "@/components/navbar";
-import { useScrollNavbar } from "@/hooks/useScrollNavbar";
+import NavbarWithTabs from "@/components/navbar-with-tabs";
 
 export default function WritingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const isNavbarVisible = useScrollNavbar();
-
   return (
     <>
-      <Navbar isVisible={isNavbarVisible} />
+      <NavbarWithTabs />
       {children}
     </>
   );
