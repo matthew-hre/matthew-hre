@@ -1,0 +1,113 @@
+---
+title: "From $30 to $3: Building My Own AI Chat Platform"
+description: "A breakdown of my AI journey, and why I built BobrChat."
+dateCreated: "2026-03-01T11:30:00Z"
+tags: ["ai", "development", "personal"]
+links:
+  - url: "https://bobrchat.com"
+    label: "Try BobrChat"
+---
+
+## The First Voight-Kampff Test
+
+I've been fooling around with AI since ChatGPT 3 first dropped. I was in my last year of high school at the time, a few months out from graduating, and it felt like a *toy*. It wasn't mainstream yet -- I remember pulling it up on my phone and showing friends and family, freaking them out with generating stupid poems and weird hot chocolate recipes of all things. Those were the days -- just fooling around with it.
+
+Trying to write code with it, though? Dogshit. I was working for a company doing Minecraft server management and course instruction at the time -- running classes for middle schoolers learning about sustainability -- and I tried to get it to help me with some command block logic. It could not formulate any decent logic -- all fake commands and non-existent syntax. Which makes sense! Tool calling wasn't a thing, and it was still fairly limited in parameters. So, it stayed a toy. A fun, occasionally impressive toy that I mostly used for writing.
+
+## The $28 Rabbit Hole
+
+I was on-and-off playing with AI for a while after that, nothing serious. It wasn't until GPT-4o dropped -- probably around my second year of university -- that I really started *coding* with it. This is when things started to switch for me -- it soon started actually helping me build stuff, giving me half-decent advice (coding, not life), and not hallucinate every other line. I was using it for studying, programming, and applying to internships, so dropping $28 CAD a month on a ChatGPT Plus plan felt like a reasonable investment.
+
+This is also around the time I became aware of Claude, as that was the other major model making waves. I was definitely Claude-Curious, but never ended up going for a plan -- I was already paying $30 for one app, why would I move my data for another at the same price? Only once I found the best of both worlds - and for cheaper - did I finally move.
+
+## T3 and the $11 "Sweet Spot"
+
+Around mid 2025, I moved over to [T3.chat](https://t3.chat) -- $11 CAD a month for a whole buffet of models, with a decent amount of "usage" (we'll talk about this in a second). At a fraction of the cost of ChatGPT, and with the newfound ability to fool around with Claude and the recently-not-so-terrible Gemini, this was a sick deal. I used T3 for around seven months, fairly happily.
+
+Then, they fucked up.[^1]
+
+## The Wrapped Incident
+
+In December 2025, T3 released a "T3 Wrapped" -- a Spotify Wrapped style breakdown of your usage over the past year -- or seven months for me. It showed me what models I used, how many chats I made, and how many tokens I sent and received. Super cool! Very fun! And *extremely* revealing.
+
+![](/images/building-bobrchat/t3.png "My T3.chat Wrapped summary -- I sadly don't have more of these breakdowns")
+
+A couple things jumped out immediately:
+
+- My two most-used models accounted for around **96%** of my total usage
+- I had used roughly **11 million tokens** (~10M in, ~1M out)
+- Over the span of 7 months and **$77 CAD** worth of subscriptions, I had only consumed around **$20** of actual API usage[^2]
+
+I was paying more than triple what my usage was actually worth.
+
+See, T3 obfuscates your actual usage behind "credits," where 1 "credit" is a message, or part of an image, or whatever. They also had "pro credits" for fancier models.[^3] This is fine -- it's a business, they need to make money, and the product is pretty good. But once you see the math, you can't unsee it.
+
+## New Year's Eve Eve, 2025
+
+On December 30th, 2025, I pushed the first commit to **BobrChat**.
+
+![](/images/building-bobrchat/jj-log.png "The JJ log of the first few BobrChat commits")
+
+The name comes from the [Ghostty](https://ghostty.org/) terminal emulator Discord. We have this [gif of a beaver spinning around](https://media.tenor.com/fF4sTbrZvnsAAAPo/bober-kurwa.mp4) that gets posted constantly, and we've kind of deified the beaver into this cult symbol. Whenever any of us have an idea for a piece of software we could make better, we name it after the bobr. A tiling window manager? [bobrwm](https://github.com/bobrwm/bobrwm). A voice-to-text app? [BobrWhisper](https://github.com/Polymath-AS/bobrwhisper). An AI chat platform? BobrChat. I'm pretty sure I was the first to actually purchase a domain with bobr in it, though.
+
+The whole thing started as a demo to see if I could actually get something running: I would just spin up a NextJS app, wrap the [OpenRouter](https://openrouter.ai/) SDK, and try to give myself the same functionality as T3, but with a bit more observability of my actual usage. When I started this project, I threw **$10** into an OpenRouter account. At the time of writing this, I still have **$1.38** left. That's months of daily use. I used, and *still* use, paid models for testing.
+
+## Two Days to Dogfood
+
+I set myself a goal: get BobrChat fully usable as a daily driver before January 16th, 2026 -- my next T3 billing date.
+
+Based on the JJ log[^4], the timeline looked something like this:
+
+- **Day 3**: Threads were added. This is when I fully switched over
+- **Day 6**: Model selection stopped being hardcoded (it was solely Gemini Flash 3 for a hot minute)
+- **Week 2**: Web search was working
+- **January 13th**: T3 subscription cancelled. Felt so good.
+
+![](/images/building-bobrchat/bobrchat-beta.png "The earliest BobrChat screenshot I could find -- taken around mid-January")
+
+I'd never worked on an app this large in scope before. I've worked on some major projects during my time at Alberta Health Services, but there you only really look at one bit at a time. This was a *ton* to digest at once, and so much of it was stuff I'd never played with: file uploads, Redis caches for rate limiting, WorkOS for authentication -- and then *moving* authentication because I started on better-auth and hit some friction, and had a pipe-dream that maybe one day I'd need SSO/SAML support. I'd never done a bunch of this, let alone all at once!
+
+Not ashamed to say I vibe-coded parts of BobrChat. But I think the value is in knowing *which* parts I can vibe, and which parts need to be hand-coded. I definitely bit a few big pieces off with AI early, which bit me in the ass later, but I've found a really nice balance at this point.
+
+## So, What Is It?
+
+![](/images/building-bobrchat/bobrchat.png "My personal BobrChat account -- no shaming me for my threads please.")
+
+BobrChat is a free, open-source[^5] AI chat platform. Here's what you get for free with a Bring Your Own API Key from OpenRouter:
+
+- **300+ models** (10x what T3 offers) with per-model selection
+- **100 conversations**
+- **10MB of file uploads** with OCR for PDFs
+- Web search powered by Parallel - some of the best AI web search I've used
+- Pricing data so you can see exactly what you're spending
+- Tags, chat icons, UI colorization -- all the UX goodness you could want
+
+For **$2.99/month**, you get unlimited threads and 100MB of storage. The idea is to let anyone use the platform freely and without many obstructions, while letting a handful of people pay for hosting and help me keep the lights on. This felt like a nice way to democratize access to AI tools without gouging people for it.
+
+## The Math
+
+Let's do the journey in numbers:
+
+| Period | Platform | Monthly Cost (CAD) |
+| --- | --- | --- |
+| 2024 | ChatGPT Plus | ~$28 |
+| Mid 2025 | T3.chat | ~$11 |
+| 2026 | BobrChat + OpenRouter | ~$4 |
+
+That's a 90% reduction from where I started. And I have *more* control, *more* models, and *more* visibility into my spending than I ever did before.
+
+## What's Next
+
+Right now, my goal is to break even on hosting costs so I can start sharing profits with my open-source contributors. After that? I actually have to *market* this thing -- a whole new world for me. I took an "Intro to Marketing" course in my first year of university, but I don't think that's going to carry me very far here.
+
+If you want to check it out, [BobrChat is live](https://bobrchat.com). Bring your own API key, kick the tires, and maybe save yourself a few bucks. If you're feeling generous, that $2.99 goes a long way toward keeping the beaver spinning.
+
+[^1]: Okay, "fucked up" is harsh. They did something cool and transparent. It just happened to reveal information that lead to me removing $11 from their monthly revenue. Real damage, I know.
+
+[^2]: For transparency: My top models were Claude Haiku 4.5 with 88% of usage, and GPT-5 with 8% of usage. Based on current pricing, and assuming the other 4% are fairly pricey (Opus, Sonnet, 5.2), we're coming in around $20 USD. This is a rough estimate.
+
+[^3]: I think they've since merged these into one system. Supposedly better, but I still don't love the obfuscation of usage.
+
+[^4]: [Jujutsu](https://docs.jj-vcs.dev/latest/) -- a version control system. This is a blog post for a later day.
+
+[^5]: Under the [Business Source License](https://mariadb.com/bsl11/), technically. Open source with some guardrails.

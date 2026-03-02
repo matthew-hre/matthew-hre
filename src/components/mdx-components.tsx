@@ -43,14 +43,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </pre>
     ),
     img: (props) => (
-      <span className="block px-4">
-        <Image
+      <span className="block">
+        <img
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           {...(props as any)}
           alt={props.alt || ""}
           className="rounded-lg my-4 w-full"
-          width={768}
-          height={0}
+          //width={1920}
+          //height={0}
         />
         <span className="text-sm text-center block mx-auto text-muted-foreground mb-4">
           {props.title}
