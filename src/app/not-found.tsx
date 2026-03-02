@@ -1,10 +1,10 @@
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import NavbarWithTabs from "@/components/navbar-with-tabs";
 
 export default function NotFound() {
   return (
     <>
-      <Navbar isVisible />
+      <NavbarWithTabs />
       <main className="mx-auto max-w-[640px] px-4 pt-24 pb-10 sm:pt-40">
         <div className="flex flex-col px-4 gap-4">
           <h2 className="text-xl font-bold mb-4">404</h2>

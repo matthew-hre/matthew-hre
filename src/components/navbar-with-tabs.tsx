@@ -1,34 +1,39 @@
+"use client";
+
 import Image from "next/image";
+import NextLink from "next/link";
+import { usePathname } from "next/navigation";
 import { Github, Linkedin, Instagram } from "@/components/icons";
 import Link from "./link";
 import { cn } from "@/lib/utils";
-import { Ref } from "react";
+import { useScrollNavbar } from "@/hooks/useScrollNavbar";
 
-export default function Navbar({
-  isVisible,
-  isMerged = false,
-  cardRef,
-}: {
-  isVisible: boolean;
-  isMerged?: boolean;
-  cardRef?: Ref<HTMLDivElement>;
-}) {
+const TABS = [
+  { key: "Projects", href: "/" },
+  { key: "Vinyl", href: "/?tab=vinyl" },
+  { key: "Writing", href: "/?tab=writing" },
+] as const;
+
+export default function NavbarWithTabs() {
+  const isVisible = useScrollNavbar();
+  const pathname = usePathname();
+
+  const activeTab = pathname.startsWith("/writing") ? "Writing" : null;
+
   return (
     <nav className="pointer-events-none fixed top-6 z-30 grid w-full grid-cols-[1fr_min(640px,100%)_1fr] px-4">
       <div
-        ref={cardRef}
-        className={cn("pointer-events-auto col-start-2 col-end-3 -mx-px bg-card px-4 py-2.5 will-change-transform [@supports(backdrop-filter:blur(0px))]:bg-card transition-[translate,opacity,border-radius] duration-200 ease-in-out",
-          !isMerged && "backdrop-blur",
+        className={cn(
+          "pointer-events-auto col-start-2 col-end-3 group/nav -mx-px rounded-lg bg-card px-1 py-1 backdrop-blur will-change-transform [@supports(backdrop-filter:blur(0px))]:bg-card transition-[translate,opacity] duration-200 ease-in-out",
           isVisible
             ? "translate-y-0 opacity-100"
-            : "-translate-y-4 opacity-0 pointer-events-none",
-          isMerged ? "rounded-t-lg rounded-b-none" : "rounded-2xl"
+            : "-translate-y-4 opacity-0 pointer-events-none"
         )}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between px-3 pt-1.5 pb-1.5">
           <div className="flex items-center space-x-4">
             <Link
-              className="group flex w-fit items-center gap-2  text-base rounded-full"
+              className="group flex w-fit items-center gap-2 text-base rounded-full"
               href="/"
             >
               <div className="rounded-full bg-linear-to-tl to-gradient-accent shadow-lg p-0.5 group transform transition ease-out hover:scale-105 hover:to-gradient-accent-hover active:translate-y-0.5">
@@ -65,7 +70,29 @@ export default function Navbar({
             </Link>
           </div>
         </div>
+        <div className="grid grid-rows-[0fr] group-hover/nav:grid-rows-[1fr] transition-[grid-template-rows] duration-200 ease-in-out">
+          <div className="overflow-hidden">
+            <div
+              role="tablist"
+              aria-label="Content sections"
+              className="mt-2 inline-flex w-full gap-1 rounded-lg text-lg font-semibold"
+            >
+              {TABS.map(({ key, href }) => {
+                return (
+                  <NextLink
+                    key={key}
+                    role="tab"
+                    href={href}
+                    className="rounded-md px-4 py-1 flex-1 text-center transition-colors duration-200 focus:outline-none text-foreground hover:bg-white/15"
+                  >
+                    {key}
+                  </NextLink>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </div>
-    </nav >
+    </nav>
   );
 }
