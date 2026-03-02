@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
 import { Disc, Disc3 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -34,7 +34,7 @@ export default function MusicPresence() {
   const [isLoading, setIsLoading] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
 
-  const fetchRecentTracks = async () => {
+  const fetchRecentTracks = useEffectEvent(async () => {
     try {
       const response = await fetch('/api/music');
 
@@ -52,7 +52,7 @@ export default function MusicPresence() {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   useEffect(() => {
     fetchRecentTracks();

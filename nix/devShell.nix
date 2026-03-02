@@ -2,14 +2,14 @@
   mkShell,
   alejandra,
   nodejs,
-  pnpm,
+  bun,
 }:
 mkShell {
   name = "matthew-hre.com";
 
   packages = [
     nodejs
-    pnpm
+    bun
 
     alejandra
   ];
