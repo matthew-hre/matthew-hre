@@ -49,9 +49,9 @@ export default function Header() {
           A web developer, graphic designer, and 4th year computing student. Makes plenty of games,
           a few helpful tools, and lots of studying resources.
         </p>
-        <p className="text-base">
+        {/*<p className="text-base">
           Currently seeking internships for this summer – preferably writing code. Reach out to me at <Link variant="inline" href="mailto:me@matthew-hre.com">me@matthew-hre.com</Link>!
-        </p>
+        </p>*/}
         <div className="flex flex-row flex-wrap items-center justify-start gap-5 border-y border-border/50 w-full py-3 text-sm font-semibold text-muted-foreground sm:justify-between sm:gap-3">
           <div className="flex items-center gap-1">
             <Briefcase className="h-4 w-4" />
