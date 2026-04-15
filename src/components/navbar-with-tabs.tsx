@@ -24,7 +24,7 @@ export default function NavbarWithTabs() {
     <nav className="pointer-events-none fixed top-6 z-30 grid w-full grid-cols-[1fr_min(640px,100%)_1fr] px-4">
       <div
         className={cn(
-          "pointer-events-auto col-start-2 col-end-3 group/nav -mx-px rounded-lg bg-card px-1 py-1 backdrop-blur will-change-transform [@supports(backdrop-filter:blur(0px))]:bg-card transition-[translate,opacity] duration-200 ease-in-out",
+          "pointer-events-auto col-start-2 col-end-3 group/nav -mx-px rounded-lg bg-[#313131]/80 px-1 py-1 backdrop-blur-lg will-change-transform transition-[translate,opacity] duration-200 ease-in-out",
           isVisible
             ? "translate-y-0 opacity-100"
             : "-translate-y-4 opacity-0 pointer-events-none"

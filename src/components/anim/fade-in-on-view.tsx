@@ -1,31 +1,34 @@
 "use client";
 
-import { useInView } from "react-intersection-observer";
-import { PropsWithChildren } from "react";
+import { useEffect, useState, PropsWithChildren } from "react";
 
 type Props = {
   delay?: number;
   className?: string;
-  threshold?: number;
-  rootMargin?: string;
 };
 
 export default function FadeInOnView({
   children,
   delay = 0,
   className = "",
-  threshold = 0,
-  rootMargin = "0px 0px 100px 0px",
 }: PropsWithChildren<Props>) {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold, rootMargin });
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShow(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   return (
     <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
+      style={{
+        transitionDelay: `${delay}ms`,
+        filter: show ? "blur(0px)" : "blur(6px)",
+      }}
       className={[
-        "transform-gpu will-change-transform transition-all duration-500 ease-out",
-        "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100",
-        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+        "transform-gpu will-change-[opacity,transform,filter] transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:blur-none",
+        show ? "opacity-100 scale-100" : "opacity-0 scale-95",
         className,
       ].join(" ")}
     >
