@@ -30,12 +30,7 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
-      {
-        protocol: "https",
-        hostname: "i.discogs.com",
-        port: "",
-        pathname: "/**",
-      },
+
     ],
   },
 };
