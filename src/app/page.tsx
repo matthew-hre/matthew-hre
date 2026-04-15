@@ -7,8 +7,8 @@ export default function Home() {
     <>
       <Suspense>
         <ProfileSection />
+        <Footer />
       </Suspense>
-      <Footer />
     </>
   );
 }

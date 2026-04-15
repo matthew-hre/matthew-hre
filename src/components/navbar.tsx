@@ -1,8 +1,8 @@
+import { Ref } from "react";
 import Image from "next/image";
 import { Github, Linkedin, Instagram } from "@/components/icons";
 import Link from "./link";
 import { cn } from "@/lib/utils";
-import { Ref } from "react";
 
 export default function Navbar({
   isVisible,

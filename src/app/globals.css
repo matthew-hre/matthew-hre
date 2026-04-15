@@ -128,3 +128,18 @@
     margin-top: 1rem !important;
   }
 }
+
+/* View transition: smooth morph for profile avatar and name */
+::view-transition-group(profile-avatar),
+::view-transition-group(profile-name) {
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(profile-avatar),
+::view-transition-new(profile-avatar),
+::view-transition-old(profile-name),
+::view-transition-new(profile-name) {
+  animation: none;
+  mix-blend-mode: normal;
+}

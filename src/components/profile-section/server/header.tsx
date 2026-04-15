@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import Image from "next/image";
 import {
   Briefcase,
@@ -13,25 +14,29 @@ export default function Header() {
       <div className="flex flex-col gap-4 px-4">
         <div className="flex w-full flex-col-reverse items-start justify-between gap-7 pb-5 sm:flex-row sm:gap-0">
           <div className="flex items-center space-x-4">
-            <div className="rounded-full bg-linear-to-tl from-background/60 to-gradient-accent shadow-lg p-[3px] ring-[5px] ring-avatar-ring">
-              <div className="rounded-full p-px h-24 w-24">
-                <Image
-                  className="rounded-full filter"
-                  width={96}
-                  height={96}
-                  sizes="96px"
-                  decoding="async"
-                  alt="Matthew Hrehirchuk"
-                  src="https://avatars.githubusercontent.com/u/49077192?v=4"
-                />
+            <ViewTransition name="profile-avatar">
+              <div className="rounded-full bg-linear-to-tl from-background/60 to-gradient-accent shadow-lg p-[3px] ring-[5px] ring-avatar-ring">
+                <div className="rounded-full p-px h-24 w-24">
+                  <Image
+                    className="rounded-full filter"
+                    width={96}
+                    height={96}
+                    sizes="96px"
+                    decoding="async"
+                    alt="Matthew Hrehirchuk"
+                    src="https://avatars.githubusercontent.com/u/49077192?v=4"
+                  />
+                </div>
               </div>
-            </div>
-            <h1 className="flex flex-col gap-1">
-              <span className="text-3xl font-bold w-1/2">Matthew Hrehirchuk</span>
-              <span className="font-mono text-base font-medium">
-                @matthew_hre
-              </span>
-            </h1>
+            </ViewTransition>
+            <ViewTransition name="profile-name">
+              <h1 className="flex flex-col gap-1">
+                <span className="text-3xl font-bold w-1/2">Matthew Hrehirchuk</span>
+                <span className="font-mono text-base font-medium">
+                  @matthew_hre
+                </span>
+              </h1>
+            </ViewTransition>
           </div>
           <div className="flex items-center space-x-4 self-end text-sm font-bold sm:-mt-16 sm:self-auto">
             <Link href="https://github.com/matthew-hre" variant="icon" size="sm">
