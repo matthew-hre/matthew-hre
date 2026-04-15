@@ -2,6 +2,8 @@
 
 import { useEffect, useState, PropsWithChildren } from "react";
 
+let hasHydrated = false;
+
 type Props = {
   delay?: number;
   className?: string;
@@ -12,11 +14,16 @@ export default function FadeInOnView({
   delay = 0,
   className = "",
 }: PropsWithChildren<Props>) {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(hasHydrated);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setShow(true));
-    return () => cancelAnimationFrame(id);
+    if (!hasHydrated) {
+      const id = requestAnimationFrame(() => {
+        hasHydrated = true;
+        setShow(true);
+      });
+      return () => cancelAnimationFrame(id);
+    }
   }, []);
 
   return (

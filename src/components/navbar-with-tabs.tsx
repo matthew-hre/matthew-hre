@@ -1,5 +1,6 @@
 "use client";
 
+import { ViewTransition } from "react";
 import Image from "next/image";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,31 +33,35 @@ export default function NavbarWithTabs() {
       >
         <div className="flex items-center justify-between px-3 pt-1.5 pb-1.5">
           <div className="flex items-center space-x-4">
-            <Link
-              className="group flex w-fit items-center gap-2 text-base rounded-full"
-              href="/"
-            >
-              <div className="rounded-full bg-linear-to-tl to-gradient-accent shadow-lg p-0.5 group transform transition ease-out hover:scale-105 hover:to-gradient-accent-hover active:translate-y-0.5">
-                <div className="rounded-full p-px h-10 w-10 transition duration-300 group-hover:scale-105">
-                  <Image
-                    alt="A picture of Matthew"
-                    width="40"
-                    height="40"
-                    decoding="async"
-                    className="rounded-full"
-                    src="https://avatars.githubusercontent.com/u/49077192?v=4"
-                  />
+            <ViewTransition name="profile-avatar">
+              <Link
+                className="group flex w-fit items-center gap-2 text-base rounded-full"
+                href="/"
+              >
+                <div className="rounded-full bg-linear-to-tl to-gradient-accent shadow-lg p-0.5 group transform transition ease-out hover:scale-105 hover:to-gradient-accent-hover active:translate-y-0.5">
+                  <div className="rounded-full p-px h-10 w-10 transition duration-300 group-hover:scale-105">
+                    <Image
+                      alt="A picture of Matthew"
+                      width="40"
+                      height="40"
+                      decoding="async"
+                      className="rounded-full"
+                      src="https://avatars.githubusercontent.com/u/49077192?v=4"
+                    />
+                  </div>
                 </div>
+              </Link>
+            </ViewTransition>
+            <ViewTransition name="profile-name">
+              <div className="flex flex-col">
+                <p className="text-base">
+                  Matthew Hrehirchuk
+                </p>
+                <p className="text-muted-foreground text-sm font-mono">
+                  @matthew_hre
+                </p>
               </div>
-            </Link>
-            <div className="flex flex-col">
-              <p className="text-base">
-                Matthew Hrehirchuk
-              </p>
-              <p className="text-muted-foreground text-sm font-mono">
-                @matthew_hre
-              </p>
-            </div>
+            </ViewTransition>
           </div>
           <div className="flex items-center space-x-2 text-base font-semibold leading-none text-foreground sm:space-x-5">
             <Link href="https://github.com/matthew-hre" variant="icon">

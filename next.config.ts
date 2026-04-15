@@ -3,6 +3,9 @@ import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  experimental: {
+    viewTransition: true,
+  },
   pageExtensions: ["ts", "tsx", "mdx"],
   images: {
     remotePatterns: [
