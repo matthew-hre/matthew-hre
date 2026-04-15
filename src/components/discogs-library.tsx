@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState, useCallback, memo } from "react";
 import { useInView } from "react-intersection-observer";
-import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import DiscogsLibrarySkeleton from "./discogs-library-skeleton";
 import {
@@ -50,20 +49,11 @@ async function fetchLibraryPage(page = 1, sortOption: SortOption = 'added', sign
 function ReleaseCard({ release }: { release: Release }) {
     return (
         <div key={release.discogs_id} className="flex flex-col h-full">
-            <Image
+            <img
                 src={release.cover_image}
                 alt={release.title}
-                width={300}
-                height={300}
+                loading="lazy"
                 className="w-full aspect-square object-cover"
-                onError={(e) => {
-                    try {
-                        const target = e.currentTarget as unknown as HTMLImageElement;
-                        if (target && "src" in target) target.src = "/placeholder-album.jpg";
-                    } catch {
-                        // ignore
-                    }
-                }}
             />
             <div className="flex flex-col mt-4 flex-1">
                 <h3 className="text-md font-bold">{release.title}</h3>
