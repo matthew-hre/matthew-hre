@@ -17,8 +17,8 @@ export default function Navbar({
     <nav className="pointer-events-none fixed top-6 z-30 grid w-full grid-cols-[1fr_min(640px,100%)_1fr] px-4">
       <div
         ref={cardRef}
-        className={cn("pointer-events-auto col-start-2 col-end-3 -mx-px bg-card px-4 py-2.5 will-change-transform [@supports(backdrop-filter:blur(0px))]:bg-card transition-[translate,opacity,border-radius] duration-200 ease-in-out",
-          !isMerged && "backdrop-blur",
+        className={cn("pointer-events-auto col-start-2 col-end-3 -mx-px bg-[#313131]/80 px-4 py-2.5 will-change-transform transition-[translate,opacity,border-radius] duration-200 ease-in-out",
+          !isMerged && "backdrop-blur-lg",
           isVisible
             ? "translate-y-0 opacity-100"
             : "-translate-y-4 opacity-0 pointer-events-none",

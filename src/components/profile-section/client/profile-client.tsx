@@ -209,8 +209,8 @@ export default function ProfileClient({
                   role="tablist"
                   aria-label="Content sections"
                   className={cn(
-                    "inline-flex w-full gap-1 bg-card p-1 text-lg font-semibold transition-[border-radius] duration-300",
-                    isMerged ? "rounded-t-none rounded-b-lg" : "rounded-lg"
+                    "inline-flex w-full gap-1 p-1 text-lg font-semibold transition-[border-radius,background-color] duration-300",
+                    isMerged ? "rounded-t-none rounded-b-lg bg-[#313131]/80" : "rounded-lg bg-card"
                   )}
                 >
                   {(["Projects", "Vinyl", "Writing"] as const).map((key) => {
