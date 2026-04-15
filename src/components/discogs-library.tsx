@@ -2,9 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback, memo } from "react";
 import { useInView } from "react-intersection-observer";
-import Image from "next/image";
 import { Loader2 } from "lucide-react";
-import type { DiscogResponse, Release } from "@/types/discog";
 import DiscogsLibrarySkeleton from "./discogs-library-skeleton";
 import {
     Select,
@@ -16,48 +14,51 @@ import {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+const API_BASE = "https://api.matthew-hre.com";
+
+interface Release {
+    discogs_id: number;
+    title: string;
+    artist_name: string;
+    cover_image: string;
+    date_added: string;
+}
+
+interface VinylResponse {
+    pagination: { page: number; pages: number; per_page: number; items: number };
+    releases: Release[];
+}
+
 type SortOption = 'title-asc' | 'title-desc' | 'artist-asc' | 'artist-desc' | 'added';
 
-async function fetchLibraryPage(page = 1, sortOption: SortOption = 'added', signal?: AbortSignal): Promise<DiscogResponse> {
-    // Map our sort options to Discogs API parameters
-    const sortMapping: Record<SortOption, { sort: string; sort_order: string }> = {
-        'title-asc': { sort: 'title', sort_order: 'asc' },
-        'title-desc': { sort: 'title', sort_order: 'desc' },
-        'artist-asc': { sort: 'artist', sort_order: 'asc' },
-        'artist-desc': { sort: 'artist', sort_order: 'desc' },
-        'added': { sort: 'added', sort_order: 'desc' },
+async function fetchLibraryPage(page = 1, sortOption: SortOption = 'added', signal?: AbortSignal): Promise<VinylResponse> {
+    const sortMapping: Record<SortOption, { sort: string; order: string }> = {
+        'title-asc': { sort: 'title', order: 'asc' },
+        'title-desc': { sort: 'title', order: 'desc' },
+        'artist-asc': { sort: 'artist', order: 'asc' },
+        'artist-desc': { sort: 'artist', order: 'desc' },
+        'added': { sort: 'added', order: 'desc' },
     };
 
-    const { sort, sort_order } = sortMapping[sortOption];
-    // First page is pre-rendered and cached via ISR, subsequent pages fetched on-demand
-    const res = await fetch(`/api/discogs/library?page=${page}&sort=${sort}&sort_order=${sort_order}`, { signal });
-    if (!res.ok) throw new Error(`Failed to fetch discogs page ${page}`);
+    const { sort, order } = sortMapping[sortOption];
+    const res = await fetch(`${API_BASE}/vinyl?page=${page}&sort=${sort}&order=${order}`, { signal });
+    if (!res.ok) throw new Error(`Failed to fetch vinyl page ${page}`);
     return res.json();
 }
 
 function ReleaseCard({ release }: { release: Release }) {
-    const { basic_information } = release;
     return (
-        <div key={release.id} className="flex flex-col h-full">
-            <Image
-                src={basic_information.cover_image}
-                alt={basic_information.title}
-                width={300}
-                height={300}
+        <div key={release.discogs_id} className="flex flex-col h-full">
+            <img
+                src={release.cover_image}
+                alt={release.title}
+                loading="lazy"
                 className="w-full aspect-square object-cover"
-                onError={(e) => {
-                    try {
-                        const target = e.currentTarget as unknown as HTMLImageElement;
-                        if (target && "src" in target) target.src = "/placeholder-album.jpg";
-                    } catch {
-                        // ignore
-                    }
-                }}
             />
             <div className="flex flex-col mt-4 flex-1">
-                <h3 className="text-md font-bold">{basic_information.title}</h3>
+                <h3 className="text-md font-bold">{release.title}</h3>
                 <p className="text-sm text-muted-foreground">
-                    {basic_information.artists?.[0]?.name}
+                    {release.artist_name}
                 </p>
             </div>
         </div>
@@ -86,13 +87,11 @@ export default function DiscogsLibrary() {
             if (isFetching) return;
             setError("");
 
-            // Use the provided sort option or fall back to current state
             const currentSort = sort ?? sortOption;
 
             const now = Date.now();
             const sinceLast = now - lastRequestTime.current;
             if (sinceLast < COOLDOWN_MS) {
-                // show spinner while waiting
                 setIsFetching(true);
                 await sleep(COOLDOWN_MS - sinceLast);
             } else {
@@ -112,8 +111,8 @@ export default function DiscogsLibrary() {
                 const data = await fetchLibraryPage(page, currentSort, controller.signal);
                 const nextReleases = data.releases || [];
                 setReleases((prev) => {
-                    const existing = new Set(prev.map((r) => String(r.id)));
-                    const filtered = nextReleases.filter((r) => !existing.has(String(r.id)));
+                    const existing = new Set(prev.map((r) => String(r.discogs_id)));
+                    const filtered = nextReleases.filter((r) => !existing.has(String(r.discogs_id)));
                     return [...prev, ...filtered];
                 });
                 currentPage.current = data.pagination.page;
@@ -122,11 +121,10 @@ export default function DiscogsLibrary() {
             } catch (err) {
                 const maybe = err as { name?: string } | null;
                 if (maybe?.name === "AbortError") return;
-                console.error("Failed to load discogs page:", err);
+                console.error("Failed to load vinyl page:", err);
                 setError("Failed to load releases. Please try again later.");
             } finally {
                 const elapsed = Date.now() - spinnerStart;
-                // Don't force the minimum spinner time for the initial page (page 1)
                 if (page !== 1 && elapsed < MIN_SPINNER_MS) {
                     await sleep(MIN_SPINNER_MS - elapsed);
                 }
@@ -137,19 +135,16 @@ export default function DiscogsLibrary() {
     );
 
     useEffect(() => {
-        // initial load
         loadPage(1);
         return () => {
             if (abortRef.current) abortRef.current.abort();
         };
-        // intentionally only on mount
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadMore = useCallback(() => {
         if (isFetching || !hasMore) return;
         const next = currentPage.current + 1 || 1;
-        // guard if totalPages known
         if (totalPages.current && next > totalPages.current) return;
         loadPage(next);
     }, [isFetching, hasMore, loadPage]);
@@ -162,12 +157,10 @@ export default function DiscogsLibrary() {
 
     const handleSortChange = useCallback((value: SortOption) => {
         setSortOption(value);
-        // Reset the collection and reload from page 1 with the new sort option
         setReleases([]);
         setHasMore(true);
         currentPage.current = 0;
         totalPages.current = null;
-        // Pass the new sort option directly to avoid stale closure
         loadPage(1, value);
     }, [loadPage]);
 
@@ -178,7 +171,6 @@ export default function DiscogsLibrary() {
 
     return (
         <div className="space-y-4">
-            {/* Filtering Section */}
             <div className="flex pb-2">
                 <Select value={sortOption} onValueChange={handleSortChange}>
                     <SelectTrigger id="sort-select" className="w-[200px]">
@@ -196,7 +188,7 @@ export default function DiscogsLibrary() {
 
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-8">
                 {releases.map((r) => (
-                    <MemoReleaseCard key={r.id} release={r} />
+                    <MemoReleaseCard key={r.discogs_id} release={r} />
                 ))}
             </div>
             {error && <div className="text-destructive text-center">{error}</div>}

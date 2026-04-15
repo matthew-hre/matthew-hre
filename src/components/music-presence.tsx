@@ -5,78 +5,56 @@ import { Skeleton } from "./ui/skeleton";
 import { Disc, Disc3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface LastFmTrack {
+const API_BASE = "https://api.matthew-hre.com";
+
+interface Track {
   name: string;
-  artist: {
-    "#text": string;
-    mbid?: string;
-  };
-  album: {
-    "#text": string;
-    mbid?: string;
-  };
-  image: Array<{
-    "#text": string;
-    size: "small" | "medium" | "large" | "extralarge";
-  }>;
+  artist: string;
+  album: string;
+  image: string;
   url: string;
-  "@attr"?: {
-    nowplaying?: string;
-  };
-  date?: {
-    uts: string;
-    "#text": string;
-  };
+  nowPlaying: boolean;
+  timestamp: string | null;
 }
 
 export default function MusicPresence() {
-  const [trackData, setTrackData] = useState<LastFmTrack | null>(null);
+  const [track, setTrack] = useState<Track | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
 
-  const fetchRecentTracks = useEffectEvent(async () => {
-    try {
-      const response = await fetch('/api/music');
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.track) {
-        setTrackData(data.track);
-      }
-    } catch (error) {
-      console.error("Error fetching music data:", error);
-    } finally {
-      setIsLoading(false);
+  const handleTrackEvent = useEffectEvent((data: { track: Track | null }) => {
+    if (data.track) {
+      setTrack(data.track);
     }
+    setIsLoading(false);
   });
 
   useEffect(() => {
-    fetchRecentTracks();
+    const eventSource = new EventSource(`${API_BASE}/activity/music/stream`);
 
-    // poll for updates every 30 seconds
-    const interval = setInterval(fetchRecentTracks, 30000);
+    eventSource.addEventListener("track", (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        handleTrackEvent(data);
+      } catch {
+        // ignore parse errors
+      }
+    });
 
-    return () => clearInterval(interval);
+    eventSource.onerror = () => {
+      // EventSource auto-reconnects, just mark as loaded
+      // so we don't show skeleton forever on transient failures
+      setIsLoading(false);
+    };
+
+    return () => eventSource.close();
   }, []);
 
-  if (isLoading) {
+  if (isLoading || !track) {
     return <Skeleton className="w-64 h-6 mt-2 -mb-2"></Skeleton>;
   }
 
-  if (!trackData) {
-    return <Skeleton className="w-64 h-6 mt-2 -mb-2"></Skeleton>;
-  }
-
-  const song = trackData.name;
-  const artist = trackData.artist["#text"];
-  const album = trackData.album["#text"];
-  const albumArtUrl = trackData.image.find(img => img.size === "large")?.["#text"] ||
-    trackData.image.find(img => img.size === "medium")?.["#text"] || "";
-  const isNowPlaying = trackData["@attr"]?.nowplaying === "true";
+  const { name: song, artist, album, image: albumArtUrl, nowPlaying: isNowPlaying } = track;
 
   return (
     <a
