@@ -22,32 +22,25 @@ export default function MusicPresence() {
   const [isLoading, setIsLoading] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
 
-  const handleTrackEvent = useEffectEvent((data: { track: Track | null }) => {
-    if (data.track) {
-      setTrack(data.track);
+  const fetchTrack = useEffectEvent(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/activity/music`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.track) {
+        setTrack(data.track);
+      }
+    } catch {
+      // ignore fetch errors
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   });
 
   useEffect(() => {
-    const eventSource = new EventSource(`${API_BASE}/activity/music/stream`);
-
-    eventSource.addEventListener("track", (e) => {
-      try {
-        const data = JSON.parse(e.data);
-        handleTrackEvent(data);
-      } catch {
-        // ignore parse errors
-      }
-    });
-
-    eventSource.onerror = () => {
-      // EventSource auto-reconnects, just mark as loaded
-      // so we don't show skeleton forever on transient failures
-      setIsLoading(false);
-    };
-
-    return () => eventSource.close();
+    fetchTrack();
+    const interval = setInterval(fetchTrack, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   if (isLoading || !track) {
