@@ -1,6 +1,7 @@
 ### Matthew Hrehirchuk
 
-Currently a Senior Data Quality Specialist @ [Cohere](https://cohere.com);<br>
+Currently a Software Engineering Intern @ [Purelend.ai](https://www.purelend.ai);<br>
+Previously @ [Cohere](https://cohere.com);<br>
 Also a Student @ [Mount Royal University](https://mtroyal.ca);<br>
 
 - Mostly working with `.tsx`, `.jsx`, `.ts`, `.js`, `.html`, `.css`, `.py`, `.sql`, `.nix`, others...
