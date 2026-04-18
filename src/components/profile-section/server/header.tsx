@@ -61,14 +61,14 @@ export default function Header() {
           <div className="flex items-center gap-1">
             <Briefcase className="h-4 w-4" />
             <span>
-              Senior Data Quality Specialist @{" "}
+              Software Engineering Intern @{" "}
               <a
-                href="https://cohere.com"
+                href="https://purelend.ai"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link-inline"
               >
-                Cohere
+                Purelend.ai
               </a>
             </span>
           </div>
