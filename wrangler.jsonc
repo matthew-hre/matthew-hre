@@ -29,5 +29,8 @@
   ],
   "images": {
     "binding": "IMAGES"
-  }
+  },
+  "placement": {
+    "mode": "smart",
+  },
 }
