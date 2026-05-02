@@ -4,6 +4,7 @@
   wrangler,
   nodejs,
   bun,
+  patchelf,
 }:
 mkShell {
   name = "matthew-hre.com";
@@ -13,6 +14,7 @@ mkShell {
     bun
 
     wrangler
+    patchelf
 
     alejandra
   ];

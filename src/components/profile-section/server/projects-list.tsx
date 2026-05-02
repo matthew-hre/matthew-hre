@@ -13,6 +13,7 @@ export default function ProjectsList() {
           "TypeScript",
           "React",
           "Next.js",
+          "OpenNext",
           "React Query",
           "Zustand",
           "BetterAuth",
@@ -20,7 +21,6 @@ export default function ProjectsList() {
           "NeonDB",
           "Nix",
           "AI-SDK",
-          "Vercel",
           "Cloudflare",
         ]}
       />

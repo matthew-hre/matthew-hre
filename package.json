@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "rm -f node_modules/.bin/wrangler node_modules/.bin/wrangler2",
+    "postinstall": "rm -f node_modules/.bin/wrangler node_modules/.bin/wrangler2 && bash scripts/patch-workerd.sh",
     "generate:posts": "node scripts/generate-posts.mjs",
     "dev": "bun run generate:posts && next dev",
     "build": "bun run generate:posts && next build",
