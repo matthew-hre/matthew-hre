@@ -1,5 +1,5 @@
-const githubApiUrl =
-  "https://api.github.com/repos/matthew-hre/matthew-hre/commits";
+const tangledFeedUrl =
+  "https://tangled.org/matthew-hre.com/matthew-hre.com/feed.atom?types=commits";
 
 let cachedCommitData: CommitData | null = null;
 let cacheTimestamp: number | null = null;
@@ -13,31 +13,46 @@ export async function getCommitData(): Promise<CommitData | null> {
       return cachedCommitData;
     }
 
-    const response = await fetch(githubApiUrl);
+    const response = await fetch(tangledFeedUrl);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch data. Status: ${response.status}`);
     }
 
-    const commitData = await response.json();
+    const xml = await response.text();
 
-    if (!commitData || commitData.length === 0) {
+    // Find the first <entry> block.
+    const entryMatch = xml.match(/<entry>([\s\S]*?)<\/entry>/);
+    if (!entryMatch) {
       return null;
     }
 
-    const latestCommit = commitData[0];
-    const commitSha = latestCommit.sha;
-    const commitMessage = latestCommit.commit.message;
+    const entry = entryMatch[1];
 
-    const commitTime = new Date(latestCommit.commit.author.date).toLocaleString(
-      "en-US",
-      { timeZone: "MST", hour12: false }
-    );
+    // Title is in the form: "[Commit a233570] readme update"
+    const titleMatch = entry.match(/<title>\s*\[Commit\s+([^\]]+)\]\s*([\s\S]*?)\s*<\/title>/);
+    // Fall back to extracting sha from the link if title format ever changes.
+    const linkMatch = entry.match(/<link[^>]*href="([^"]*\/commit\/([a-f0-9]+))"/);
+    const updatedMatch = entry.match(/<updated>([^<]+)<\/updated>/);
+
+    if (!titleMatch && !linkMatch) {
+      return null;
+    }
+
+    const sha = linkMatch ? linkMatch[2] : "";
+    const message = titleMatch ? titleMatch[2].trim() : "";
+
+    const commitTime = updatedMatch
+      ? new Date(updatedMatch[1]).toLocaleString("en-US", {
+        timeZone: "MST",
+        hour12: false,
+      })
+      : "";
 
     cachedCommitData = {
-      sha: commitSha,
+      sha,
       time: commitTime.replace(", ", " at "),
-      message: commitMessage,
+      message,
     };
     cacheTimestamp = now;
 

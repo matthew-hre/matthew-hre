@@ -19,7 +19,7 @@ export default async function Footer() {
             CC BY-SA 4.0
           </Link>
           <Link
-            href={`https://github.com/matthew-hre/matthew-hre/commit/${commitData?.sha}`}
+            href={`https://tangled.org/matthew-hre.com/matthew-hre.com/commit/${commitData?.sha}`}
             variant="muted"
             mono
             icon={<GitBranch className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-default" />}
