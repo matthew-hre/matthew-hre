@@ -1,6 +1,7 @@
 {
   mkShell,
   alejandra,
+  wrangler,
   nodejs,
   bun,
 }:
@@ -10,6 +11,8 @@ mkShell {
   packages = [
     nodejs
     bun
+
+    wrangler
 
     alejandra
   ];

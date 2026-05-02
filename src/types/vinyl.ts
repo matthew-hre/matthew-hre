@@ -36,10 +36,28 @@ export async function fetchVinyl(
   order: VinylOrder = 'desc',
   init?: RequestInit,
 ): Promise<VinylResponse> {
-  const url = `${API_BASE}/vinyl?page=${page}&sort=${sort}&order=${order}`;
-  const res = await fetch(url, init);
+  const path = `/vinyl?page=${page}&sort=${sort}&order=${order}`;
+  const res = await apiFetch(path, init);
   if (!res.ok) {
     throw new Error(`Failed to fetch vinyl. Status: ${res.status}`);
   }
   return res.json();
+}
+
+async function apiFetch(path: string, init?: RequestInit): Promise<Response> {
+  // On the server (Cloudflare Worker), prefer the API service binding to skip
+  // DNS/TLS/public network. Falls back to public fetch in the browser, during
+  // `next dev`, or if the binding isn't present.
+  if (typeof window === 'undefined') {
+    try {
+      const { getCloudflareContext } = await import('@opennextjs/cloudflare');
+      const env = getCloudflareContext().env as { API?: { fetch: typeof fetch } };
+      if (env?.API?.fetch) {
+        return env.API.fetch(`${API_BASE}${path}`, init);
+      }
+    } catch {
+      // not running on Cloudflare (e.g. `next dev` without bindings) — fall through
+    }
+  }
+  return fetch(`${API_BASE}${path}`, init);
 }

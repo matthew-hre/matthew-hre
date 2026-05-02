@@ -1,46 +1,12 @@
-import { globby } from "globby";
-import { readFile } from "fs/promises";
-import matter from "gray-matter";
-import path from "path";
 import { PostMetadata, PostMetadataSchema } from "./types";
+import { posts as rawPosts } from "./posts.generated";
 
-const POSTS_DIRECTORY = path.join(process.cwd(), "src/content/posts");
+let cached: PostMetadata[] | null = null;
 
 export async function getAllPostMetadata(): Promise<PostMetadata[]> {
-  const files = await globby("**/*.mdx", {
-    cwd: POSTS_DIRECTORY,
-  });
-
-  const posts = await Promise.all(
-    files.map(async (file) => {
-      const content = await readFile(path.join(POSTS_DIRECTORY, file), "utf8");
-      const { data } = matter(content);
-
-      const slug = file.replace(/\.mdx$/, "");
-
-      // Validate frontmatter against schema
-      try {
-        const validated = PostMetadataSchema.parse({
-          ...data,
-          slug,
-        });
-        return validated;
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(`\n❌ Build error in ${file}:`);
-          console.error(error.message);
-          process.exit(1);
-        }
-        throw error;
-      }
-    })
-  );
-
-  // Sort by date created descending
-  return posts.sort(
-    (a, b) =>
-      new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime()
-  );
+  if (cached) return cached;
+  cached = rawPosts.map((p) => PostMetadataSchema.parse(p));
+  return cached;
 }
 
 export async function getPostBySlug(
