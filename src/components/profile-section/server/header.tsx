@@ -5,7 +5,7 @@ import {
   GraduationCap,
   MapPin,
 } from "lucide-react";
-import { Github, Linkedin, Instagram } from "@/components/icons";
+import { Github, Tangled, Linkedin, Instagram } from "@/components/icons";
 import Link from "@/components/link";
 
 export default function Header() {
@@ -41,6 +41,9 @@ export default function Header() {
           <div className="flex items-center space-x-4 self-end text-sm font-bold sm:-mt-16 sm:self-auto">
             <Link href="https://github.com/matthew-hre" variant="icon" size="sm">
               <Github className="icon-button text-foreground" />
+            </Link>
+            <Link href="https://tangled.sh/@matthew-hre.com" variant="icon" size="sm">
+              <Tangled className="icon-button text-foreground" />
             </Link>
             <Link href="https://linkedin.com/in/matthew-hre/" variant="icon" size="sm">
               <Linkedin className="icon-button text-foreground" />

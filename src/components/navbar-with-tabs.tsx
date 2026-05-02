@@ -4,7 +4,7 @@ import { ViewTransition } from "react";
 import Image from "next/image";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import { Github, Linkedin, Instagram } from "@/components/icons";
+import { Github, Tangled, Linkedin, Instagram } from "@/components/icons";
 import Link from "./link";
 import { cn } from "@/lib/utils";
 import { useScrollNavbar } from "@/hooks/useScrollNavbar";
@@ -66,6 +66,9 @@ export default function NavbarWithTabs() {
           <div className="flex items-center space-x-2 text-base font-semibold leading-none text-foreground sm:space-x-5">
             <Link href="https://github.com/matthew-hre" variant="icon">
               <Github className="icon-button" />
+            </Link>
+            <Link href="https://tangled.sh/@matthew-hre.com" variant="icon">
+              <Tangled className="icon-button" />
             </Link>
             <Link href="https://linkedin.com/in/matthew-hre/" variant="icon">
               <Linkedin className="icon-button" />
