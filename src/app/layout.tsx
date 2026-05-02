@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Fira_Code, Rethink_Sans } from "next/font/google";
 import "./globals.css";
 import GrainOverlay from "@/components/grain-overlay";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import BackToTop from "@/components/back-to-top";
 
 const rethinkSans = Rethink_Sans({
@@ -42,8 +40,6 @@ export default function RootLayout({
       >
         <GrainOverlay />
         {children}
-        <Analytics />
-        <SpeedInsights />
         <BackToTop />
       </body>
     </html>

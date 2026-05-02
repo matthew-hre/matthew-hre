@@ -7,7 +7,6 @@ The source code for [matthew-hre.com](https://www.matthew-hre.com). Home to some
 - [Next.js](https://nextjs.org) (App Router) + [React 19](https://react.dev)
 - [Tailwind CSS v4](https://tailwindcss.com)
 - [MDX](https://mdxjs.com) for posts, with `rehype-pretty-code` for syntax highlighting
-- [Vercel Analytics](https://vercel.com/analytics) + Speed Insights (for now)
 - [Nix](https://nixos.org) for a reproducible dev shell
 
 ## Getting started
@@ -27,12 +26,12 @@ bun dev
 
 ## Scripts
 
-| Command      | What it does                |
-| ------------ | --------------------------- |
-| `bun dev`    | Start the dev server        |
-| `bun build`  | Build for production        |
-| `bun start`  | Run the production build    |
-| `bun lint`   | Lint with ESLint            |
+| Command     | What it does             |
+| ----------- | ------------------------ |
+| `bun dev`   | Start the dev server     |
+| `bun build` | Build for production     |
+| `bun start` | Run the production build |
+| `bun lint`  | Lint with ESLint         |
 
 ## Structure
 
