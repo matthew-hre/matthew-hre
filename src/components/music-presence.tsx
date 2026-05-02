@@ -5,38 +5,24 @@ import { Skeleton } from "./ui/skeleton";
 import { Disc, Disc3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface LastFmTrack {
+interface Track {
   name: string;
-  artist: {
-    "#text": string;
-    mbid?: string;
-  };
-  album: {
-    "#text": string;
-    mbid?: string;
-  };
-  image: Array<{
-    "#text": string;
-    size: "small" | "medium" | "large" | "extralarge";
-  }>;
+  artist: string;
+  album: string;
+  image: string | null;
   url: string;
-  "@attr"?: {
-    nowplaying?: string;
-  };
-  date?: {
-    uts: string;
-    "#text": string;
-  };
+  nowPlaying: boolean;
+  timestamp: string | null;
 }
 
 export default function MusicPresence() {
-  const [trackData, setTrackData] = useState<LastFmTrack | null>(null);
+  const [trackData, setTrackData] = useState<Track | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
 
   const fetchRecentTracks = useEffectEvent(async () => {
     try {
-      const response = await fetch('/api/music');
+      const response = await fetch('https://api.matthew-hre.com/activity/music');
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -72,11 +58,10 @@ export default function MusicPresence() {
   }
 
   const song = trackData.name;
-  const artist = trackData.artist["#text"];
-  const album = trackData.album["#text"];
-  const albumArtUrl = trackData.image.find(img => img.size === "large")?.["#text"] ||
-    trackData.image.find(img => img.size === "medium")?.["#text"] || "";
-  const isNowPlaying = trackData["@attr"]?.nowplaying === "true";
+  const artist = trackData.artist;
+  const album = trackData.album;
+  const albumArtUrl = trackData.image || "";
+  const isNowPlaying = trackData.nowPlaying;
 
   return (
     <a
