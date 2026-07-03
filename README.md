@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > If you're looking for my website, it's not here anymore! I've begun moving my projects to [Tangled](https://tangled.org/matthew-hre.com/). See ya there!
 
-Currently a Software Engineering Intern @ [Purelend.ai](https://www.purelend.ai);<br>
+Currently a Software Engineer @ [Purelend.ai](https://www.purelend.ai);<br>
 Previously @ [Cohere](https://cohere.com);<br>
 Also a Student @ [Mount Royal University](https://mtroyal.ca);<br>
 
