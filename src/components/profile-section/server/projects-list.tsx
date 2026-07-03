@@ -44,22 +44,6 @@ export default function ProjectsList() {
         ]}
       />
       <ProjectCard
-        title="Peerfect"
-        description="A peer-to-peer life skills exchange platform."
-        githubUrl="https://github.com/burtonjong/peerfect"
-        imageFallbackColor="bg-blue-600/60"
-        techStack={[
-          "TypeScript",
-          "React",
-          "Next.js",
-          "Tailwind CSS",
-          "Supabase",
-          "WebSockets",
-          "PostgreSQL",
-          "Nix",
-        ]}
-      />
-      <ProjectCard
         title="Shelf'd"
         description="An interactive bookshelf app to track your reading."
         githubUrl="https://github.com/matthew-hre/nwHacks2025"
@@ -89,19 +73,6 @@ export default function ProjectsList() {
           "PowerShell",
           "Swift",
           "ConvexDB",
-        ]}
-      />
-      <ProjectCard
-        title="Hunchifier"
-        description="A full-stack app for managing software project ideas."
-        githubUrl="https://github.com/matthew-hre/hunchifier"
-        techStack={[
-          "TypeScript",
-          "React",
-          "Next.js",
-          "Tailwind CSS",
-          "Supabase",
-          "PostgreSQL",
         ]}
       />
       <ProjectCard

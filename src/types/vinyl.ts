@@ -11,6 +11,7 @@ export interface VinylPagination {
   pages: number;
   per_page: number;
   items: number;
+  added_this_year?: number;
 }
 
 export interface VinylResponse {
@@ -48,7 +49,7 @@ async function apiFetch(path: string, init?: RequestInit): Promise<Response> {
   // On the server (Cloudflare Worker), prefer the API service binding to skip
   // DNS/TLS/public network. Falls back to public fetch in the browser, during
   // `next dev`, or if the binding isn't present.
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' && process.env.NODE_ENV !== 'development') {
     try {
       const { getCloudflareContext } = await import('@opennextjs/cloudflare');
       const env = getCloudflareContext().env as { API?: { fetch: typeof fetch } };

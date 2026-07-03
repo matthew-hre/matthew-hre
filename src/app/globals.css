@@ -129,17 +129,16 @@
   }
 }
 
-/* View transition: smooth morph for profile avatar and name */
-::view-transition-group(profile-avatar),
-::view-transition-group(profile-name) {
+/* View transition: smooth morph for profile photo only */
+::view-transition-group(profile-avatar) {
   animation-duration: 300ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  border-radius: 9999px;
 }
 
 ::view-transition-old(profile-avatar),
-::view-transition-new(profile-avatar),
-::view-transition-old(profile-name),
-::view-transition-new(profile-name) {
+::view-transition-new(profile-avatar) {
   animation: none;
   mix-blend-mode: normal;
 }
