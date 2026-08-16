@@ -1,21 +1,42 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import FadeInOnView from "@/components/anim/fade-in-on-view";
+
+const SKELETON_COUNT = 10;
+
+function SkeletonSet({ foreground = false }: { foreground?: boolean }) {
+  return (
+    <div
+      aria-hidden
+      className={`relative flex shrink-0 flex-row-reverse justify-end ${foreground ? "z-10" : "z-0"}`}
+    >
+      {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
+        <div
+          key={index}
+          className="relative z-0 -me-5 size-28 shrink-0 [perspective:700px]"
+        >
+          <div className="size-28 rounded-sm bg-muted shadow-[0_12px_24px_oklch(0_0_0/0.35)] outline -outline-offset-1 outline-white/10 [transform:rotateY(-24deg)]" />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function DiscogsLibrarySkeleton() {
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-2 xl:grid-cols-3 gap-8">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex flex-col h-full">
-            <Skeleton className="w-full aspect-square" />
-            <div className="flex flex-col mt-4 flex-1">
-              <Skeleton className="h-4 w-3/4 mb-2" />
-              <Skeleton className="h-3 w-1/2" />
-            </div>
+    <div
+      aria-label="Loading record collection"
+      aria-busy="true"
+      className="mx-auto w-full max-w-[640px] overflow-hidden px-8"
+    >
+      <FadeInOnView delay={260}>
+        <div className="skeleton-record-viewport relative h-48 overflow-hidden">
+          <div className="skeleton-record-track absolute start-0 top-8 flex w-max">
+            <SkeletonSet foreground />
+            <SkeletonSet />
           </div>
-        ))}
-      </div>
+        </div>
+      </FadeInOnView>
     </div>
   );
 }

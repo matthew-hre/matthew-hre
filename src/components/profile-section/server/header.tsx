@@ -56,8 +56,7 @@ export default async function Header() {
         </div>
         <div className="space-y-2 text-base">
           <p>
-            Software engineer, web developer, and graphic designer. I make web apps, tools, games, and
-            the occasional blog post.
+            Software engineer, web developer, and graphic designer. I make web apps, tools, and games.
           </p>
           <p>
             Also a record collector, a music nerd, and a terrible guitarist.

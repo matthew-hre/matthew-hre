@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface CustomLinkProps {
   href?: string;
   children: ReactNode;
-  variant?: "default" | "muted" | "icon" | "project" | "inline";
+  variant?: "default" | "muted" | "icon" | "inline";
   size?: "sm" | "base" | "lg";
   external?: boolean;
   className?: string;
@@ -35,7 +35,6 @@ export default function Link({
     default: "hover:underline hover:text-primary",
     muted: "text-muted-foreground group-hover:underline group-hover:text-primary",
     icon: "hover:text-primary",
-    project: "font-semibold",
     inline: "text-muted-foreground hover:underline hover:text-primary inline-block",
   };
 

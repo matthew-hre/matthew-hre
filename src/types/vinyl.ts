@@ -22,13 +22,6 @@ export interface VinylResponse {
 export type VinylSort = 'title' | 'artist' | 'added';
 export type VinylOrder = 'asc' | 'desc';
 
-export const VINYL_SORTS: VinylSort[] = ['title', 'artist', 'added'];
-export const VINYL_ORDERS: Record<VinylSort, VinylOrder[]> = {
-  title: ['asc', 'desc'],
-  artist: ['asc', 'desc'],
-  added: ['desc'],
-};
-
 export const API_BASE = 'https://api.matthew-hre.com';
 
 export async function fetchVinyl(

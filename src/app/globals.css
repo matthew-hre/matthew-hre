@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -9,20 +6,10 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-ring: var(--ring);
-  --color-input: var(--input);
   --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-card-hover: var(--card-hover);
   --color-card-active: var(--card-active);
@@ -32,11 +19,8 @@
   --radius-xl: calc(var(--radius) + 4px);
   --font-sans: var(--font-rethink-sans);
   --font-mono: var(--font-fira-code);
-  --animate-spin-slow: spin 3s linear infinite;
-
   --color-icon-button: var(--icon-button);
   --color-icon-button-hover: var(--icon-button-hover);
-  --color-icon-muted: var(--icon-muted);
   --color-avatar-ring: var(--avatar-ring);
   --color-gradient-accent: var(--gradient-accent);
   --color-gradient-accent-hover: var(--gradient-accent-hover);
@@ -49,26 +33,14 @@
   --card: oklch(1 0 0 / 5%);
   --card-hover: oklch(1 0 0 / 10%);
   --card-active: oklch(1 0 0 / 20%);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
 
   --icon-button: oklch(0.97 0 0 / 30%);
   --icon-button-hover: oklch(0.97 0 0 / 40%);
-  --icon-muted: oklch(0.97 0 0 / 30%);
-
   --avatar-ring: oklch(0.5 0 0 / 30%);
 
   --gradient-accent: oklch(0.7 0 0 / 60%);
@@ -96,37 +68,6 @@
   .link-inline {
     @apply text-muted-foreground hover:text-primary underline transition-all duration-300 ease-out;
   }
-
-  #table-of-contents + ul,
-  #table-of-contents + ul * ul {
-    list-style-type: none !important;
-    list-style-position: inside !important;
-  }
-
-  #table-of-contents + ul {
-    margin-left: 0 !important;
-  }
-
-  #footnote-label {
-    border-top: 1px solid var(--border) !important;
-    margin: 1rem !important;
-    margin-top: 2rem !important;
-    
-    font-size: 0 !important;
-  }
-
-  blockquote p {
-    margin-bottom: 0 !important;
-  }
-
-  .footnotes p, .footnotes li {
-    font-size: var(--text-sm) !important;
-    color: var(--muted-foreground) !important;
-  }
-
-  ul + p {
-    margin-top: 1rem !important;
-  }
 }
 
 /* View transition: smooth morph for profile photo only */
@@ -141,4 +82,56 @@
 ::view-transition-new(profile-avatar) {
   animation: none;
   mix-blend-mode: normal;
+}
+
+@property --album-rotation {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: -24deg;
+}
+
+.album-cover.is-missing-cover {
+  background: var(--muted);
+  box-shadow: 0 12px 24px oklch(0 0 0 / 0.35);
+}
+
+@keyframes skeleton-record-scroll-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.skeleton-record-track {
+  animation: skeleton-record-scroll-left 9s linear infinite;
+  will-change: transform;
+}
+
+.skeleton-record-viewport::before,
+.skeleton-record-viewport::after {
+  content: "";
+  position: absolute;
+  z-index: 20;
+  inset-block: 0;
+  width: 2.5rem;
+  pointer-events: none;
+}
+
+.skeleton-record-viewport::before {
+  inset-inline-start: 0;
+  background: linear-gradient(to right, var(--muted) 15%, transparent);
+}
+
+.skeleton-record-viewport::after {
+  inset-inline-end: 0;
+  background: linear-gradient(to left, var(--muted) 15%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-record-track {
+    animation: none;
+  }
 }

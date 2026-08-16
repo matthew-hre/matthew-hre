@@ -1,12 +1,12 @@
 # matthew-hre.com
 
-The source code for [matthew-hre.com](https://www.matthew-hre.com). Home to some writing, a Discogs-powered record shelf, and whatever else I feel like putting out there.
+The source code for [matthew-hre.com](https://www.matthew-hre.com), a small personal site centered around a Discogs-powered record shelf.
 
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router) + [React 19](https://react.dev)
 - [Tailwind CSS v4](https://tailwindcss.com)
-- [MDX](https://mdxjs.com) for posts, with `rehype-pretty-code` for syntax highlighting
+- [Motion](https://motion.dev) for record shelf interactions
 - [Nix](https://nixos.org) for a reproducible dev shell
 
 ## Getting started
@@ -37,12 +37,10 @@ bun dev
 
 ```
 src/
-├── app/         # routes (writing, discogs, api, ...)
-├── components/  # UI bits and pieces
-├── content/     # MDX posts
-├── hooks/
-├── lib/
-└── types/
+├── app/         # homepage and global styles
+├── components/  # profile, record shelf, and shared UI
+├── lib/         # shared utilities
+└── types/       # Discogs API types and client
 ```
 
 ## Contact

@@ -1,15 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import DiscogsLibrarySkeleton from "@/components/discogs-library-skeleton";
-
-const DiscogsLibrary = dynamic(
-  () => import("@/components/discogs-library"),
-  {
-    ssr: false,
-    loading: () => <DiscogsLibrarySkeleton />,
-  }
-);
+import DiscogsLibrary from "@/components/discogs-library";
 
 export default function VinylPanel() {
   return <DiscogsLibrary />;

@@ -1,202 +1,717 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback, memo } from "react";
-import { useInView } from "react-intersection-observer";
+import { startTransition, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Loader2 } from "lucide-react";
-import {
-    fetchVinyl,
-    type VinylRelease,
-    type VinylResponse,
-    type VinylSort,
-    type VinylOrder,
-} from "@/types/vinyl";
+import { animate, type AnimationPlaybackControls } from "motion";
+import { fetchVinyl, type VinylRelease } from "@/types/vinyl";
+import { cn } from "@/lib/utils";
+import FadeInOnView from "./anim/fade-in-on-view";
 import DiscogsLibrarySkeleton from "./discogs-library-skeleton";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-type SortOption = 'title-asc' | 'title-desc' | 'artist-asc' | 'artist-desc' | 'added';
-
-const sortMapping: Record<SortOption, { sort: VinylSort; order: VinylOrder }> = {
-    'title-asc': { sort: 'title', order: 'asc' },
-    'title-desc': { sort: 'title', order: 'desc' },
-    'artist-asc': { sort: 'artist', order: 'asc' },
-    'artist-desc': { sort: 'artist', order: 'desc' },
-    'added': { sort: 'added', order: 'desc' },
-};
-
-async function fetchLibraryPage(page = 1, sortOption: SortOption = 'added', signal?: AbortSignal): Promise<VinylResponse> {
-    const { sort, order } = sortMapping[sortOption];
-    return fetchVinyl(page, sort, order, { signal });
+function setRecordExpanded(record: HTMLDivElement, expanded: boolean) {
+  record.querySelector<HTMLButtonElement>(".album-trigger")?.setAttribute("aria-expanded", String(expanded));
 }
 
-function ReleaseCard({ release }: { release: VinylRelease }) {
-    return (
-        <div key={release.discogs_id} className="flex flex-col h-full">
-            <Image
-                src={release.cover_image}
-                alt={release.title}
-                width={300}
-                height={300}
-                className="w-full aspect-square object-cover"
-                onError={(e) => {
-                    try {
-                        const target = e.currentTarget as unknown as HTMLImageElement;
-                        if (target && "src" in target) target.src = "/placeholder-album.jpg";
-                    } catch {
-                        // ignore
-                    }
-                }}
-            />
-            <div className="flex flex-col mt-4 flex-1">
-                <h3 className="text-md font-bold">{release.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                    {release.artist_name}
-                </p>
-            </div>
-        </div>
-    );
+function AlbumSet({
+  releases,
+  measureRef,
+  hidden,
+  onRecordEnter,
+  onRecordLeave,
+  onRecordTap,
+}: {
+  releases: VinylRelease[];
+  measureRef?: React.Ref<HTMLDivElement>;
+  hidden?: boolean;
+  onRecordEnter: (record: HTMLDivElement) => void;
+  onRecordLeave: (record: HTMLDivElement) => void;
+  onRecordTap: (record: HTMLDivElement) => void;
+}) {
+  return (
+    <div ref={measureRef} aria-hidden={hidden} className="flex shrink-0 flex-row-reverse justify-end pe-3">
+      {[...releases].reverse().map((release, reversedIndex) => {
+        return (
+          <div
+            key={`${release.discogs_id}-${reversedIndex}`}
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse") onRecordEnter(event.currentTarget);
+            }}
+            onPointerLeave={(event) => {
+              if (event.pointerType === "mouse") onRecordLeave(event.currentTarget);
+            }}
+            onFocus={(event) => {
+              if ((event.target as HTMLElement).matches(":focus-visible")) onRecordEnter(event.currentTarget);
+            }}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) onRecordLeave(event.currentTarget);
+            }}
+            className="album-record group relative z-0 -me-5 block size-28 shrink-0 rounded-sm [perspective:700px]"
+          >
+            <button
+              type="button"
+              tabIndex={hidden ? -1 : undefined}
+              aria-label={`Show details for ${release.title} by ${release.artist_name}`}
+              aria-expanded="false"
+              onClick={(event) => {
+                const isTouchLike = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+                if (event.detail > 0 && !isTouchLike) return;
+                const record = event.currentTarget.parentElement as HTMLDivElement;
+                if (event.detail > 0) onRecordTap(record);
+                else onRecordEnter(record);
+              }}
+              className={cn(
+                "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-card-active p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-white/10 [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
+                !release.cover_image && "is-missing-cover",
+              )}
+            >
+              {release.cover_image && (
+                <Image
+                  src={release.cover_image}
+                  alt=""
+                  fill
+                  draggable={false}
+                  sizes="112px"
+                  className="object-cover"
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                    event.currentTarget.closest(".album-cover")?.classList.add("is-missing-cover");
+                  }}
+                />
+              )}
+            </button>
+            <span className="album-details pointer-events-none absolute start-full top-1/2 w-56 -translate-y-1/2 py-5 pe-4 ps-5 opacity-0 sm:w-64">
+              <span className="line-clamp-2 text-sm font-bold leading-tight">{release.title}</span>
+              <span className="mt-1 block truncate text-xs text-muted-foreground">{release.artist_name}</span>
+              <a
+                href={`https://www.discogs.com/release/${release.discogs_id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                tabIndex={hidden ? -1 : undefined}
+                className="mt-3 block w-fit font-mono text-[0.65rem] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                Open in Discogs ↗
+              </a>
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
-const MemoReleaseCard = memo(ReleaseCard);
+function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady: () => void }) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const setRef = useRef<HTMLDivElement>(null);
+  const setWidth = useRef(0);
+  const targetScroll = useRef(0);
+  const animationFrame = useRef<number | null>(null);
+  const dragPointer = useRef<number | null>(null);
+  const dragStartX = useRef(0);
+  const dragStartScroll = useRef(0);
+  const dragLastX = useRef(0);
+  const dragLastTime = useRef(0);
+  const dragVelocity = useRef(0);
+  const dragMoved = useRef(false);
+  const preserveExpandedDuringScroll = useRef(false);
+  const centeringTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isAnimating = useRef(false);
+  const isPointerOver = useRef(false);
+  const isScrolling = useRef(false);
+  const restoreHoverAfterScroll = useRef(true);
+  const scrollingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const activeRecord = useRef<HTMLDivElement | null>(null);
+  const hoverAnimations = useRef<AnimationPlaybackControls[]>([]);
+  const touchedRecords = useRef(new Set<HTMLDivElement>());
+  const shiftedSets = useRef(new Set<HTMLElement>());
 
-export default function DiscogsLibrary() {
-    const [releases, setReleases] = useState<VinylRelease[]>([]);
-    const [isFetching, setIsFetching] = useState(false);
-    const [error, setError] = useState("");
-    const [hasMore, setHasMore] = useState(true);
-    const [sortOption, setSortOption] = useState<SortOption>('added');
-    const currentPage = useRef(0);
-    const totalPages = useRef<number | null>(null);
-    const lastRequestTime = useRef<number>(0);
-    const { ref, inView } = useInView({ rootMargin: "200px" });
-    const abortRef = useRef<AbortController | null>(null);
+  const stopHoverAnimations = () => {
+    hoverAnimations.current.forEach((animation) => animation.stop());
+    hoverAnimations.current = [];
+  };
 
-    const COOLDOWN_MS = 1000;
-    const MIN_SPINNER_MS = 1000;
+  const resetHoverImmediately = () => {
+    const scroller = scrollerRef.current;
+    stopHoverAnimations();
+    activeRecord.current = null;
+    touchedRecords.current.clear();
+    shiftedSets.current.clear();
+    if (!scroller) return;
 
-    const loadPage = useCallback(
-        async (page: number, sort?: SortOption) => {
-            if (isFetching) return;
-            setError("");
+    scroller.querySelectorAll<HTMLElement>(".album-record").forEach((record) => {
+      record.style.transform = "";
+      setRecordExpanded(record as HTMLDivElement, false);
+    });
+    scroller.querySelectorAll<HTMLElement>(".album-cover").forEach((cover) => {
+      cover.style.removeProperty("--album-rotation");
+    });
+    scroller.querySelectorAll<HTMLElement>(".album-details").forEach((details) => {
+      details.style.opacity = "";
+      details.style.pointerEvents = "";
+    });
+  };
 
-            const currentSort = sort ?? sortOption;
-
-            const now = Date.now();
-            const sinceLast = now - lastRequestTime.current;
-            if (sinceLast < COOLDOWN_MS) {
-                setIsFetching(true);
-                await sleep(COOLDOWN_MS - sinceLast);
-            } else {
-                setIsFetching(true);
-            }
-
-            if (abortRef.current) {
-                abortRef.current.abort();
-            }
-            const controller = new AbortController();
-            abortRef.current = controller;
-
-            const spinnerStart = Date.now();
-            lastRequestTime.current = spinnerStart;
-
-            try {
-                const data = await fetchLibraryPage(page, currentSort, controller.signal);
-                const nextReleases = data.releases || [];
-                setReleases((prev) => {
-                    const existing = new Set(prev.map((r) => String(r.discogs_id)));
-                    const filtered = nextReleases.filter((r) => !existing.has(String(r.discogs_id)));
-                    return [...prev, ...filtered];
-                });
-                currentPage.current = data.pagination.page;
-                totalPages.current = data.pagination.pages;
-                if (data.pagination.page >= data.pagination.pages) setHasMore(false);
-            } catch (err) {
-                const maybe = err as { name?: string } | null;
-                if (maybe?.name === "AbortError") return;
-                console.error("Failed to load discogs page:", err);
-                setError("Failed to load releases. Please try again later.");
-            } finally {
-                const elapsed = Date.now() - spinnerStart;
-                if (page !== 1 && elapsed < MIN_SPINNER_MS) {
-                    await sleep(MIN_SPINNER_MS - elapsed);
-                }
-                setIsFetching(false);
-            }
-        },
-        [isFetching, sortOption]
-    );
-
-    useEffect(() => {
-        loadPage(1);
-        return () => {
-            if (abortRef.current) abortRef.current.abort();
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const loadMore = useCallback(() => {
-        if (isFetching || !hasMore) return;
-        const next = currentPage.current + 1 || 1;
-        if (totalPages.current && next > totalPages.current) return;
-        loadPage(next);
-    }, [isFetching, hasMore, loadPage]);
-
-    useEffect(() => {
-        if (inView && hasMore && !isFetching) {
-            loadMore();
-        }
-    }, [inView, hasMore, isFetching, loadMore]);
-
-    const handleSortChange = useCallback((value: SortOption) => {
-        setSortOption(value);
-        setReleases([]);
-        setHasMore(true);
-        currentPage.current = 0;
-        totalPages.current = null;
-        loadPage(1, value);
-    }, [loadPage]);
-
-
-    if (releases.length === 0 && !error) {
-        return <DiscogsLibrarySkeleton />;
+  const releaseHoverForScrolling = () => {
+    const record = activeRecord.current;
+    if (!record) {
+      resetHoverImmediately();
+      return;
     }
 
-    return (
-        <div className="space-y-4">
-            <div className="flex pb-2">
-                <Select value={sortOption} onValueChange={handleSortChange}>
-                    <SelectTrigger id="sort-select" className="w-[200px]">
-                        <SelectValue placeholder="Sort by..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="title-asc">Title (A-Z)</SelectItem>
-                        <SelectItem value="title-desc">Title (Z-A)</SelectItem>
-                        <SelectItem value="artist-asc">Artist (A-Z)</SelectItem>
-                        <SelectItem value="artist-desc">Artist (Z-A)</SelectItem>
-                        <SelectItem value="added">Recently Added</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
+    stopHoverAnimations();
+    activeRecord.current = null;
+    setRecordExpanded(record, false);
 
-            <div className="grid grid-cols-2 xl:grid-cols-3 gap-8">
-                {releases.map((r) => (
-                    <MemoReleaseCard key={r.discogs_id} release={r} />
-                ))}
-            </div>
-            {error && <div className="text-destructive text-center">{error}</div>}
-            {hasMore && (
-                <div ref={ref} className="col-span-full flex justify-center p-4 h-20">
-                    {isFetching && <Loader2 className="animate-spin" />}
-                </div>
-            )}
+    touchedRecords.current.forEach((touchedRecord) => {
+      if (touchedRecord === record) return;
+      setRecordExpanded(touchedRecord, false);
+      touchedRecord.querySelector<HTMLElement>(".album-cover")?.style.removeProperty("--album-rotation");
+      const staleDetails = touchedRecord.querySelector<HTMLElement>(".album-details");
+      if (staleDetails) {
+        staleDetails.style.opacity = "";
+        staleDetails.style.pointerEvents = "";
+      }
+    });
+
+    const albumSet = record.parentElement;
+    shiftedSets.current.forEach((shiftedSet) => {
+      if (shiftedSet === albumSet) return;
+      shiftedSet.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+        sibling.style.transform = "";
+      });
+    });
+    touchedRecords.current.clear();
+    shiftedSets.current.clear();
+
+    albumSet?.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+      hoverAnimations.current.push(
+        animate(sibling, { x: 0 }, { duration: 0.16, ease: [0.22, 1, 0.36, 1] }),
+      );
+    });
+    const cover = record.querySelector<HTMLElement>(".album-cover");
+    const details = record.querySelector<HTMLElement>(".album-details");
+    if (cover) {
+      hoverAnimations.current.push(
+        animate(cover, { "--album-rotation": "-24deg" }, { duration: 0.14, ease: "easeOut" }),
+      );
+    }
+    if (details) {
+      details.style.pointerEvents = "none";
+      hoverAnimations.current.push(animate(details, { opacity: 0 }, { duration: 0.1, ease: "easeOut" }));
+    }
+  };
+
+  const collapseRecord = (record: HTMLDivElement) => {
+    if (isScrolling.current || activeRecord.current !== record) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      resetHoverImmediately();
+      return;
+    }
+    stopHoverAnimations();
+    activeRecord.current = null;
+    setRecordExpanded(record, false);
+
+    const albumSet = record.parentElement;
+    if (albumSet) {
+      albumSet.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+        hoverAnimations.current.push(animate(sibling, { x: 0 }, { duration: 0.22, ease: [0.22, 1, 0.36, 1] }));
+      });
+    }
+
+    const cover = record.querySelector<HTMLElement>(".album-cover");
+    const details = record.querySelector<HTMLElement>(".album-details");
+    if (cover) {
+      hoverAnimations.current.push(
+        animate(cover, { "--album-rotation": "-24deg" }, { duration: 0.18, ease: "easeOut" }),
+      );
+    }
+    if (details) {
+      details.style.pointerEvents = "none";
+      hoverAnimations.current.push(animate(details, { opacity: 0 }, { duration: 0.12, ease: "easeOut" }));
+    }
+  };
+
+  const expandRecord = (record: HTMLDivElement) => {
+    if (isScrolling.current || activeRecord.current === record) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      resetHoverImmediately();
+      activeRecord.current = record;
+      setRecordExpanded(record, true);
+      touchedRecords.current.add(record);
+      if (record.parentElement) shiftedSets.current.add(record.parentElement);
+      record.parentElement?.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+        if (sibling === record) return;
+        sibling.style.transform = `translateX(${sibling.offsetLeft < record.offsetLeft ? -30 : 272}px)`;
+      });
+      const cover = record.querySelector<HTMLElement>(".album-cover");
+      const details = record.querySelector<HTMLElement>(".album-details");
+      if (cover) cover.style.setProperty("--album-rotation", "0deg");
+      if (details) {
+        details.style.opacity = "1";
+        details.style.pointerEvents = "auto";
+      }
+      return;
+    }
+
+    const previousRecord = activeRecord.current;
+    stopHoverAnimations();
+
+    touchedRecords.current.forEach((touchedRecord) => {
+      if (touchedRecord === previousRecord || touchedRecord === record) return;
+      setRecordExpanded(touchedRecord, false);
+      const staleCover = touchedRecord.querySelector<HTMLElement>(".album-cover");
+      const staleDetails = touchedRecord.querySelector<HTMLElement>(".album-details");
+      if (staleCover) staleCover.style.removeProperty("--album-rotation");
+      if (staleDetails) {
+        staleDetails.style.opacity = "";
+        staleDetails.style.pointerEvents = "";
+      }
+    });
+
+    const currentSet = record.parentElement;
+    const previousSet = previousRecord?.parentElement;
+    shiftedSets.current.forEach((shiftedSet) => {
+      if (shiftedSet === currentSet || shiftedSet === previousSet) return;
+      shiftedSet.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+        sibling.style.transform = "";
+      });
+    });
+    touchedRecords.current.clear();
+    shiftedSets.current.clear();
+
+    if (previousRecord) {
+      setRecordExpanded(previousRecord, false);
+      previousRecord.querySelector<HTMLElement>(".album-details")?.style.setProperty("pointer-events", "none");
+      const previousCover = previousRecord.querySelector<HTMLElement>(".album-cover");
+      const previousDetails = previousRecord.querySelector<HTMLElement>(".album-details");
+      if (previousCover) {
+        hoverAnimations.current.push(
+          animate(previousCover, { "--album-rotation": "-24deg" }, { duration: 0.18, ease: "easeOut" }),
+        );
+      }
+      if (previousDetails) hoverAnimations.current.push(animate(previousDetails, { opacity: 0 }, { duration: 0.12, ease: "easeOut" }));
+      if (previousRecord.parentElement !== record.parentElement) {
+        previousRecord.parentElement?.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+          hoverAnimations.current.push(animate(sibling, { x: 0 }, { duration: 0.2, ease: "easeOut" }));
+        });
+      }
+    }
+
+    activeRecord.current = record;
+    setRecordExpanded(record, true);
+    touchedRecords.current.add(record);
+    if (currentSet) shiftedSets.current.add(currentSet);
+    if (previousRecord) touchedRecords.current.add(previousRecord);
+    if (previousSet) shiftedSets.current.add(previousSet);
+
+    record.parentElement?.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+      if (sibling === record) {
+        hoverAnimations.current.push(animate(sibling, { x: 0 }, { duration: 0.12, ease: "easeOut" }));
+        return;
+      }
+
+      const isLeft = sibling.offsetLeft < record.offsetLeft;
+      const transform = getComputedStyle(sibling).transform;
+      const currentX = transform === "none" ? 0 : new DOMMatrixReadOnly(transform).m41;
+      if (isLeft) {
+        hoverAnimations.current.push(
+          animate(sibling, { x: [currentX, -30] }, { duration: 0.08, ease: "easeOut" }),
+        );
+      } else {
+        hoverAnimations.current.push(
+          animate(
+            sibling,
+            { x: [currentX, 24, 24, 272] },
+            { duration: 0.42, times: [0, 0.17, 0.43, 1], ease: "easeOut" },
+          ),
+        );
+      }
+    });
+
+    const cover = record.querySelector<HTMLElement>(".album-cover");
+    const details = record.querySelector<HTMLElement>(".album-details");
+    if (cover) {
+      hoverAnimations.current.push(
+        animate(
+          cover,
+          { "--album-rotation": "0deg" },
+          { delay: 0.07, duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+        ),
+      );
+    }
+    if (details) {
+      details.style.pointerEvents = "auto";
+      hoverAnimations.current.push(animate(details, { opacity: 1 }, { delay: 0.18, duration: 0.16, ease: "easeOut" }));
+    }
+  };
+
+  useEffect(() => {
+    const albumSet = setRef.current;
+    const scroller = scrollerRef.current;
+    if (!albumSet || !scroller) return;
+
+    const measure = () => {
+      const width = albumSet.offsetWidth;
+      const previousWidth = setWidth.current;
+      setWidth.current = width;
+      if (width > 0 && previousWidth === 0) {
+        scroller.scrollLeft = width;
+        targetScroll.current = width;
+      }
+    };
+
+    const normalizePosition = () => {
+      const width = setWidth.current;
+      if (width === 0) return;
+
+      if (scroller.scrollLeft < width * 0.5) {
+        scroller.scrollLeft += width;
+        targetScroll.current += width;
+      } else if (scroller.scrollLeft >= width * 1.5) {
+        scroller.scrollLeft -= width;
+        targetScroll.current -= width;
+      }
+    };
+
+    const markScrolling = () => {
+      if (!isScrolling.current) {
+        if (!preserveExpandedDuringScroll.current) {
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) resetHoverImmediately();
+          else releaseHoverForScrolling();
+        }
+      }
+      isScrolling.current = true;
+
+      if (scrollingTimer.current !== null) clearTimeout(scrollingTimer.current);
+      scrollingTimer.current = setTimeout(() => {
+        isScrolling.current = false;
+        preserveExpandedDuringScroll.current = false;
+        scrollingTimer.current = null;
+        const shouldRestoreHover = restoreHoverAfterScroll.current;
+        restoreHoverAfterScroll.current = true;
+        const hoveredRecord = shouldRestoreHover && isPointerOver.current
+          ? scroller.querySelector<HTMLDivElement>(".album-record:hover")
+          : null;
+        if (hoveredRecord) requestAnimationFrame(() => expandRecord(hoveredRecord));
+      }, 160);
+    };
+
+    const animateScroll = () => {
+      isAnimating.current = true;
+      const remaining = targetScroll.current - scroller.scrollLeft;
+      scroller.scrollLeft += remaining * 0.1;
+      normalizePosition();
+
+      if (Math.abs(remaining) > 0.25) {
+        animationFrame.current = requestAnimationFrame(animateScroll);
+      } else {
+        scroller.scrollLeft = targetScroll.current;
+        normalizePosition();
+        animationFrame.current = null;
+        isAnimating.current = false;
+      }
+    };
+
+    const handleWheel = (event: WheelEvent) => {
+      const horizontalInput = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+
+      event.preventDefault();
+      restoreHoverAfterScroll.current = true;
+      markScrolling();
+      const wheelDelta = horizontalInput ? event.deltaX : event.deltaY;
+      const pixelDelta = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+        ? wheelDelta * 16
+        : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+          ? wheelDelta * window.innerHeight
+          : wheelDelta;
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        scroller.scrollLeft += pixelDelta * 0.28;
+        normalizePosition();
+        targetScroll.current = scroller.scrollLeft;
+        return;
+      }
+
+      targetScroll.current += pixelDelta * 0.28;
+
+      if (animationFrame.current === null) {
+        animationFrame.current = requestAnimationFrame(animateScroll);
+      }
+    };
+
+    const handleNativeScroll = () => {
+      markScrolling();
+      if (isAnimating.current) return;
+      normalizePosition();
+      targetScroll.current = scroller.scrollLeft;
+    };
+
+    measure();
+    let readyFrame = requestAnimationFrame(() => {
+      readyFrame = requestAnimationFrame(onReady);
+    });
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(albumSet);
+    scroller.addEventListener("scroll", handleNativeScroll, { passive: true });
+    scroller.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(readyFrame);
+      stopHoverAnimations();
+      if (centeringTimer.current !== null) clearTimeout(centeringTimer.current);
+      if (scrollingTimer.current !== null) clearTimeout(scrollingTimer.current);
+      if (animationFrame.current !== null) cancelAnimationFrame(animationFrame.current);
+      scroller.removeEventListener("scroll", handleNativeScroll);
+      scroller.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("resize", measure);
+    };
+  }, [onReady, releases]);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+    if (!scroller || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
+    event.preventDefault();
+    scroller.scrollLeft += event.key === "ArrowRight" ? 96 : -96;
+  };
+
+  const handleRecordTap = (record: HTMLDivElement) => {
+    if (activeRecord.current === record) {
+      preserveExpandedDuringScroll.current = false;
+      isScrolling.current = false;
+      if (centeringTimer.current !== null) clearTimeout(centeringTimer.current);
+      centeringTimer.current = null;
+      if (scrollingTimer.current !== null) clearTimeout(scrollingTimer.current);
+      scrollingTimer.current = null;
+      collapseRecord(record);
+      return;
+    }
+
+    expandRecord(record);
+    requestAnimationFrame(() => {
+      const scroller = scrollerRef.current;
+      const details = record.querySelector<HTMLElement>(".album-details");
+      if (!scroller || !details || activeRecord.current !== record) return;
+
+      const recordRect = record.getBoundingClientRect();
+      const scrollerRect = scroller.getBoundingClientRect();
+      const groupCenter = recordRect.left + (record.offsetWidth + details.offsetWidth) / 2;
+      const viewportCenter = scrollerRect.left + scroller.clientWidth / 2;
+      const distance = groupCenter - viewportCenter;
+      if (Math.abs(distance) < 1) return;
+
+      preserveExpandedDuringScroll.current = true;
+      if (centeringTimer.current !== null) clearTimeout(centeringTimer.current);
+      centeringTimer.current = setTimeout(() => {
+        preserveExpandedDuringScroll.current = false;
+        centeringTimer.current = null;
+      }, 700);
+      scroller.scrollTo({
+        left: scroller.scrollLeft + distance,
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      });
+    });
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+    if (!scroller || event.pointerType !== "mouse" || event.button !== 0) return;
+    if ((event.target as Element).closest(".album-details a")) return;
+
+    event.preventDefault();
+    if (animationFrame.current !== null) {
+      cancelAnimationFrame(animationFrame.current);
+      animationFrame.current = null;
+      isAnimating.current = false;
+    }
+    targetScroll.current = scroller.scrollLeft;
+    dragPointer.current = event.pointerId;
+    dragStartX.current = event.clientX;
+    dragStartScroll.current = scroller.scrollLeft;
+    dragLastX.current = event.clientX;
+    dragLastTime.current = event.timeStamp;
+    dragVelocity.current = 0;
+    dragMoved.current = false;
+    isAnimating.current = true;
+    scroller.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+    if (!scroller || dragPointer.current !== event.pointerId) return;
+    if (!dragMoved.current) {
+      if (Math.abs(event.clientX - dragStartX.current) <= 2) return;
+      dragMoved.current = true;
+      if (scrollingTimer.current !== null) clearTimeout(scrollingTimer.current);
+      scrollingTimer.current = null;
+      restoreHoverAfterScroll.current = false;
+      isScrolling.current = true;
+      if (activeRecord.current) releaseHoverForScrolling();
+      else resetHoverImmediately();
+    }
+    const elapsed = event.timeStamp - dragLastTime.current;
+    if (elapsed > 0) {
+      const nextVelocity = -(event.clientX - dragLastX.current) / elapsed;
+      dragVelocity.current = dragVelocity.current * 0.65 + nextVelocity * 0.35;
+      dragLastX.current = event.clientX;
+      dragLastTime.current = event.timeStamp;
+    }
+    scroller.scrollLeft = dragStartScroll.current - (event.clientX - dragStartX.current);
+    targetScroll.current = scroller.scrollLeft;
+  };
+
+  const handlePointerEnd = (event: React.PointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+    if (!scroller || dragPointer.current !== event.pointerId) return;
+    dragPointer.current = null;
+    if (scroller.hasPointerCapture(event.pointerId)) scroller.releasePointerCapture(event.pointerId);
+
+    let velocity = Math.max(-1.4, Math.min(1.4, dragVelocity.current));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || Math.abs(velocity) < 0.02) {
+      isAnimating.current = false;
+      targetScroll.current = scroller.scrollLeft;
+      return;
+    }
+
+    let previousTime = performance.now();
+    const glide = (time: number) => {
+      const elapsed = Math.min(time - previousTime, 32);
+      previousTime = time;
+      scroller.scrollLeft += velocity * elapsed;
+
+      const width = setWidth.current;
+      if (width > 0 && scroller.scrollLeft < width * 0.5) scroller.scrollLeft += width;
+      else if (width > 0 && scroller.scrollLeft >= width * 1.5) scroller.scrollLeft -= width;
+
+      targetScroll.current = scroller.scrollLeft;
+      velocity *= Math.pow(0.9, elapsed / 16.67);
+      if (Math.abs(velocity) > 0.02) {
+        animationFrame.current = requestAnimationFrame(glide);
+      } else {
+        animationFrame.current = null;
+        isAnimating.current = false;
+      }
+    };
+
+    animationFrame.current = requestAnimationFrame(glide);
+  };
+
+  return (
+    <div className="relative left-1/2 w-screen -translate-x-1/2">
+      <div
+        ref={scrollerRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Record collection. Scroll while pointing at the shelf, drag, or use the arrow keys to browse."
+        onKeyDown={handleKeyDown}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerEnd}
+        onPointerCancel={handlePointerEnd}
+        onPointerEnter={(event) => {
+          if (event.pointerType === "mouse") isPointerOver.current = true;
+        }}
+        onPointerLeave={(event) => {
+          if (event.pointerType !== "mouse") return;
+          isPointerOver.current = false;
+          if (activeRecord.current) collapseRecord(activeRecord.current);
+        }}
+        className="record-scroller relative h-48 cursor-grab touch-pan-x select-none overflow-x-auto overflow-y-hidden overscroll-contain active:cursor-grabbing [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-[-2px] [&::-webkit-scrollbar]:hidden"
+      >
+        <div className="pointer-events-none absolute inset-x-0 top-[5.5rem] h-px bg-white/15" aria-hidden />
+        <div className="absolute start-0 top-8 flex w-max items-center pb-4">
+          <AlbumSet releases={releases} hidden onRecordEnter={expandRecord} onRecordLeave={collapseRecord} onRecordTap={handleRecordTap} />
+          <AlbumSet releases={releases} measureRef={setRef} onRecordEnter={expandRecord} onRecordLeave={collapseRecord} onRecordTap={handleRecordTap} />
+          <AlbumSet releases={releases} hidden onRecordEnter={expandRecord} onRecordLeave={collapseRecord} onRecordTap={handleRecordTap} />
         </div>
-    );
+      </div>
+    </div>
+  );
+}
+
+export default function DiscogsLibrary() {
+  const [releases, setReleases] = useState<VinylRelease[]>([]);
+  const [error, setError] = useState(false);
+  const [shelfReady, setShelfReady] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
+  const handleShelfReady = useCallback(() => setShelfReady(true), []);
+
+  useEffect(() => {
+    if (!shelfReady) return;
+    const timer = setTimeout(() => setShowSkeleton(false), 600);
+    return () => clearTimeout(timer);
+  }, [shelfReady]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadCollection = async () => {
+      const firstPage = await fetchVinyl(1, "added", "desc", { signal: controller.signal });
+      const remainingPages = await Promise.all(
+        Array.from(
+          { length: Math.max(0, firstPage.pagination.pages - 1) },
+          (_, index) => fetchVinyl(index + 2, "added", "desc", { signal: controller.signal }),
+        ),
+      );
+
+      const collection = [
+        ...(firstPage.releases ?? []),
+        ...remainingPages.flatMap((page) => page.releases ?? []),
+      ];
+
+      startTransition(() => setReleases(collection));
+    };
+
+    loadCollection()
+      .catch((caughtError: unknown) => {
+        if ((caughtError as { name?: string }).name !== "AbortError") {
+          console.error("Failed to load Discogs shelf:", caughtError);
+          setError(true);
+        }
+      });
+
+    return () => controller.abort();
+  }, []);
+
+  if (error) {
+    return <p className="mt-3 px-4 text-sm text-muted-foreground">The shelf is temporarily out of reach.</p>;
+  }
+
+  return (
+    <div className="pt-5">
+      <div className="mx-auto mb-2 w-full max-w-[640px] px-8">
+        <FadeInOnView delay={140}>
+          <h2 className="text-lg font-semibold">My record collection</h2>
+        </FadeInOnView>
+      </div>
+      <div className="grid">
+        {showSkeleton && (
+          <div
+            aria-hidden={shelfReady}
+            className={cn(
+              "col-start-1 row-start-1 transition-[opacity,filter] duration-500 ease-out motion-reduce:transition-none",
+              shelfReady ? "pointer-events-none opacity-0 blur-sm" : "opacity-100 blur-none",
+            )}
+          >
+            <DiscogsLibrarySkeleton />
+          </div>
+        )}
+        {releases.length > 0 && (
+          <div
+            inert={!shelfReady ? true : undefined}
+            aria-hidden={!shelfReady}
+            className={cn(
+              "col-start-1 row-start-1 transition-[opacity,filter,translate] duration-700 ease-out motion-reduce:translate-x-0 motion-reduce:transition-none",
+              shelfReady
+                ? "translate-x-0 opacity-100 blur-none"
+                : "pointer-events-none translate-x-4 opacity-0 blur-[1px]",
+            )}
+          >
+            <ScrollShelf releases={releases} onReady={handleShelfReady} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
