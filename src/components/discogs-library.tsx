@@ -8,31 +8,49 @@ import { cn } from "@/lib/utils";
 import FadeInOnView from "./anim/fade-in-on-view";
 import DiscogsLibrarySkeleton from "./discogs-library-skeleton";
 
+const ALBUM_SIZE = 112;
+const ALBUM_OVERLAP = 20;
+const ALBUM_STRIDE = ALBUM_SIZE - ALBUM_OVERLAP;
+const SET_GAP = 12;
+const VIRTUAL_OVERSCAN = 20;
+
 function setRecordExpanded(record: HTMLDivElement, expanded: boolean) {
   record.querySelector<HTMLButtonElement>(".album-trigger")?.setAttribute("aria-expanded", String(expanded));
 }
 
-function AlbumSet({
+function VirtualAlbumTrack({
   releases,
-  measureRef,
-  hidden,
+  range,
+  setWidth,
   onRecordEnter,
   onRecordLeave,
   onRecordTap,
 }: {
   releases: VinylRelease[];
-  measureRef?: React.Ref<HTMLDivElement>;
-  hidden?: boolean;
+  range: { start: number; end: number };
+  setWidth: number;
   onRecordEnter: (record: HTMLDivElement) => void;
   onRecordLeave: (record: HTMLDivElement) => void;
   onRecordTap: (record: HTMLDivElement) => void;
 }) {
+  const totalItems = releases.length * 3;
+  const visibleItems = Array.from(
+    { length: Math.max(0, range.end - range.start) },
+    (_, offset) => range.start + offset,
+  );
+
   return (
-    <div ref={measureRef} aria-hidden={hidden} className="flex shrink-0 flex-row-reverse justify-end pe-3">
-      {[...releases].reverse().map((release, reversedIndex) => {
+    <div className="relative h-28" style={{ width: setWidth * 3 + ALBUM_OVERLAP }}>
+      {visibleItems.map((virtualIndex) => {
+        const releaseIndex = virtualIndex % releases.length;
+        const cycle = Math.floor(virtualIndex / releases.length);
+        const release = releases[releaseIndex];
+        const hidden = cycle !== 1;
+
         return (
           <div
-            key={`${release.discogs_id}-${reversedIndex}`}
+            key={`${release.discogs_id}-${virtualIndex}`}
+            aria-hidden={hidden}
             onPointerEnter={(event) => {
               if (event.pointerType === "mouse") onRecordEnter(event.currentTarget);
             }}
@@ -45,7 +63,11 @@ function AlbumSet({
             onBlur={(event) => {
               if (!event.currentTarget.contains(event.relatedTarget)) onRecordLeave(event.currentTarget);
             }}
-            className="album-record group relative z-0 -me-5 block size-28 shrink-0 rounded-sm [perspective:700px]"
+            className="album-record group absolute top-0 block size-28 rounded-sm [perspective:700px]"
+            style={{
+              left: cycle * setWidth + releaseIndex * ALBUM_STRIDE,
+              zIndex: totalItems - virtualIndex,
+            }}
           >
             <button
               type="button"
@@ -70,6 +92,7 @@ function AlbumSet({
                   alt=""
                   fill
                   draggable={false}
+                  loading="eager"
                   sizes="112px"
                   className="object-cover"
                   onError={(event) => {
@@ -101,8 +124,11 @@ function AlbumSet({
 
 function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady: () => void }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const setRef = useRef<HTMLDivElement>(null);
   const setWidth = useRef(0);
+  const [virtualRange, setVirtualRange] = useState(() => ({
+    start: Math.max(0, releases.length - VIRTUAL_OVERSCAN),
+    end: Math.min(releases.length * 3, releases.length + VIRTUAL_OVERSCAN * 2),
+  }));
   const targetScroll = useRef(0);
   const animationFrame = useRef<number | null>(null);
   const dragPointer = useRef<number | null>(null);
@@ -346,18 +372,29 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
   };
 
   useEffect(() => {
-    const albumSet = setRef.current;
     const scroller = scrollerRef.current;
-    if (!albumSet || !scroller) return;
+    if (!scroller) return;
+
+    const width = releases.length * ALBUM_STRIDE + SET_GAP;
+    const totalItems = releases.length * 3;
+
+    const updateVirtualRange = () => {
+      const start = Math.max(0, Math.floor(scroller.scrollLeft / ALBUM_STRIDE) - VIRTUAL_OVERSCAN);
+      const end = Math.min(
+        totalItems,
+        Math.ceil((scroller.scrollLeft + scroller.clientWidth) / ALBUM_STRIDE) + VIRTUAL_OVERSCAN,
+      );
+      setVirtualRange((current) => current.start === start && current.end === end ? current : { start, end });
+    };
 
     const measure = () => {
-      const width = albumSet.offsetWidth;
       const previousWidth = setWidth.current;
       setWidth.current = width;
       if (width > 0 && previousWidth === 0) {
         scroller.scrollLeft = width;
         targetScroll.current = width;
       }
+      updateVirtualRange();
     };
 
     const normalizePosition = () => {
@@ -367,9 +404,11 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
       if (scroller.scrollLeft < width * 0.5) {
         scroller.scrollLeft += width;
         targetScroll.current += width;
+        updateVirtualRange();
       } else if (scroller.scrollLeft >= width * 1.5) {
         scroller.scrollLeft -= width;
         targetScroll.current -= width;
+        updateVirtualRange();
       }
     };
 
@@ -441,6 +480,7 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
 
     const handleNativeScroll = () => {
       markScrolling();
+      updateVirtualRange();
       if (isAnimating.current) return;
       normalizePosition();
       targetScroll.current = scroller.scrollLeft;
@@ -452,7 +492,7 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     });
 
     const observer = new ResizeObserver(measure);
-    observer.observe(albumSet);
+    observer.observe(scroller);
     scroller.addEventListener("scroll", handleNativeScroll, { passive: true });
     scroller.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("resize", measure);
@@ -597,6 +637,8 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     animationFrame.current = requestAnimationFrame(glide);
   };
 
+  const albumSetWidth = releases.length * ALBUM_STRIDE + SET_GAP;
+
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2">
       <div
@@ -620,10 +662,15 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
         className="record-scroller relative h-48 cursor-grab touch-pan-x select-none overflow-x-auto overflow-y-hidden overscroll-contain active:cursor-grabbing [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-[-2px] [&::-webkit-scrollbar]:hidden"
       >
         <div className="pointer-events-none absolute inset-x-0 top-[5.5rem] h-px bg-white/15" aria-hidden />
-        <div className="absolute start-0 top-8 flex w-max items-center pb-4">
-          <AlbumSet releases={releases} hidden onRecordEnter={expandRecord} onRecordLeave={collapseRecord} onRecordTap={handleRecordTap} />
-          <AlbumSet releases={releases} measureRef={setRef} onRecordEnter={expandRecord} onRecordLeave={collapseRecord} onRecordTap={handleRecordTap} />
-          <AlbumSet releases={releases} hidden onRecordEnter={expandRecord} onRecordLeave={collapseRecord} onRecordTap={handleRecordTap} />
+        <div className="absolute start-0 top-8 w-max pb-4">
+          <VirtualAlbumTrack
+            releases={releases}
+            range={virtualRange}
+            setWidth={albumSetWidth}
+            onRecordEnter={expandRecord}
+            onRecordLeave={collapseRecord}
+            onRecordTap={handleRecordTap}
+          />
         </div>
       </div>
     </div>
