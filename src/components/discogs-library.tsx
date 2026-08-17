@@ -679,7 +679,11 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
       if (centeringTimer.current !== null) clearTimeout(centeringTimer.current);
       if (scrollingTimer.current !== null) clearTimeout(scrollingTimer.current);
       if (pendingCollapseTimer.current !== null) clearTimeout(pendingCollapseTimer.current);
-      if (animationFrame.current !== null) cancelAnimationFrame(animationFrame.current);
+      if (animationFrame.current !== null) {
+        cancelAnimationFrame(animationFrame.current);
+        animationFrame.current = null;
+        isAnimating.current = false;
+      }
       scroller.removeEventListener("scroll", handleNativeScroll);
       scroller.removeEventListener("wheel", handleWheel);
       window.removeEventListener("resize", measure);

@@ -13,6 +13,7 @@ const SOCIAL_LINK_CLASSES = "size-10 justify-center rounded-md bg-card text-fore
 
 export default async function Header() {
   const recordCount = await getRecordCount();
+  const currentYear = new Date().getFullYear();
 
   return (
     <div className="flex flex-col items-start text-xl">
@@ -102,7 +103,7 @@ export default async function Header() {
                 rel="noopener noreferrer"
                 className="link-inline"
               >
-                Purelend.ai
+                Purelend
               </a>
             </span>
           </div>
@@ -115,7 +116,7 @@ export default async function Header() {
               <Disc3 className="h-4 w-4" />
               <span>
                 {recordCount.total} records
-                {recordCount.addedThisYear !== null && ` (+${recordCount.addedThisYear} this year)`}
+                {recordCount.addedThisYear !== null && ` (+${recordCount.addedThisYear} in ${currentYear})`}
               </span>
             </div>
           )}
