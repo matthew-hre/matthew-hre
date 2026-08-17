@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useCallback, useEffect, useRef, useState } from "react";
+import { memo, startTransition, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { animate, type AnimationPlaybackControls } from "motion";
 import { fetchVinyl, type VinylRelease } from "@/types/vinyl";
@@ -12,11 +12,83 @@ const ALBUM_SIZE = 112;
 const ALBUM_OVERLAP = 20;
 const ALBUM_STRIDE = ALBUM_SIZE - ALBUM_OVERLAP;
 const SET_GAP = 12;
-const VIRTUAL_OVERSCAN = 20;
+const VIRTUAL_OVERSCAN = 12;
 
 function setRecordExpanded(record: HTMLDivElement, expanded: boolean) {
   record.querySelector<HTMLButtonElement>(".album-trigger")?.setAttribute("aria-expanded", String(expanded));
 }
+
+function getRecordTarget(target: EventTarget | null) {
+  return target instanceof Element ? target.closest<HTMLDivElement>(".album-record") : null;
+}
+
+const AlbumRecord = memo(function AlbumRecord({
+  release,
+  releaseIndex,
+  virtualIndex,
+  setWidth,
+  totalItems,
+}: {
+  release: VinylRelease;
+  releaseIndex: number;
+  virtualIndex: number;
+  setWidth: number;
+  totalItems: number;
+}) {
+  const cycle = Math.floor(virtualIndex / (totalItems / 3));
+  const hidden = cycle !== 1;
+
+  return (
+    <div
+      aria-hidden={hidden}
+      className="album-record group absolute top-0 block size-28 rounded-sm [perspective:700px]"
+      style={{
+        left: cycle * setWidth + releaseIndex * ALBUM_STRIDE,
+        zIndex: totalItems - virtualIndex,
+      }}
+    >
+      <button
+        type="button"
+        tabIndex={hidden ? -1 : undefined}
+        aria-label={`Show details for ${release.title} by ${release.artist_name}`}
+        aria-expanded="false"
+        className={cn(
+          "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-card-active p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-white/10 [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
+          !release.cover_image && "is-missing-cover",
+        )}
+      >
+        {release.cover_image && (
+          <Image
+            src={release.cover_image}
+            alt=""
+            fill
+            draggable={false}
+            loading="eager"
+            sizes="112px"
+            className="object-cover"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+              event.currentTarget.closest(".album-cover")?.classList.add("is-missing-cover");
+            }}
+          />
+        )}
+      </button>
+      <span className="album-details pointer-events-none absolute start-full top-1/2 w-56 -translate-y-1/2 py-5 pe-4 ps-5 opacity-0 sm:w-64">
+        <span className="line-clamp-2 text-sm font-bold leading-tight">{release.title}</span>
+        <span className="mt-1 block truncate text-xs text-muted-foreground">{release.artist_name}</span>
+        <a
+          href={`https://www.discogs.com/release/${release.discogs_id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex={hidden ? -1 : undefined}
+          className="mt-3 block w-fit font-mono text-[0.65rem] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          Open in Discogs ↗
+        </a>
+      </span>
+    </div>
+  );
+});
 
 function VirtualAlbumTrack({
   releases,
@@ -40,82 +112,50 @@ function VirtualAlbumTrack({
   );
 
   return (
-    <div className="relative h-28" style={{ width: setWidth * 3 + ALBUM_OVERLAP }}>
+    <div
+      className="relative h-28"
+      style={{ width: setWidth * 3 + ALBUM_OVERLAP }}
+      onPointerOver={(event) => {
+        if (event.pointerType !== "mouse") return;
+        const record = getRecordTarget(event.target);
+        if (record && record !== getRecordTarget(event.relatedTarget)) onRecordEnter(record);
+      }}
+      onPointerOut={(event) => {
+        if (event.pointerType !== "mouse") return;
+        const record = getRecordTarget(event.target);
+        if (record && record !== getRecordTarget(event.relatedTarget)) onRecordLeave(record);
+      }}
+      onFocus={(event) => {
+        const record = getRecordTarget(event.target);
+        if (record && (event.target as HTMLElement).matches(":focus-visible")) onRecordEnter(record);
+      }}
+      onBlur={(event) => {
+        const record = getRecordTarget(event.target);
+        if (record && record !== getRecordTarget(event.relatedTarget)) onRecordLeave(record);
+      }}
+      onClick={(event) => {
+        const trigger = (event.target as Element).closest<HTMLButtonElement>(".album-trigger");
+        if (!trigger) return;
+        const isTouchLike = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+        if (event.detail > 0 && !isTouchLike) return;
+        const record = trigger.parentElement as HTMLDivElement;
+        if (event.detail > 0) onRecordTap(record);
+        else onRecordEnter(record);
+      }}
+    >
       {visibleItems.map((virtualIndex) => {
         const releaseIndex = virtualIndex % releases.length;
-        const cycle = Math.floor(virtualIndex / releases.length);
         const release = releases[releaseIndex];
-        const hidden = cycle !== 1;
 
         return (
-          <div
+          <AlbumRecord
             key={`${release.discogs_id}-${virtualIndex}`}
-            aria-hidden={hidden}
-            onPointerEnter={(event) => {
-              if (event.pointerType === "mouse") onRecordEnter(event.currentTarget);
-            }}
-            onPointerLeave={(event) => {
-              if (event.pointerType === "mouse") onRecordLeave(event.currentTarget);
-            }}
-            onFocus={(event) => {
-              if ((event.target as HTMLElement).matches(":focus-visible")) onRecordEnter(event.currentTarget);
-            }}
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) onRecordLeave(event.currentTarget);
-            }}
-            className="album-record group absolute top-0 block size-28 rounded-sm [perspective:700px]"
-            style={{
-              left: cycle * setWidth + releaseIndex * ALBUM_STRIDE,
-              zIndex: totalItems - virtualIndex,
-            }}
-          >
-            <button
-              type="button"
-              tabIndex={hidden ? -1 : undefined}
-              aria-label={`Show details for ${release.title} by ${release.artist_name}`}
-              aria-expanded="false"
-              onClick={(event) => {
-                const isTouchLike = window.matchMedia("(hover: none), (pointer: coarse)").matches;
-                if (event.detail > 0 && !isTouchLike) return;
-                const record = event.currentTarget.parentElement as HTMLDivElement;
-                if (event.detail > 0) onRecordTap(record);
-                else onRecordEnter(record);
-              }}
-              className={cn(
-                "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-card-active p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-white/10 [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
-                !release.cover_image && "is-missing-cover",
-              )}
-            >
-              {release.cover_image && (
-                <Image
-                  src={release.cover_image}
-                  alt=""
-                  fill
-                  draggable={false}
-                  loading="eager"
-                  sizes="112px"
-                  className="object-cover"
-                  onError={(event) => {
-                    event.currentTarget.style.display = "none";
-                    event.currentTarget.closest(".album-cover")?.classList.add("is-missing-cover");
-                  }}
-                />
-              )}
-            </button>
-            <span className="album-details pointer-events-none absolute start-full top-1/2 w-56 -translate-y-1/2 py-5 pe-4 ps-5 opacity-0 sm:w-64">
-              <span className="line-clamp-2 text-sm font-bold leading-tight">{release.title}</span>
-              <span className="mt-1 block truncate text-xs text-muted-foreground">{release.artist_name}</span>
-              <a
-                href={`https://www.discogs.com/release/${release.discogs_id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                tabIndex={hidden ? -1 : undefined}
-                className="mt-3 block w-fit font-mono text-[0.65rem] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
-              >
-                Open in Discogs ↗
-              </a>
-            </span>
-          </div>
+            release={release}
+            releaseIndex={releaseIndex}
+            virtualIndex={virtualIndex}
+            setWidth={setWidth}
+            totalItems={totalItems}
+          />
         );
       })}
     </div>
