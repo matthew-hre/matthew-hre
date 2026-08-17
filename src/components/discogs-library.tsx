@@ -527,8 +527,13 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     };
 
     measure();
+    let cancelled = false;
     let readyFrame = requestAnimationFrame(() => {
-      readyFrame = requestAnimationFrame(onReady);
+      readyFrame = requestAnimationFrame(async () => {
+        const images = Array.from(scroller.querySelectorAll<HTMLImageElement>(".album-record img"));
+        await Promise.allSettled(images.map((image) => image.decode()));
+        if (!cancelled) onReady();
+      });
     });
 
     const observer = new ResizeObserver(measure);
@@ -537,6 +542,7 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     scroller.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("resize", measure);
     return () => {
+      cancelled = true;
       observer.disconnect();
       cancelAnimationFrame(readyFrame);
       stopHoverAnimations();
