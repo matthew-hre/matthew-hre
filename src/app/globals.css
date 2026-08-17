@@ -19,8 +19,6 @@
   --radius-xl: calc(var(--radius) + 4px);
   --font-sans: var(--font-rethink-sans);
   --font-mono: var(--font-fira-code);
-  --color-icon-button: var(--icon-button);
-  --color-icon-button-hover: var(--icon-button-hover);
   --color-avatar-ring: var(--avatar-ring);
   --color-gradient-accent: var(--gradient-accent);
   --color-gradient-accent-hover: var(--gradient-accent-hover);
@@ -40,8 +38,6 @@
   --border: oklch(1 0 0 / 10%);
   --ring: oklch(0.556 0 0);
 
-  --icon-button: oklch(0.97 0 0 / 30%);
-  --icon-button-hover: oklch(0.97 0 0 / 40%);
   --avatar-ring: oklch(0.5 0 0 / 30%);
 
   --gradient-accent: oklch(0.7 0 0 / 60%);
@@ -60,10 +56,6 @@
 @layer components {
   .transition-default {
     @apply transition-all duration-300 ease-out;
-  }
-
-  .icon-button {
-    @apply bg-icon-button p-1 rounded-md transition-all duration-300 ease-out group-hover:bg-icon-button-hover;
   }
 
   .link-inline {

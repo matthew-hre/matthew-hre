@@ -1,7 +1,9 @@
 "use client";
 
-import { memo, startTransition, useCallback, useEffect, useRef, useState } from "react";
+import { memo, startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Select } from "@base-ui/react/select";
 import Image from "next/image";
+import { Check, ChevronDown } from "lucide-react";
 import { animate, type AnimationPlaybackControls } from "motion";
 import { fetchVinyl, type VinylRelease } from "@/types/vinyl";
 import { cn } from "@/lib/utils";
@@ -13,6 +15,19 @@ const ALBUM_OVERLAP = 20;
 const ALBUM_STRIDE = ALBUM_SIZE - ALBUM_OVERLAP;
 const SET_GAP = 12;
 const VIRTUAL_OVERSCAN = 12;
+const ADDED_DATE_FORMATTER = new Intl.DateTimeFormat("en", {
+  month: "long",
+  year: "numeric",
+});
+const RECORD_COLLATOR = new Intl.Collator("en", { numeric: true, sensitivity: "base" });
+
+type RecordSort = "added" | "artist" | "title";
+
+const RECORD_SORT_OPTIONS: ReadonlyArray<{ value: RecordSort; label: string }> = [
+  { value: "added", label: "Recently added" },
+  { value: "artist", label: "Artist A–Z" },
+  { value: "title", label: "Album A–Z" },
+];
 
 function setRecordExpanded(record: HTMLDivElement, expanded: boolean) {
   record.querySelector<HTMLButtonElement>(".album-trigger")?.setAttribute("aria-expanded", String(expanded));
@@ -82,17 +97,11 @@ const AlbumRecord = memo(function AlbumRecord({
         </button>
       </div>
       <span className="album-details pointer-events-none absolute start-full top-1/2 w-56 -translate-y-1/2 py-5 pe-4 ps-5 opacity-0 sm:w-64">
-        <span className="line-clamp-2 text-sm font-bold leading-tight">{release.title}</span>
+        <span className="line-clamp-2 text-pretty text-sm font-bold leading-tight">{release.title}</span>
         <span className="mt-1 block truncate text-xs text-muted-foreground">{release.artist_name}</span>
-        <a
-          href={`https://www.discogs.com/release/${release.discogs_id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          tabIndex={hidden ? -1 : undefined}
-          className="mt-3 block w-fit font-mono text-[0.65rem] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          Open in Discogs ↗
-        </a>
+        <span className="mt-3 block font-mono text-xs text-muted-foreground">
+          Added {ADDED_DATE_FORMATTER.format(new Date(release.date_added))}
+        </span>
       </span>
     </div>
   );
@@ -671,7 +680,6 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     const scroller = scrollerRef.current;
     if (!scroller || event.pointerType !== "mouse" || event.button !== 0) return;
-    if ((event.target as Element).closest(".album-details a")) return;
 
     event.preventDefault();
     if (animationFrame.current !== null) {
@@ -799,7 +807,67 @@ export default function DiscogsLibrary() {
   const [error, setError] = useState(false);
   const [shelfReady, setShelfReady] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(true);
+  const [sort, setSort] = useState<RecordSort>("added");
+  const [displaySort, setDisplaySort] = useState<RecordSort>("added");
+  const shelfRef = useRef<HTMLDivElement>(null);
+  const reorderAnimation = useRef<AnimationPlaybackControls | null>(null);
+  const reorderSequence = useRef(0);
   const handleShelfReady = useCallback(() => setShelfReady(true), []);
+  const sortedReleases = useMemo(() => {
+    return [...releases].sort((first, second) => {
+      if (displaySort === "added") return second.date_added.localeCompare(first.date_added);
+
+      const primary = displaySort === "artist"
+        ? RECORD_COLLATOR.compare(first.artist_name, second.artist_name)
+        : RECORD_COLLATOR.compare(first.title, second.title);
+      if (primary !== 0) return primary;
+
+      return displaySort === "artist"
+        ? RECORD_COLLATOR.compare(first.title, second.title)
+        : RECORD_COLLATOR.compare(first.artist_name, second.artist_name);
+    });
+  }, [displaySort, releases]);
+
+  const handleSortChange = useCallback(async (nextSort: RecordSort) => {
+    if (nextSort === sort) return;
+    setSort(nextSort);
+
+    const sequence = ++reorderSequence.current;
+    reorderAnimation.current?.stop();
+    const shelf = shelfRef.current;
+    if (!shelf || !shelfReady || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplaySort(nextSort);
+      return;
+    }
+
+    reorderAnimation.current = animate(
+      shelf,
+      { opacity: 0, transform: "translate3d(-10px, 0, 0)" },
+      { duration: 0.15, ease: [0.4, 0, 1, 1] },
+    );
+    await reorderAnimation.current;
+    if (sequence !== reorderSequence.current) return;
+
+    setDisplaySort(nextSort);
+    requestAnimationFrame(() => {
+      if (sequence !== reorderSequence.current || !shelf.isConnected) return;
+      reorderAnimation.current = animate(
+        shelf,
+        {
+          opacity: [0, 1],
+          transform: ["translate3d(10px, 0, 0)", "translate3d(0, 0, 0)"],
+        },
+        { duration: 0.28, ease: [0.23, 1, 0.32, 1] },
+      );
+    });
+  }, [shelfReady, sort]);
+
+  useEffect(() => {
+    return () => {
+      reorderSequence.current += 1;
+      reorderAnimation.current?.stop();
+    };
+  }, []);
 
   useEffect(() => {
     if (!shelfReady) return;
@@ -844,9 +912,47 @@ export default function DiscogsLibrary() {
 
   return (
     <div className="pt-5">
-      <div className="mx-auto mb-2 w-full max-w-[640px] px-8">
-        <FadeInOnView delay={140}>
+      <div className="mx-auto mb-2 w-full max-w-[640px] px-4 sm:px-8">
+        <FadeInOnView delay={140} className="flex items-center justify-between gap-3">
           <h2 className="text-lg font-semibold">My record collection</h2>
+          <Select.Root
+            value={sort}
+            onValueChange={(value) => {
+              if (value) void handleSortChange(value as RecordSort);
+            }}
+          >
+            <Select.Trigger
+              aria-label="Sort record collection"
+              className="group flex h-8 items-center gap-1 bg-transparent px-1 text-base text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground focus-visible:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 sm:text-xs"
+            >
+              <Select.Value>
+                {(value: RecordSort) => RECORD_SORT_OPTIONS.find((option) => option.value === value)?.label}
+              </Select.Value>
+              <Select.Icon>
+                <ChevronDown aria-hidden className="size-3.5 transition-transform duration-200 group-data-[popup-open]:rotate-180" />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner align="end" alignItemWithTrigger={false} sideOffset={4} className="z-50 outline-none">
+                <Select.Popup className="min-w-40 origin-top-right rounded-md border border-border bg-background p-1 shadow-[0_12px_32px_oklch(0_0_0/0.45)] outline-none transition-[opacity,transform] duration-[180ms] [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] data-[starting-style]:translate-y-1 data-[starting-style]:scale-[0.98] data-[starting-style]:opacity-0 data-[ending-style]:translate-y-0.5 data-[ending-style]:scale-[0.98] data-[ending-style]:opacity-0 data-[ending-style]:duration-[120ms] motion-reduce:transform-none motion-reduce:duration-150">
+                  <Select.List>
+                    {RECORD_SORT_OPTIONS.map(({ value, label }) => (
+                      <Select.Item
+                        key={value}
+                        value={value}
+                        className="relative flex cursor-default items-center rounded-sm py-1.5 pe-7 ps-2 text-sm text-muted-foreground outline-none data-[highlighted]:bg-card-hover data-[highlighted]:text-foreground data-[selected]:text-foreground"
+                      >
+                        <Select.ItemText>{label}</Select.ItemText>
+                        <Select.ItemIndicator className="absolute end-2">
+                          <Check aria-hidden className="size-3.5" />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                    ))}
+                  </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
         </FadeInOnView>
       </div>
       <div className="grid">
@@ -861,8 +967,9 @@ export default function DiscogsLibrary() {
             <DiscogsLibrarySkeleton />
           </div>
         )}
-        {releases.length > 0 && (
+        {sortedReleases.length > 0 && (
           <div
+            ref={shelfRef}
             inert={!shelfReady ? true : undefined}
             aria-hidden={!shelfReady}
             className={cn(
@@ -872,7 +979,7 @@ export default function DiscogsLibrary() {
                 : "pointer-events-none translate-x-4 opacity-0 blur-[1px]",
             )}
           >
-            <ScrollShelf releases={releases} onReady={handleShelfReady} />
+            <ScrollShelf key={displaySort} releases={sortedReleases} onReady={handleShelfReady} />
           </div>
         )}
       </div>
