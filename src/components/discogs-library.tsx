@@ -30,6 +30,10 @@ const RECORD_SORT_OPTIONS: ReadonlyArray<{ value: RecordSort; label: string }> =
   { value: "title", label: "Album A–Z" },
 ];
 
+function getLowResolutionImageUrl(source: string) {
+  return `/_next/image?url=${encodeURIComponent(source)}&w=32&q=75`;
+}
+
 function setRecordExpanded(record: HTMLDivElement, expanded: boolean) {
   record.querySelector<HTMLButtonElement>(".album-trigger")?.setAttribute("aria-expanded", String(expanded));
 }
@@ -48,12 +52,14 @@ const AlbumRecord = memo(function AlbumRecord({
   virtualIndex,
   setWidth,
   totalItems,
+  loadFullImage,
 }: {
   release: VinylRelease;
   releaseIndex: number;
   virtualIndex: number;
   setWidth: number;
   totalItems: number;
+  loadFullImage: boolean;
 }) {
   const cycle = Math.floor(virtualIndex / (totalItems / 3));
   const hidden = cycle !== 1;
@@ -82,7 +88,18 @@ const AlbumRecord = memo(function AlbumRecord({
             !release.cover_image && "is-missing-cover",
           )}
         >
-          {release.cover_image && (
+          {release.cover_image && highPriority && (
+            <span
+              aria-hidden
+              data-thumbnail-url={getLowResolutionImageUrl(release.cover_image)}
+              className={cn(
+                "pointer-events-none absolute -inset-1 scale-110 bg-cover bg-center blur-[4px] transition-opacity duration-[180ms] ease-out motion-reduce:transition-none",
+                imageLoaded ? "opacity-0" : "opacity-100",
+              )}
+              style={{ backgroundImage: `url("${getLowResolutionImageUrl(release.cover_image)}")` }}
+            />
+          )}
+          {release.cover_image && loadFullImage && (
             <Image
               src={release.cover_image}
               alt=""
@@ -97,6 +114,7 @@ const AlbumRecord = memo(function AlbumRecord({
               )}
               onLoad={() => setImageLoaded(true)}
               onError={(event) => {
+                setImageLoaded(true);
                 event.currentTarget.style.display = "none";
                 event.currentTarget.closest(".album-cover")?.classList.add("is-missing-cover");
               }}
@@ -119,6 +137,7 @@ function VirtualAlbumTrack({
   releases,
   range,
   setWidth,
+  loadFullImages,
   onRecordEnter,
   onRecordLeave,
   onRecordTap,
@@ -126,6 +145,7 @@ function VirtualAlbumTrack({
   releases: VinylRelease[];
   range: { start: number; end: number };
   setWidth: number;
+  loadFullImages: boolean;
   onRecordEnter: (record: HTMLDivElement) => void;
   onRecordLeave: (record: HTMLDivElement) => void;
   onRecordTap: (record: HTMLDivElement) => void;
@@ -187,6 +207,7 @@ function VirtualAlbumTrack({
             virtualIndex={virtualIndex}
             setWidth={setWidth}
             totalItems={totalItems}
+            loadFullImage={loadFullImages}
           />
         );
       })}
@@ -197,6 +218,8 @@ function VirtualAlbumTrack({
 function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady: () => void }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const setWidth = useRef(0);
+  const didSignalReady = useRef(false);
+  const [loadFullImages, setLoadFullImages] = useState(false);
   const [virtualRange, setVirtualRange] = useState(() => ({
     start: Math.max(0, releases.length - VIRTUAL_OVERSCAN),
     end: Math.min(releases.length * 3, releases.length + VIRTUAL_OVERSCAN * 2),
@@ -615,13 +638,30 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     let readyFrame = requestAnimationFrame(() => {
       readyFrame = requestAnimationFrame(async () => {
         const scrollerRect = scroller.getBoundingClientRect();
-        const visibleImages = Array.from(scroller.querySelectorAll<HTMLImageElement>(".album-record img"))
-          .filter((image) => {
-            const recordRect = image.closest<HTMLElement>(".album-record")?.getBoundingClientRect();
-            return recordRect && recordRect.right > scrollerRect.left && recordRect.left < scrollerRect.right;
+        const visibleRecords = Array.from(scroller.querySelectorAll<HTMLElement>(".album-record"))
+          .filter((record) => {
+            const recordRect = record.getBoundingClientRect();
+            return recordRect.right > scrollerRect.left && recordRect.left < scrollerRect.right;
           });
-        await Promise.allSettled(visibleImages.map((image) => image.decode()));
-        if (!cancelled) readyFrame = requestAnimationFrame(onReady);
+        const thumbnailUrls = visibleRecords.flatMap((record) => {
+          const url = record.querySelector<HTMLElement>("[data-thumbnail-url]")?.dataset.thumbnailUrl;
+          return url ? [url] : [];
+        });
+        await Promise.all(thumbnailUrls.map((url) => new Promise<void>((resolve) => {
+          const thumbnail = new window.Image();
+          thumbnail.addEventListener("load", () => resolve(), { once: true });
+          thumbnail.addEventListener("error", () => resolve(), { once: true });
+          thumbnail.src = url;
+          if (thumbnail.complete) resolve();
+        })));
+        if (!cancelled) {
+          setLoadFullImages(true);
+          readyFrame = requestAnimationFrame(() => {
+            if (didSignalReady.current) return;
+            didSignalReady.current = true;
+            onReady();
+          });
+        }
       });
     });
 
@@ -805,6 +845,7 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
             releases={releases}
             range={virtualRange}
             setWidth={albumSetWidth}
+            loadFullImages={loadFullImages}
             onRecordEnter={expandRecord}
             onRecordLeave={collapseRecord}
             onRecordTap={handleRecordTap}

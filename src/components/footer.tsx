@@ -1,11 +1,8 @@
-import { getCommitData } from "@/lib/getCommitData";
-import { GitBranch } from "lucide-react";
 import FadeInOnView from "./anim/fade-in-on-view";
+import CommitHash from "./commit-hash";
 import Link from "./link";
 
-export default async function Footer() {
-  const commitData = await getCommitData();
-
+export default function Footer() {
   return (
     <footer>
       <FadeInOnView>
@@ -19,14 +16,7 @@ export default async function Footer() {
               >
                 CC BY-SA 4.0
               </Link>
-              <Link
-                href={`https://tangled.org/matthew-hre.com/matthew-hre.com/commit/${commitData?.sha}`}
-                variant="muted"
-                mono
-                icon={<GitBranch className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-default" />}
-              >
-                {commitData?.sha.slice(0, 7)}
-              </Link>
+              <CommitHash />
             </div>
           </div>
         </div>
