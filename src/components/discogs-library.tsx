@@ -84,7 +84,7 @@ const AlbumRecord = memo(function AlbumRecord({
           aria-label={`Show details for ${release.title} by ${release.artist_name}`}
           aria-expanded="false"
           className={cn(
-            "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-muted p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-white/10 [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
+            "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-muted p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-image-outline [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
             !release.cover_image && "is-missing-cover",
           )}
         >
@@ -844,7 +844,7 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
         }}
         className="record-scroller relative h-48 cursor-grab touch-pan-x select-none overflow-x-auto overflow-y-hidden overscroll-contain active:cursor-grabbing [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-[-2px] [&::-webkit-scrollbar]:hidden"
       >
-        <div className="pointer-events-none absolute inset-x-0 top-[5.5rem] h-px bg-white/15" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-0 top-[5.5rem] h-px bg-border" aria-hidden />
         <div className="absolute start-0 top-8 w-max pb-4">
           <VirtualAlbumTrack
             releases={releases}

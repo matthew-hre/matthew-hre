@@ -1,6 +1,6 @@
 import FadeInOnView from "./anim/fade-in-on-view";
 import CommitHash from "./commit-hash";
-import Link from "./link";
+import ThemeToggle from "./theme-toggle";
 
 export default function Footer() {
   return (
@@ -10,12 +10,7 @@ export default function Footer() {
           <div className="flex flex-col flex-wrap items-center gap-10 px-4 py-5 pt-0">
             <hr className="w-full border-t border-border" />
             <div className="grid w-full grid-flow-col-dense grid-cols-1 items-start gap-4">
-              <Link
-                href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"
-                variant="muted"
-              >
-                CC BY-SA 4.0
-              </Link>
+              <ThemeToggle />
               <CommitHash />
             </div>
           </div>

@@ -4,6 +4,20 @@ import "./globals.css";
 import GrainOverlay from "@/components/grain-overlay";
 import BackToTop from "@/components/back-to-top";
 
+const themeScript = `(() => {
+  try {
+    const preference = localStorage.getItem("theme");
+    if (preference === "light" || preference === "dark" || preference === "system") {
+      const theme = preference === "system"
+        ? matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"
+        : preference;
+      document.documentElement.dataset.themePreference = preference;
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    }
+  } catch {}
+})();`;
+
 const rethinkSans = Rethink_Sans({
   subsets: ["latin"],
   variable: "--font-rethink-sans",
@@ -34,9 +48,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body
-        className={`${rethinkSans.variable} ${firaCode.variable} font-sans antialiased bg-muted`}
+        className={`${rethinkSans.variable} ${firaCode.variable} bg-muted font-sans antialiased`}
       >
         <GrainOverlay />
         {children}

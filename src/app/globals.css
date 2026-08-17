@@ -22,6 +22,7 @@
   --color-avatar-ring: var(--avatar-ring);
   --color-gradient-accent: var(--gradient-accent);
   --color-gradient-accent-hover: var(--gradient-accent-hover);
+  --color-image-outline: var(--image-outline);
 }
 
 :root {
@@ -42,6 +43,26 @@
 
   --gradient-accent: oklch(0.7 0 0 / 60%);
   --gradient-accent-hover: oklch(0.7 0 0);
+  --image-outline: oklch(1 0 0 / 10%);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --background: oklch(0.975 0 0);
+  --foreground: oklch(0.205 0 0);
+  --card: oklch(0 0 0 / 5%);
+  --card-hover: oklch(0 0 0 / 9%);
+  --card-active: oklch(0 0 0 / 16%);
+  --primary: oklch(0.13 0 0);
+  --muted: oklch(0.915 0 0);
+  --muted-transparent: oklch(0.915 0 0 / 0);
+  --muted-foreground: oklch(0.455 0 0);
+  --border: oklch(0 0 0 / 12%);
+  --ring: oklch(0.43 0 0);
+  --avatar-ring: oklch(0.45 0 0 / 25%);
+  --gradient-accent: oklch(0.42 0 0 / 45%);
+  --gradient-accent-hover: oklch(0.42 0 0);
+  --image-outline: oklch(0 0 0 / 10%);
 }
 
 @layer base {
@@ -55,11 +76,11 @@
 
 @layer components {
   .transition-default {
-    @apply transition-all duration-300 ease-out;
+    @apply transition-[color,background-color,opacity,text-decoration-color,transform] duration-300 ease-out;
   }
 
   .link-inline {
-    @apply text-muted-foreground hover:text-primary underline transition-all duration-300 ease-out;
+    @apply text-muted-foreground hover:text-primary underline transition-[color,text-decoration-color] duration-300 ease-out;
   }
 }
 

@@ -15,7 +15,7 @@ function SkeletonSet({ foreground = false }: { foreground?: boolean }) {
           key={index}
           className="relative z-0 -me-5 size-28 shrink-0 [perspective:700px]"
         >
-          <div className="size-28 rounded-sm bg-muted shadow-[0_12px_24px_oklch(0_0_0/0.35)] outline -outline-offset-1 outline-white/10 [transform:rotateY(-24deg)]" />
+          <div className="size-28 rounded-sm bg-muted shadow-[0_12px_24px_oklch(0_0_0/0.35)] outline -outline-offset-1 outline-image-outline [transform:rotateY(-24deg)]" />
         </div>
       ))}
     </div>
