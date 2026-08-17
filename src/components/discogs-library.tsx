@@ -15,6 +15,7 @@ const ALBUM_OVERLAP = 20;
 const ALBUM_STRIDE = ALBUM_SIZE - ALBUM_OVERLAP;
 const SET_GAP = 12;
 const VIRTUAL_OVERSCAN = 12;
+const INITIAL_HIGH_PRIORITY_IMAGES = 8;
 const ADDED_DATE_FORMATTER = new Intl.DateTimeFormat("en", {
   month: "long",
   year: "numeric",
@@ -56,6 +57,8 @@ const AlbumRecord = memo(function AlbumRecord({
 }) {
   const cycle = Math.floor(virtualIndex / (totalItems / 3));
   const hidden = cycle !== 1;
+  const highPriority = cycle === 1 && releaseIndex < INITIAL_HIGH_PRIORITY_IMAGES;
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <div
@@ -75,7 +78,7 @@ const AlbumRecord = memo(function AlbumRecord({
           aria-label={`Show details for ${release.title} by ${release.artist_name}`}
           aria-expanded="false"
           className={cn(
-            "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-card-active p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-white/10 [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
+            "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-muted p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-white/10 [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
             !release.cover_image && "is-missing-cover",
           )}
         >
@@ -85,9 +88,14 @@ const AlbumRecord = memo(function AlbumRecord({
               alt=""
               fill
               draggable={false}
-              loading="eager"
+              loading={highPriority ? "eager" : "lazy"}
+              fetchPriority={highPriority ? "high" : "auto"}
               sizes="112px"
-              className="object-cover"
+              className={cn(
+                "object-cover transition-opacity duration-[180ms] ease-out motion-reduce:transition-none",
+                imageLoaded ? "opacity-100" : "opacity-0",
+              )}
+              onLoad={() => setImageLoaded(true)}
               onError={(event) => {
                 event.currentTarget.style.display = "none";
                 event.currentTarget.closest(".album-cover")?.classList.add("is-missing-cover");
@@ -606,9 +614,14 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     let cancelled = false;
     let readyFrame = requestAnimationFrame(() => {
       readyFrame = requestAnimationFrame(async () => {
-        const images = Array.from(scroller.querySelectorAll<HTMLImageElement>(".album-record img"));
-        await Promise.allSettled(images.map((image) => image.decode()));
-        if (!cancelled) onReady();
+        const scrollerRect = scroller.getBoundingClientRect();
+        const visibleImages = Array.from(scroller.querySelectorAll<HTMLImageElement>(".album-record img"))
+          .filter((image) => {
+            const recordRect = image.closest<HTMLElement>(".album-record")?.getBoundingClientRect();
+            return recordRect && recordRect.right > scrollerRect.left && recordRect.left < scrollerRect.right;
+          });
+        await Promise.allSettled(visibleImages.map((image) => image.decode()));
+        if (!cancelled) readyFrame = requestAnimationFrame(onReady);
       });
     });
 
