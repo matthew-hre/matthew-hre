@@ -22,6 +22,10 @@ function getRecordTarget(target: EventTarget | null) {
   return target instanceof Element ? target.closest<HTMLDivElement>(".album-record") : null;
 }
 
+function getAlbumVisual(record: Element) {
+  return record.querySelector<HTMLElement>(".album-visual");
+}
+
 const AlbumRecord = memo(function AlbumRecord({
   release,
   releaseIndex,
@@ -41,38 +45,42 @@ const AlbumRecord = memo(function AlbumRecord({
   return (
     <div
       aria-hidden={hidden}
-      className="album-record group absolute top-0 block size-28 rounded-sm [perspective:700px]"
+      className="album-record group absolute top-0 block size-28 rounded-sm"
       style={{
         left: cycle * setWidth + releaseIndex * ALBUM_STRIDE,
-        zIndex: totalItems - virtualIndex,
       }}
     >
-      <button
-        type="button"
-        tabIndex={hidden ? -1 : undefined}
-        aria-label={`Show details for ${release.title} by ${release.artist_name}`}
-        aria-expanded="false"
-        className={cn(
-          "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-card-active p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-white/10 [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
-          !release.cover_image && "is-missing-cover",
-        )}
+      <div
+        className="album-visual relative size-28 [perspective:700px]"
+        style={{ zIndex: totalItems - virtualIndex }}
       >
-        {release.cover_image && (
-          <Image
-            src={release.cover_image}
-            alt=""
-            fill
-            draggable={false}
-            loading="eager"
-            sizes="112px"
-            className="object-cover"
-            onError={(event) => {
-              event.currentTarget.style.display = "none";
-              event.currentTarget.closest(".album-cover")?.classList.add("is-missing-cover");
-            }}
-          />
-        )}
-      </button>
+        <button
+          type="button"
+          tabIndex={hidden ? -1 : undefined}
+          aria-label={`Show details for ${release.title} by ${release.artist_name}`}
+          aria-expanded="false"
+          className={cn(
+            "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-card-active p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-white/10 [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
+            !release.cover_image && "is-missing-cover",
+          )}
+        >
+          {release.cover_image && (
+            <Image
+              src={release.cover_image}
+              alt=""
+              fill
+              draggable={false}
+              loading="eager"
+              sizes="112px"
+              className="object-cover"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+                event.currentTarget.closest(".album-cover")?.classList.add("is-missing-cover");
+              }}
+            />
+          )}
+        </button>
+      </div>
       <span className="album-details pointer-events-none absolute start-full top-1/2 w-56 -translate-y-1/2 py-5 pe-4 ps-5 opacity-0 sm:w-64">
         <span className="line-clamp-2 text-sm font-bold leading-tight">{release.title}</span>
         <span className="mt-1 block truncate text-xs text-muted-foreground">{release.artist_name}</span>
@@ -106,6 +114,7 @@ function VirtualAlbumTrack({
   onRecordTap: (record: HTMLDivElement) => void;
 }) {
   const totalItems = releases.length * 3;
+  const lastIntentionalRecord = useRef<HTMLDivElement | null>(null);
   const visibleItems = Array.from(
     { length: Math.max(0, range.end - range.start) },
     (_, offset) => range.start + offset,
@@ -115,15 +124,14 @@ function VirtualAlbumTrack({
     <div
       className="relative h-28"
       style={{ width: setWidth * 3 + ALBUM_OVERLAP }}
-      onPointerOver={(event) => {
+      onPointerMove={(event) => {
         if (event.pointerType !== "mouse") return;
         const record = getRecordTarget(event.target);
-        if (record && record !== getRecordTarget(event.relatedTarget)) onRecordEnter(record);
-      }}
-      onPointerOut={(event) => {
-        if (event.pointerType !== "mouse") return;
-        const record = getRecordTarget(event.target);
-        if (record && record !== getRecordTarget(event.relatedTarget)) onRecordLeave(record);
+        const previousRecord = lastIntentionalRecord.current;
+        if (record === previousRecord) return;
+        lastIntentionalRecord.current = record;
+        if (record) onRecordEnter(record);
+        else if (previousRecord) onRecordLeave(previousRecord);
       }}
       onFocus={(event) => {
         const record = getRecordTarget(event.target);
@@ -138,9 +146,16 @@ function VirtualAlbumTrack({
         if (!trigger) return;
         const isTouchLike = window.matchMedia("(hover: none), (pointer: coarse)").matches;
         if (event.detail > 0 && !isTouchLike) return;
-        const record = trigger.parentElement as HTMLDivElement;
+        const record = trigger.closest<HTMLDivElement>(".album-record");
+        if (!record) return;
         if (event.detail > 0) onRecordTap(record);
         else onRecordEnter(record);
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType !== "mouse") return;
+        const previousRecord = lastIntentionalRecord.current;
+        lastIntentionalRecord.current = null;
+        if (previousRecord) onRecordLeave(previousRecord);
       }}
     >
       {visibleItems.map((virtualIndex) => {
@@ -185,18 +200,30 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
   const isScrolling = useRef(false);
   const restoreHoverAfterScroll = useRef(true);
   const scrollingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverLockUntil = useRef(0);
+  const pendingCollapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeRecord = useRef<HTMLDivElement | null>(null);
   const hoverAnimations = useRef<AnimationPlaybackControls[]>([]);
+  const staleResetFrame = useRef<number | null>(null);
   const touchedRecords = useRef(new Set<HTMLDivElement>());
   const shiftedSets = useRef(new Set<HTMLElement>());
 
   const stopHoverAnimations = () => {
+    if (staleResetFrame.current !== null) cancelAnimationFrame(staleResetFrame.current);
+    staleResetFrame.current = null;
     hoverAnimations.current.forEach((animation) => animation.stop());
     hoverAnimations.current = [];
   };
 
+  const clearPendingCollapse = () => {
+    if (pendingCollapseTimer.current !== null) clearTimeout(pendingCollapseTimer.current);
+    pendingCollapseTimer.current = null;
+  };
+
   const resetHoverImmediately = () => {
     const scroller = scrollerRef.current;
+    clearPendingCollapse();
+    hoverLockUntil.current = 0;
     stopHoverAnimations();
     activeRecord.current = null;
     touchedRecords.current.clear();
@@ -204,7 +231,7 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     if (!scroller) return;
 
     scroller.querySelectorAll<HTMLElement>(".album-record").forEach((record) => {
-      record.style.transform = "";
+      getAlbumVisual(record)?.style.removeProperty("transform");
       setRecordExpanded(record as HTMLDivElement, false);
     });
     scroller.querySelectorAll<HTMLElement>(".album-cover").forEach((cover) => {
@@ -223,6 +250,8 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
       return;
     }
 
+    clearPendingCollapse();
+    hoverLockUntil.current = 0;
     stopHoverAnimations();
     activeRecord.current = null;
     setRecordExpanded(record, false);
@@ -242,15 +271,17 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     shiftedSets.current.forEach((shiftedSet) => {
       if (shiftedSet === albumSet) return;
       shiftedSet.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
-        sibling.style.transform = "";
+        getAlbumVisual(sibling)?.style.removeProperty("transform");
       });
     });
     touchedRecords.current.clear();
     shiftedSets.current.clear();
 
     albumSet?.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+      const visual = getAlbumVisual(sibling);
+      if (!visual) return;
       hoverAnimations.current.push(
-        animate(sibling, { x: 0 }, { duration: 0.16, ease: [0.22, 1, 0.36, 1] }),
+        animate(visual, { x: 0 }, { duration: 0.16, ease: [0.22, 1, 0.36, 1] }),
       );
     });
     const cover = record.querySelector<HTMLElement>(".album-cover");
@@ -266,12 +297,23 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     }
   };
 
-  const collapseRecord = (record: HTMLDivElement) => {
+  const collapseRecord = (record: HTMLDivElement): void => {
     if (isScrolling.current || activeRecord.current !== record) return;
+    const hoverLockRemaining = hoverLockUntil.current - performance.now();
+    if (hoverLockRemaining > 0) {
+      clearPendingCollapse();
+      pendingCollapseTimer.current = setTimeout(() => {
+        pendingCollapseTimer.current = null;
+        if (!record.matches(":hover")) collapseRecord(record);
+      }, hoverLockRemaining);
+      return;
+    }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       resetHoverImmediately();
       return;
     }
+    clearPendingCollapse();
+    hoverLockUntil.current = 0;
     stopHoverAnimations();
     activeRecord.current = null;
     setRecordExpanded(record, false);
@@ -279,7 +321,10 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     const albumSet = record.parentElement;
     if (albumSet) {
       albumSet.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
-        hoverAnimations.current.push(animate(sibling, { x: 0 }, { duration: 0.22, ease: [0.22, 1, 0.36, 1] }));
+        const visual = getAlbumVisual(sibling);
+        if (visual) {
+          hoverAnimations.current.push(animate(visual, { x: 0 }, { duration: 0.22, ease: [0.22, 1, 0.36, 1] }));
+        }
       });
     }
 
@@ -307,7 +352,8 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
       if (record.parentElement) shiftedSets.current.add(record.parentElement);
       record.parentElement?.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
         if (sibling === record) return;
-        sibling.style.transform = `translateX(${sibling.offsetLeft < record.offsetLeft ? -30 : 272}px)`;
+        const visual = getAlbumVisual(sibling);
+        if (visual) visual.style.transform = `translateX(${sibling.offsetLeft < record.offsetLeft ? -30 : 272}px)`;
       });
       const cover = record.querySelector<HTMLElement>(".album-cover");
       const details = record.querySelector<HTMLElement>(".album-details");
@@ -319,27 +365,32 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
       return;
     }
 
+    clearPendingCollapse();
+    hoverLockUntil.current = performance.now() + 440;
     const previousRecord = activeRecord.current;
     stopHoverAnimations();
 
-    touchedRecords.current.forEach((touchedRecord) => {
-      if (touchedRecord === previousRecord || touchedRecord === record) return;
-      setRecordExpanded(touchedRecord, false);
-      const staleCover = touchedRecord.querySelector<HTMLElement>(".album-cover");
-      const staleDetails = touchedRecord.querySelector<HTMLElement>(".album-details");
-      if (staleCover) staleCover.style.removeProperty("--album-rotation");
-      if (staleDetails) {
-        staleDetails.style.opacity = "";
-        staleDetails.style.pointerEvents = "";
-      }
-    });
+    const resetStaleRecords = () => {
+      record.parentElement?.querySelectorAll<HTMLDivElement>(".album-record").forEach((staleRecord) => {
+        if (staleRecord === previousRecord || staleRecord === record) return;
+        setRecordExpanded(staleRecord, false);
+        const staleCover = staleRecord.querySelector<HTMLElement>(".album-cover");
+        const staleDetails = staleRecord.querySelector<HTMLElement>(".album-details");
+        if (staleCover) staleCover.style.setProperty("--album-rotation", "-24deg");
+        if (staleDetails) {
+          staleDetails.style.opacity = "0";
+          staleDetails.style.pointerEvents = "none";
+        }
+      });
+    };
+    resetStaleRecords();
 
     const currentSet = record.parentElement;
     const previousSet = previousRecord?.parentElement;
     shiftedSets.current.forEach((shiftedSet) => {
       if (shiftedSet === currentSet || shiftedSet === previousSet) return;
       shiftedSet.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
-        sibling.style.transform = "";
+        getAlbumVisual(sibling)?.style.removeProperty("transform");
       });
     });
     touchedRecords.current.clear();
@@ -358,7 +409,8 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
       if (previousDetails) hoverAnimations.current.push(animate(previousDetails, { opacity: 0 }, { duration: 0.12, ease: "easeOut" }));
       if (previousRecord.parentElement !== record.parentElement) {
         previousRecord.parentElement?.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
-          hoverAnimations.current.push(animate(sibling, { x: 0 }, { duration: 0.2, ease: "easeOut" }));
+          const visual = getAlbumVisual(sibling);
+          if (visual) hoverAnimations.current.push(animate(visual, { x: 0 }, { duration: 0.2, ease: "easeOut" }));
         });
       }
     }
@@ -371,25 +423,36 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     if (previousSet) shiftedSets.current.add(previousSet);
 
     record.parentElement?.querySelectorAll<HTMLElement>(".album-record").forEach((sibling) => {
+      const visual = getAlbumVisual(sibling);
+      if (!visual) return;
+      const transform = getComputedStyle(visual).transform;
+      const currentX = transform === "none" ? 0 : new DOMMatrixReadOnly(transform).m41;
+
       if (sibling === record) {
-        hoverAnimations.current.push(animate(sibling, { x: 0 }, { duration: 0.12, ease: "easeOut" }));
+        if (Math.abs(currentX) > 0.5) {
+          hoverAnimations.current.push(animate(visual, { x: 0 }, { duration: 0.12, ease: "easeOut" }));
+        }
         return;
       }
 
       const isLeft = sibling.offsetLeft < record.offsetLeft;
-      const transform = getComputedStyle(sibling).transform;
-      const currentX = transform === "none" ? 0 : new DOMMatrixReadOnly(transform).m41;
       if (isLeft) {
-        hoverAnimations.current.push(
-          animate(sibling, { x: [currentX, -30] }, { duration: 0.08, ease: "easeOut" }),
-        );
+        if (Math.abs(currentX + 30) > 0.5) {
+          hoverAnimations.current.push(
+            animate(visual, { x: -30 }, { duration: 0.08, ease: "easeOut" }),
+          );
+        }
       } else {
+        if (Math.abs(currentX - 272) <= 0.5) return;
+
         hoverAnimations.current.push(
-          animate(
-            sibling,
-            { x: [currentX, 24, 24, 272] },
-            { duration: 0.42, times: [0, 0.17, 0.43, 1], ease: "easeOut" },
-          ),
+          Math.abs(currentX) <= 0.5
+            ? animate(
+                visual,
+                { x: [currentX, 24, 272] },
+                { duration: 0.36, times: [0, 0.14, 1], ease: [0.22, 1, 0.36, 1] },
+              )
+            : animate(visual, { x: 272 }, { duration: 0.3, ease: [0.22, 1, 0.36, 1] }),
         );
       }
     });
@@ -401,14 +464,18 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
         animate(
           cover,
           { "--album-rotation": "0deg" },
-          { delay: 0.07, duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+          { delay: 0.04, duration: 0.2, ease: [0.22, 1, 0.36, 1] },
         ),
       );
     }
     if (details) {
       details.style.pointerEvents = "auto";
-      hoverAnimations.current.push(animate(details, { opacity: 1 }, { delay: 0.18, duration: 0.16, ease: "easeOut" }));
+      hoverAnimations.current.push(animate(details, { opacity: 1 }, { delay: 0.1, duration: 0.2, ease: "easeOut" }));
     }
+    staleResetFrame.current = requestAnimationFrame(() => {
+      staleResetFrame.current = null;
+      resetStaleRecords();
+    });
   };
 
   useEffect(() => {
@@ -548,6 +615,7 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
       stopHoverAnimations();
       if (centeringTimer.current !== null) clearTimeout(centeringTimer.current);
       if (scrollingTimer.current !== null) clearTimeout(scrollingTimer.current);
+      if (pendingCollapseTimer.current !== null) clearTimeout(pendingCollapseTimer.current);
       if (animationFrame.current !== null) cancelAnimationFrame(animationFrame.current);
       scroller.removeEventListener("scroll", handleNativeScroll);
       scroller.removeEventListener("wheel", handleWheel);
@@ -703,7 +771,10 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
         onPointerLeave={(event) => {
           if (event.pointerType !== "mouse") return;
           isPointerOver.current = false;
-          if (activeRecord.current) collapseRecord(activeRecord.current);
+          if (activeRecord.current) {
+            hoverLockUntil.current = 0;
+            collapseRecord(activeRecord.current);
+          }
         }}
         className="record-scroller relative h-48 cursor-grab touch-pan-x select-none overflow-x-auto overflow-y-hidden overscroll-contain active:cursor-grabbing [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-[-2px] [&::-webkit-scrollbar]:hidden"
       >

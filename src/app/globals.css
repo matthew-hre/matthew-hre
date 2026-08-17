@@ -35,6 +35,7 @@
   --card-active: oklch(1 0 0 / 20%);
   --primary: oklch(0.922 0 0);
   --muted: oklch(0.269 0 0);
+  --muted-transparent: oklch(0.269 0 0 / 0);
   --muted-foreground: oklch(0.708 0 0);
   --border: oklch(1 0 0 / 10%);
   --ring: oklch(0.556 0 0);
@@ -122,12 +123,12 @@
 
 .skeleton-record-viewport::before {
   inset-inline-start: 0;
-  background: linear-gradient(to right, var(--muted) 15%, transparent);
+  background: linear-gradient(to right, var(--muted) 15%, var(--muted-transparent));
 }
 
 .skeleton-record-viewport::after {
   inset-inline-end: 0;
-  background: linear-gradient(to left, var(--muted) 15%, transparent);
+  background: linear-gradient(to left, var(--muted) 15%, var(--muted-transparent));
 }
 
 @media (prefers-reduced-motion: reduce) {
