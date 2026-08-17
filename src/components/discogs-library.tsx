@@ -88,7 +88,7 @@ const AlbumRecord = memo(function AlbumRecord({
             !release.cover_image && "is-missing-cover",
           )}
         >
-          {release.cover_image && highPriority && (
+          {release.cover_image && (
             <span
               aria-hidden
               data-thumbnail-url={getLowResolutionImageUrl(release.cover_image)}
@@ -198,10 +198,11 @@ function VirtualAlbumTrack({
       {visibleItems.map((virtualIndex) => {
         const releaseIndex = virtualIndex % releases.length;
         const release = releases[releaseIndex];
+        const cycle = Math.floor(virtualIndex / releases.length);
 
         return (
           <AlbumRecord
-            key={`${release.discogs_id}-${virtualIndex}`}
+            key={`${release.discogs_id}-${cycle}`}
             release={release}
             releaseIndex={releaseIndex}
             virtualIndex={virtualIndex}
@@ -889,7 +890,11 @@ export default function DiscogsLibrary() {
     const sequence = ++reorderSequence.current;
     reorderAnimation.current?.stop();
     const shelf = shelfRef.current;
-    if (!shelf || !shelfReady || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      !shelf
+      || !shelfReady
+      || window.matchMedia("(prefers-reduced-motion: reduce), (hover: none), (pointer: coarse)").matches
+    ) {
       setDisplaySort(nextSort);
       return;
     }
@@ -1033,7 +1038,7 @@ export default function DiscogsLibrary() {
                 : "pointer-events-none translate-x-4 opacity-0 blur-[1px]",
             )}
           >
-            <ScrollShelf key={displaySort} releases={sortedReleases} onReady={handleShelfReady} />
+            <ScrollShelf releases={sortedReleases} onReady={handleShelfReady} />
           </div>
         )}
       </div>
