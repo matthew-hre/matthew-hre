@@ -84,7 +84,7 @@ const AlbumRecord = memo(function AlbumRecord({
           aria-label={`Show details for ${release.title} by ${release.artist_name}`}
           aria-expanded="false"
           className={cn(
-            "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-muted p-0 shadow-[0_12px_24px_oklch(0_0_0/0.5)] outline -outline-offset-1 outline-image-outline [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
+            "album-trigger album-cover relative block aspect-square w-full origin-center cursor-grab overflow-hidden rounded-sm border-0 bg-muted p-0 shadow-[0_12px_24px_oklch(0_0_0/0.38)] [touch-action:pan-x] [transform:rotateY(var(--album-rotation))] [--album-rotation:-24deg] active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-4",
             !release.cover_image && "is-missing-cover",
           )}
         >
@@ -125,7 +125,7 @@ const AlbumRecord = memo(function AlbumRecord({
       <span className="album-details pointer-events-none absolute start-full top-1/2 w-56 -translate-y-1/2 py-5 pe-4 ps-5 opacity-0 sm:w-64">
         <span className="line-clamp-2 text-pretty text-sm font-bold leading-tight">{release.title}</span>
         <span className="mt-1 block truncate text-xs text-muted-foreground">{release.artist_name}</span>
-        <span className="mt-3 block font-mono text-xs text-muted-foreground">
+        <span className="mt-3 block font-sans text-xs text-muted-foreground">
           Added {ADDED_DATE_FORMATTER.format(new Date(release.date_added))}
         </span>
       </span>
@@ -239,6 +239,9 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
   const isAnimating = useRef(false);
   const isPointerOver = useRef(false);
   const isScrolling = useRef(false);
+  const lastScrollLeft = useRef(0);
+  const recordIcon = useRef<SVGSVGElement | null>(null);
+  const recordIconRotation = useRef(0);
   const restoreHoverAfterScroll = useRef(true);
   const scrollingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hoverLockUntil = useRef(0);
@@ -523,6 +526,9 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     const scroller = scrollerRef.current;
     if (!scroller) return;
 
+    recordIcon.current = document.querySelector<SVGSVGElement>(".record-count-icon");
+    recordIconRotation.current = Number(recordIcon.current?.dataset.rotation ?? 0);
+
     const width = releases.length * ALBUM_STRIDE + SET_GAP;
     const totalItems = releases.length * 3;
 
@@ -627,6 +633,16 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     };
 
     const handleNativeScroll = () => {
+      const direction = scroller.scrollLeft - lastScrollLeft.current;
+      if (direction !== 0) {
+        recordIconRotation.current += direction * 0.4;
+        const icon = recordIcon.current;
+        if (icon) {
+          icon.style.setProperty("rotate", `${recordIconRotation.current}deg`);
+          icon.dataset.rotation = String(recordIconRotation.current);
+        }
+        lastScrollLeft.current = scroller.scrollLeft;
+      }
       markScrolling();
       updateVirtualRange();
       if (isAnimating.current) return;
@@ -635,6 +651,7 @@ function ScrollShelf({ releases, onReady }: { releases: VinylRelease[]; onReady:
     };
 
     measure();
+    lastScrollLeft.current = scroller.scrollLeft;
     let cancelled = false;
     let readyFrame = requestAnimationFrame(() => {
       readyFrame = requestAnimationFrame(async () => {
@@ -997,7 +1014,7 @@ export default function DiscogsLibrary() {
             </Select.Trigger>
             <Select.Portal>
               <Select.Positioner align="end" alignItemWithTrigger={false} sideOffset={4} className="z-50 outline-none">
-                <Select.Popup className="min-w-40 origin-top-right rounded-md border border-border bg-background p-1 shadow-[0_12px_32px_oklch(0_0_0/0.45)] outline-none transition-[opacity,transform] duration-[180ms] [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] data-[starting-style]:translate-y-1 data-[starting-style]:scale-[0.98] data-[starting-style]:opacity-0 data-[ending-style]:translate-y-0.5 data-[ending-style]:scale-[0.98] data-[ending-style]:opacity-0 data-[ending-style]:duration-[120ms] motion-reduce:transform-none motion-reduce:duration-150">
+                <Select.Popup className="min-w-40 origin-top-right rounded-md border border-border bg-background p-1 shadow-[0_12px_32px_oklch(0_0_0/0.45)] outline-none transition-[opacity,transform,filter] duration-200 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] data-[starting-style]:translate-y-2 data-[starting-style]:scale-[0.96] data-[starting-style]:opacity-0 data-[starting-style]:blur-[2px] data-[ending-style]:opacity-0 data-[ending-style]:duration-100 motion-reduce:transform-none motion-reduce:blur-none motion-reduce:duration-150">
                   <Select.List>
                     {RECORD_SORT_OPTIONS.map(({ value, label }) => (
                       <Select.Item

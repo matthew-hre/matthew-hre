@@ -1,21 +1,14 @@
 export default function GrainOverlay() {
   return (
-    <svg
-      className="pointer-events-none fixed isolate z-50 opacity-20 mix-blend-soft-light"
-      width="100%"
-      height="100%"
-      id="texture"
-    >
-      <filter id="noise">
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.8"
-          numOctaves="4"
-          stitchTiles="stitch"
-        ></feTurbulence>
-        <feColorMatrix type="saturate" values="0"></feColorMatrix>
-      </filter>
-      <rect width="100%" height="100%" filter="url(#noise)"></rect>
-    </svg>
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[60] opacity-[0.08] mix-blend-soft-light"
+      style={{
+        backgroundImage: "url(/noise.png)",
+        backgroundRepeat: "repeat",
+        backgroundSize: "512px 512px",
+        backgroundPosition: "0 0",
+      }}
+    />
   );
 }

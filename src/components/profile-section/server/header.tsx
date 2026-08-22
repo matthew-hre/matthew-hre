@@ -5,7 +5,7 @@ import {
   Disc3,
   MapPin,
 } from "lucide-react";
-import { Github, Tangled, Linkedin, Instagram } from "@/components/icons";
+import { Github, Tangled, Linkedin, X } from "@/components/icons";
 import Link from "@/components/link";
 import { fetchVinyl } from "@/types/vinyl";
 
@@ -18,23 +18,21 @@ export default async function Header() {
   return (
     <div className="flex flex-col items-start text-xl">
       <div className="flex flex-col gap-4 px-4">
-        <div className="flex w-full flex-col-reverse items-start justify-between gap-7 pb-5 sm:flex-row sm:gap-0">
+        <div className="flex w-full flex-col-reverse items-start justify-between gap-7 pb-2 sm:flex-row sm:gap-0">
           <div className="flex items-center space-x-4">
-            <div className="rounded-full bg-linear-to-tl from-background/60 to-gradient-accent shadow-lg p-[3px] ring-[5px] ring-avatar-ring">
-              <div className="rounded-full p-px h-24 w-24">
-                <ViewTransition name="profile-avatar">
-                  <Image
-                    className="rounded-full filter"
-                    width={96}
-                    height={96}
-                    sizes="96px"
-                    decoding="async"
-                    alt="Matthew Hrehirchuk"
-                    src="https://avatars.githubusercontent.com/u/49077192?v=4"
-                  />
-                </ViewTransition>
+            <ViewTransition name="profile-avatar">
+              <div className="avatar-stage avatar-lift">
+                <Image
+                  className="avatar-image"
+                  width={96}
+                  height={96}
+                  sizes="96px"
+                  decoding="async"
+                  alt="Matthew Hrehirchuk"
+                  src="https://avatars.githubusercontent.com/u/49077192?v=4"
+                />
               </div>
-            </div>
+            </ViewTransition>
             <h1 className="flex flex-col gap-1">
               <span className="max-w-48 text-balance text-3xl font-bold leading-[1.05] tracking-[-0.025em]">Matthew Hrehirchuk</span>
               <span className="font-mono text-base font-normal">
@@ -71,13 +69,13 @@ export default async function Header() {
               <span className="sr-only">LinkedIn</span>
             </Link>
             <Link
-              href="https://instagram.com/matthew_hre/"
+              href="https://x.com/matthew_hre"
               variant="icon"
               size="sm"
               className={SOCIAL_LINK_CLASSES}
             >
-              <span aria-hidden><Instagram className="size-[18px]" /></span>
-              <span className="sr-only">Instagram</span>
+              <span aria-hidden><X className="size-[18px]" /></span>
+              <span className="sr-only">X</span>
             </Link>
           </div>
         </div>
@@ -113,7 +111,7 @@ export default async function Header() {
           </div>
           {recordCount !== null && (
             <div className="flex items-center gap-1">
-              <Disc3 className="h-4 w-4" />
+              <Disc3 className="record-count-icon h-4 w-4" />
               <span>
                 {recordCount.total} records
                 {recordCount.addedThisYear !== null && ` (+${recordCount.addedThisYear} in ${currentYear})`}

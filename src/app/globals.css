@@ -82,6 +82,31 @@
   .link-inline {
     @apply text-muted-foreground hover:text-primary underline transition-[color,text-decoration-color] duration-300 ease-out;
   }
+
+  .avatar-stage {
+    position: relative;
+    display: grid;
+    width: 6rem;
+    height: 6rem;
+    flex: none;
+    place-items: center;
+  }
+
+  .avatar-image {
+    position: relative;
+    z-index: 2;
+    width: 6rem;
+    height: 6rem;
+    border-radius: calc(var(--radius) - 4px);
+    outline: 1px solid var(--image-outline);
+    outline-offset: 0;
+  }
+
+  .avatar-lift .avatar-image {
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 12%),
+      0 6px 16px oklch(0 0 0 / 10%);
+  }
 }
 
 /* View transition: smooth morph for profile photo only */
@@ -89,7 +114,7 @@
   animation-duration: 300ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
-  border-radius: 9999px;
+  border-radius: calc(var(--radius) - 4px);
 }
 
 ::view-transition-old(profile-avatar),
@@ -106,7 +131,12 @@
 
 .album-cover.is-missing-cover {
   background: var(--muted);
-  box-shadow: 0 12px 24px oklch(0 0 0 / 0.35);
+  box-shadow: 0 12px 24px oklch(0 0 0 / 0.28);
+}
+
+.album-cover {
+  outline: 1px solid var(--image-outline);
+  outline-offset: 0;
 }
 
 @keyframes skeleton-record-scroll-left {
