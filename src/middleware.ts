@@ -10,7 +10,7 @@ function addNegotiationHeaders(response: NextResponse, pathname: string) {
   return response;
 }
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (pathname === "/index.md") {

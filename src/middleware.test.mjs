@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { NextRequest } from "next/server";
-import { proxy } from "./proxy.ts";
+import { middleware } from "./middleware.ts";
 
 function request(path, accept) {
   return new NextRequest(`https://matthew-hre.com${path}`, {
@@ -10,7 +10,7 @@ function request(path, accept) {
 
 describe("page content negotiation proxy", () => {
   test("rewrites a Markdown homepage request to its representation", () => {
-    const response = proxy(request("/", "text/markdown"));
+    const response = middleware(request("/", "text/markdown"));
     const rewrite = new URL(response.headers.get("x-middleware-rewrite"));
 
     expect(rewrite.pathname).toBe("/api/markdown");
@@ -19,15 +19,15 @@ describe("page content negotiation proxy", () => {
   });
 
   test("preserves the missing path for a Markdown 404", () => {
-    const response = proxy(request("/missing", "text/markdown"));
+    const response = middleware(request("/missing", "text/markdown"));
     const rewrite = new URL(response.headers.get("x-middleware-rewrite"));
 
     expect(rewrite.searchParams.get("__markdown_path")).toBe("/missing");
   });
 
   test("passes HTML through and rejects unsupported representations", async () => {
-    const html = proxy(request("/", "text/html"));
-    const unsupported = proxy(request("/", "application/pdf"));
+    const html = middleware(request("/", "text/html"));
+    const unsupported = middleware(request("/", "application/pdf"));
 
     expect(html.headers.get("x-middleware-next")).toBe("1");
     expect(unsupported.status).toBe(406);
@@ -35,7 +35,7 @@ describe("page content negotiation proxy", () => {
   });
 
   test("serves the explicit Markdown URL regardless of Accept", () => {
-    const response = proxy(request("/index.md", "*/*"));
+    const response = middleware(request("/index.md", "*/*"));
     const rewrite = new URL(response.headers.get("x-middleware-rewrite"));
 
     expect(rewrite.searchParams.get("__markdown_path")).toBe("/");
