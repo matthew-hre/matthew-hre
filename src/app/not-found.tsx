@@ -8,9 +8,11 @@ export default function NotFound() {
         <div className="flex flex-col px-4 gap-4">
           <h1 className="text-xl font-bold">404</h1>
           <p className="text-base text-muted-foreground">There’s nothing here.</p>
-          <Link href="/" variant="inline" className="w-fit">
-            Return home
-          </Link>
+          <p className="text-base text-muted-foreground">
+            Return to the <Link href="/" variant="inline">homepage</Link>, or use the{" "}
+            <Link href="/sitemap.xml" variant="inline">sitemap</Link> and{" "}
+            <Link href="/llms.txt" variant="inline">agent resource index</Link> to find what is available.
+          </p>
         </div>
       </main>
       <Footer />

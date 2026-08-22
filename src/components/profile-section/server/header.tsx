@@ -8,6 +8,7 @@ import {
 import { Github, Tangled, Linkedin, X } from "@/components/icons";
 import Link from "@/components/link";
 import { fetchVinyl } from "@/types/vinyl";
+import { BIOGRAPHY } from "@/lib/site-content";
 
 const SOCIAL_LINK_CLASSES = "size-10 justify-center rounded-md bg-card text-foreground backdrop-blur-md transition-[color,background-color,transform] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-card-hover active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 pointer-coarse:size-11";
 
@@ -80,12 +81,7 @@ export default async function Header() {
           </div>
         </div>
         <div className="space-y-2 text-pretty text-base leading-relaxed">
-          <p>
-            I&apos;m a software developer and a design engineer. I love crafting purposeful interfaces and making web interactions fun.
-          </p>
-          <p>
-            I&apos;m also a record collector, a music nerd, and a terrible guitarist.
-          </p>
+          {BIOGRAPHY.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
         {/*<p className="text-base">
           Currently seeking internships for this summer – preferably writing code. Reach out to me at <Link variant="inline" href="mailto:me@matthew-hre.com">me@matthew-hre.com</Link>!
