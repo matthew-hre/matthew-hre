@@ -1,0 +1,263 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-border: var(--border);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-card-active: var(--card-active);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-rethink-sans);
+  --font-mono: var(--font-fira-code);
+  --color-avatar-ring: var(--avatar-ring);
+  --color-gradient-accent: var(--gradient-accent);
+  --color-gradient-accent-hover: var(--gradient-accent-hover);
+  --color-image-outline: var(--image-outline);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(1 0 0 / 5%);
+  --card-hover: oklch(1 0 0 / 10%);
+  --card-active: oklch(1 0 0 / 20%);
+  --primary: oklch(0.922 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-transparent: oklch(0.269 0 0 / 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --ring: oklch(0.556 0 0);
+
+  --avatar-ring: oklch(0.5 0 0 / 30%);
+
+  --gradient-accent: oklch(0.7 0 0 / 60%);
+  --gradient-accent-hover: oklch(0.7 0 0);
+  --image-outline: oklch(1 0 0 / 10%);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --background: oklch(0.975 0 0);
+  --foreground: oklch(0.205 0 0);
+  --card: oklch(0 0 0 / 5%);
+  --card-hover: oklch(0 0 0 / 9%);
+  --card-active: oklch(0 0 0 / 16%);
+  --primary: oklch(0.13 0 0);
+  --muted: oklch(0.915 0 0);
+  --muted-transparent: oklch(0.915 0 0 / 0);
+  --muted-foreground: oklch(0.455 0 0);
+  --border: oklch(0 0 0 / 12%);
+  --ring: oklch(0.43 0 0);
+  --avatar-ring: oklch(0.45 0 0 / 25%);
+  --gradient-accent: oklch(0.42 0 0 / 45%);
+  --gradient-accent-hover: oklch(0.42 0 0);
+  --image-outline: oklch(0 0 0 / 10%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .transition-default {
+    @apply transition-[color,background-color,opacity,text-decoration-color,transform] duration-300 ease-out;
+  }
+
+  .link-inline {
+    @apply text-muted-foreground hover:text-primary underline transition-[color,text-decoration-color] duration-300 ease-out;
+  }
+
+  .avatar-stage {
+    position: relative;
+    display: grid;
+    width: 6rem;
+    height: 6rem;
+    flex: none;
+    place-items: center;
+  }
+
+  .avatar-image {
+    position: relative;
+    z-index: 2;
+    width: 6rem;
+    height: 6rem;
+    border-radius: calc(var(--radius) - 4px);
+    outline: 1px solid var(--image-outline);
+    outline-offset: 0;
+  }
+
+  .avatar-lift .avatar-image {
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 12%),
+      0 6px 16px oklch(0 0 0 / 10%);
+  }
+}
+
+/* View transition: smooth morph for profile photo only */
+::view-transition-group(profile-avatar) {
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 4px);
+}
+
+::view-transition-old(profile-avatar),
+::view-transition-new(profile-avatar) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@property --album-rotation {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: -24deg;
+}
+
+.album-cover.is-missing-cover {
+  background: var(--muted);
+  box-shadow: 0 12px 24px oklch(0 0 0 / 0.28);
+}
+
+.album-cover {
+  outline: 1px solid var(--image-outline);
+  outline-offset: 0;
+}
+
+@keyframes skeleton-record-scroll-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes fade-in-on-view {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+.fade-in-on-view {
+  animation: fade-in-on-view 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-in-on-view-reduced {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-on-view-mobile {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes commit-hash-loaded {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+    filter: blur(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.commit-hash-skeleton {
+  opacity: 1;
+  background: color-mix(in oklch, var(--muted-foreground) 30%, transparent);
+  transition: opacity 400ms ease-out;
+}
+
+.commit-hash-skeleton.is-loaded {
+  opacity: 0;
+}
+
+.commit-hash-loaded {
+  animation: commit-hash-loaded 500ms 60ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.skeleton-record-track {
+  animation: skeleton-record-scroll-left 9s linear infinite;
+  will-change: transform;
+}
+
+.skeleton-record-viewport::before,
+.skeleton-record-viewport::after {
+  content: "";
+  position: absolute;
+  z-index: 20;
+  inset-block: 0;
+  width: 2.5rem;
+  pointer-events: none;
+}
+
+.skeleton-record-viewport::before {
+  inset-inline-start: 0;
+  background: linear-gradient(to right, var(--muted) 15%, var(--muted-transparent));
+}
+
+.skeleton-record-viewport::after {
+  inset-inline-end: 0;
+  background: linear-gradient(to left, var(--muted) 15%, var(--muted-transparent));
+}
+
+@media (max-width: 40rem) {
+  .fade-in-on-view {
+    animation-name: fade-in-on-view-mobile;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-record-track {
+    animation: none;
+  }
+
+  .fade-in-on-view {
+    animation: fade-in-on-view-reduced 400ms ease-out both;
+  }
+
+  .commit-hash-loaded {
+    animation: fade-in-on-view-reduced 300ms ease-out both;
+  }
+}

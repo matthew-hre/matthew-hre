@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "matthew-hre",
+  "compatibility_date": "2024-12-30",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "routes": [
+    {
+      "pattern": "matthew-hre.com",
+      "custom_domain": true
+    }
+  ],
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "matthew-hre"
+    },
+    {
+      "binding": "API",
+      "service": "api-matthew-hre"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "placement": {
+    "mode": "smart",
+  },
+}

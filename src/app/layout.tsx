@@ -1,0 +1,64 @@
+import type { Metadata } from "next";
+import { Fira_Code, Rethink_Sans } from "next/font/google";
+import "./globals.css";
+import GrainOverlay from "@/components/grain-overlay";
+import BackToTop from "@/components/back-to-top";
+
+const themeScript = `(() => {
+  try {
+    const preference = localStorage.getItem("theme");
+    if (preference === "light" || preference === "dark" || preference === "system") {
+      const theme = preference === "system"
+        ? matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"
+        : preference;
+      document.documentElement.dataset.themePreference = preference;
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    }
+  } catch {}
+})();`;
+
+const rethinkSans = Rethink_Sans({
+  subsets: ["latin"],
+  variable: "--font-rethink-sans",
+  display: "swap",
+});
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  variable: "--font-fira-code",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "Matthew Hrehirchuk",
+  description: "The personal portfolio of Matthew Hrehirchuk",
+  icons: [
+    {
+      rel: "icon",
+      type: "image/svg+xml",
+      url: "https://fav.farm/%F0%9F%91%8B",
+    },
+  ],
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body
+        className={`${rethinkSans.variable} ${firaCode.variable} bg-muted font-sans antialiased`}
+      >
+        <GrainOverlay />
+        {children}
+        <BackToTop />
+      </body>
+    </html>
+  );
+}
