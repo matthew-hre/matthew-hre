@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "rm -f node_modules/.bin/wrangler node_modules/.bin/wrangler2 && bash scripts/patch-workerd.sh",
+    "postinstall": "bash scripts/patch-workerd.sh",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -37,6 +37,7 @@
     "eslint": "^9.39.0",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4.2.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wrangler": "^4.86.0"
   }
 }

@@ -5,6 +5,13 @@
 # workerd binary bundled with the nix-provided `wrangler` from the dev shell.
 set -euo pipefail
 
+if [[ -z "${IN_NIX_SHELL:-}" ]]; then
+  exit 0
+fi
+
+# Prefer the nix-provided Wrangler over the local npm shim in the dev shell.
+rm -f node_modules/.bin/wrangler node_modules/.bin/wrangler2
+
 if [[ "$(uname -s)" != "Linux" ]]; then
   exit 0
 fi
