@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+log_dir="$HOME/.cache/amp/logs"
+mkdir -p "$log_dir"
+log_file="$log_dir/setup.log"
+exec > >(tee -a "$log_file") 2>&1
+
+step() {
+	printf '\n[%s] %s\n' "$(date --iso-8601=seconds)" "$1"
+}
+
+step "Inspecting repository setup requirements"
+
+if [[ -f package.json ]]; then
+	if [[ -f pnpm-lock.yaml ]]; then
+		command -v pnpm >/dev/null || { echo "pnpm is required by pnpm-lock.yaml but is not installed." >&2; exit 1; }
+		pnpm install --frozen-lockfile
+	elif [[ -f yarn.lock ]]; then
+		command -v yarn >/dev/null || { echo "yarn is required by yarn.lock but is not installed." >&2; exit 1; }
+		yarn install --immutable
+	elif [[ -f package-lock.json ]]; then
+		command -v npm >/dev/null || { echo "npm is required by package-lock.json but is not installed." >&2; exit 1; }
+		npm ci
+	else
+		echo "Found package.json without a recognized lockfile; skipping dependency installation."
+	fi
+elif [[ -f requirements.txt ]]; then
+	command -v python3 >/dev/null || { echo "python3 is required by requirements.txt but is not installed." >&2; exit 1; }
+	python3 -m pip install -r requirements.txt
+else
+	echo "No supported dependency manifest or lockfile found; this README-only repository has no project dependencies to install."
+fi
+
+step "Repository setup complete"
